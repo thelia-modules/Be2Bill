@@ -16,6 +16,8 @@ namespace Be2Bill;
 use Be2Bill\Model\Be2billConfigQuery;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Thelia\Install\Database;
+use Thelia\Model\Message;
+use Thelia\Model\MessageQuery;
 use Thelia\Model\Order;
 use Thelia\Module\AbstractPaymentModule;
 use Thelia\Module\BaseModule;
@@ -30,6 +32,8 @@ class Be2Bill extends AbstractPaymentModule
      * Have fun !
      */
 
+    const CONFIRMATION_MESSAGE_NAME = 'be2bill_payment_confirmation';
+
 
     public function postActivation(ConnectionInterface $con = null)
     {
@@ -38,6 +42,30 @@ class Be2Bill extends AbstractPaymentModule
         $database->insertSql(null, array(
             __DIR__ . DS . 'Config'.DS.'thelia.sql'
         ));
+
+        // Create payment confirmation message from templates, if not already defined
+        $email_templates_dir = __DIR__.DS.'I18n'.DS.'email-templates'.DS;
+
+        if(null == MessageQuery::create()->findOneByName(self::CONFIRMATION_MESSAGE_NAME)){
+
+            $message = new Message();
+
+            $message->setName(self::CONFIRMATION_MESSAGE_NAME)
+
+                ->setLocale('en_US')
+                ->setTitle('Be2Bill payment confirmation')
+                ->setSubject('Payment of order {$order_ref}')
+                ->setHtmlMessage(file_get_contents($email_templates_dir.'en.html'))
+                ->setTextMessage(file_get_contents($email_templates_dir.'en.txt'))
+
+                ->setLocale('fr_FR')
+                ->setTitle('Confirmation de paiement par Be2Bill')
+                ->setSubject('Confirmation du paiement de votre commande {$order_ref}')
+                ->setHtmlMessage(file_get_contents($email_templates_dir.'fr.html'))
+                ->setTextMessage(file_get_contents($email_templates_dir.'fr.txt'))
+
+                ->save();
+        }
     }
     /**
      *

@@ -1,0 +1,112 @@
+<div class="row">
+    <div class="col-md-12 general-block-decorator">
+        <div class="row">
+            <div class="col-md-12 title title-without-tabs">
+                {intl l="Configuration Be2Bill"}
+            </div>
+        </div>
+
+        <div class="form-container">
+
+        {form name="be2bill.configuration.form"}
+
+
+
+            {if $form_error}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-danger">{$form_error_message}</div>
+                    </div>
+                </div>
+            {/if}
+
+            <form action="{url path='/admin/module/be2bill/configure'}" method="post">
+
+                {form_hidden_fields form=$form}
+
+                {include file = "includes/inner-form-toolbar.html"
+                hide_flags = true
+                page_url   = "{url path='/admin/module/be2bill'}"
+                close_url  = "{url path='/admin/modules'}"
+                }
+
+                <div class="row">
+                    <div class="col-md-12">
+                        {form_field form=$form field="identifier"}
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
+                                    <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
+                                    <span class="help-block">{$label_attr.help}</span>
+                                </div>
+                            </div>
+
+                        {/form_field}
+
+                        {form_field form=$form field="password"}
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
+                                <input id="{$name}" type="password" name="{$name}" value="{$value}" class="form-control"/>
+                                <span class="help-block">{$label_attr.help}</span>
+                            </div>
+                        </div>
+
+                        {/form_field}
+
+                        {form_field form=$form field="url"}
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
+                                <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
+                                <span class="help-block">{$label_attr.help}</span>
+                            </div>
+                        </div>
+
+                        {/form_field}
+
+                        {form_field form=$form field="3dsecure"}
+
+                        <div class="col-md-6 ">
+                            <div class="form-group">
+                                <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
+                                <select id="{$name}" name="{$name}" class="form-control">
+                                    <option value="no" {if ({$value} === "no")} selected="selected"{/if} >Non</option>
+                                    <option value="yes" {if ({$value} === "yes")} selected="selected"{/if} >Oui</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/form_field}
+
+
+
+
+                        {form_field form=$form field="description"}
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
+                                    <textarea id="{$name}" name="{$name}" class="form-control">{$value}</textarea>
+                                    <span class="help-block">{$label_attr.help}</span>
+                                </div>
+                            </div>
+
+                        {/form_field}
+
+
+
+
+
+                    </div>
+                </div>
+
+            </form>
+
+        {/form}
+        </div>
+    </div>
+</div>

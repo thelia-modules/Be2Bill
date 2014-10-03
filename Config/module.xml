@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <fullnamespace>Be2Bill\Be2Bill</fullnamespace>
+    <descriptive locale="en_US">
+        <title>Payment method Be2Bill</title>
+    </descriptive>
+    <descriptive locale="fr_FR">
+        <title>Méthode de paiement Be2Bill</title>
+    </descriptive>
+    <version></version>
+    <author>
+        <name></name>
+        <email></email>
+    </author>
+    <type>payment</type>
+    <thelia>2.0.0</thelia>
+    <stability>other</stability>
+</module>

@@ -18,19 +18,13 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Thelia\Install\Database;
 use Thelia\Model\Message;
 use Thelia\Model\MessageQuery;
+use Thelia\Model\ModuleImageQuery;
 use Thelia\Model\Order;
 use Thelia\Module\AbstractPaymentModule;
 use Thelia\Module\BaseModule;
 
 class Be2Bill extends AbstractPaymentModule
 {
-
-    /*
-     * You may now override BaseModuleInterface methods, such as:
-     * install, destroy, preActivation, postActivation, preDeactivation, postDeactivation
-     *
-     * Have fun !
-     */
 
     const CONFIRMATION_MESSAGE_NAME = 'be2bill_payment_confirmation';
 
@@ -66,7 +60,14 @@ class Be2Bill extends AbstractPaymentModule
 
                 ->save();
         }
+
+        $module = $this->getModuleModel();
+
+        if (ModuleImageQuery::create()->filterByModule($module)->count() == 0) {
+            $this->deployImageFolder($module, sprintf('%s/images', __DIR__), $con);
+        }
     }
+
     /**
      *
      *  Method used by payment gateway.
@@ -130,8 +131,6 @@ class Be2Bill extends AbstractPaymentModule
         }
         return hash('sha256', $clear_string);
     }
-
-
 
     /**
      *

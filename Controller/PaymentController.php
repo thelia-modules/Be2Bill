@@ -26,7 +26,8 @@ class PaymentController extends BasePaymentModuleController
         return "Be2Bill";
     }
 
-    public function processBe2BillRequest($type){
+    public function processBe2BillRequest($type)
+    {
         $request = $this->getRequest()->request;
 
         //Récupération du hash recu par Be2Bill
@@ -41,7 +42,7 @@ class PaymentController extends BasePaymentModuleController
 
         $this->getLog()->addInfo($this->getTranslator()->trans("Be2Bill platform request received for order ID %id.", array('%id' => $order_id)));
 
-        if(null !== $order = $this->getOrder($order_id)){
+        if (null !== $order = $this->getOrder($order_id)) {
 
             //Check the authencity of the request
             if ($be2BillHash == $hash) {
@@ -82,7 +83,8 @@ class PaymentController extends BasePaymentModuleController
         }
     }
 
-    public function redirectBe2BillRequest($type){
+    public function redirectBe2BillRequest($type)
+    {
         $request = $this->getRequest()->query;
 
         $be2BillHash = $request->get('HASH');
@@ -92,10 +94,10 @@ class PaymentController extends BasePaymentModuleController
         $hash = Be2Bill::be2BillHash($params);
 
 
-        if ($be2BillHash == $hash){
-            if ($type == 'success'){
+        if ($be2BillHash == $hash) {
+            if ($type == 'success') {
                 $this->redirectToSuccessPage($params['ORDERID']);
-            }else{
+            } else {
                 $message = $this->getTranslator()->trans('Error n° %code', array('%code' => $params['EXECCODE']));
                 $this->redirectToFailurePage($params['ORDERID'], $message);
             }

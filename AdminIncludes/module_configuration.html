@@ -10,8 +10,6 @@
 
         {form name="be2bill.configuration.form"}
 
-
-
             {if $form_error}
                 <div class="row">
                     <div class="col-md-12">
@@ -55,19 +53,6 @@
                         </div>
 
                         {/form_field}
-
-                        {form_field form=$form field="url"}
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
-                                <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
-                                <span class="help-block">{$label_attr.help}</span>
-                            </div>
-                        </div>
-
-                        {/form_field}
-
                         {form_field form=$form field="3dsecure"}
 
                         <div class="col-md-6 ">
@@ -82,24 +67,46 @@
 
                         {/form_field}
 
+                        {form_field form=$form field="url"}
 
-
-
-                        {form_field form=$form field="description"}
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
-                                    <textarea id="{$name}" name="{$name}" class="form-control">{$value}</textarea>
-                                    <span class="help-block">{$label_attr.help}</span>
-                                </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
+                                <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
+                                <span class="help-block">{$label_attr.help}</span>
                             </div>
+                        </div>
 
                         {/form_field}
 
+                        {form_field form=$form field="description"}
 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
+                                <textarea id="{$name}" name="{$name}" class="form-control">{$value}</textarea>
+                                <span class="help-block">{$label_attr.help}</span>
+                            </div>
+                        </div>
 
+                        {/form_field}
 
+                        <div class="col-md-6">
+                            <strong>{intl l="N'oubliez pas d'aller configurer votre compte dans l'extranet Be2bill :"}</strong>
+                            <br/>
+                            {intl l="1) Autoriser l'hébergeur à acceder au service Be2Bill en renseignant son adresse IP dans la configuration."}
+                            <br/>
+                            {intl l="2) Renseigner les urls de redirections :"}
+                            <ul>
+                                <li>{intl l="http://votresite.fr/be2bill/redirect/payment (Url après traitement) "}</li>
+                                <li>{intl l="http://votresite.fr/cart (Url en cas d'annulation) "}</li>
+                            </ul>
+                            {intl l="3) Renseigner les urls de notifications :"}
+                            <ul>
+                                <li>{intl l="http://votresite.fr/be2bill/callback/notif (notification de transactions)"}</li>
+                                <li>{intl l="http://votresite.fr/be2bill/callback/unpayed (notification d'impayés)"}</li>
+                            </ul>
+                        </div>
 
                     </div>
                 </div>

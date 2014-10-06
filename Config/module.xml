@@ -2,10 +2,10 @@
 <module>
     <fullnamespace>Be2Bill\Be2Bill</fullnamespace>
     <descriptive locale="en_US">
-        <title>Payment method Be2Bill</title>
+        <title>Pay with Be2Bill</title>
     </descriptive>
     <descriptive locale="fr_FR">
-        <title>Méthode de paiement Be2Bill</title>
+        <title>Payer avec Be2Bill</title>
     </descriptive>
     <version></version>
     <author>

@@ -43,12 +43,12 @@ class SendConfirmationEmail extends BaseAction implements EventSubscriberInterfa
     {
         $be2bill = new Be2Bill();
 
-        if($event->getOrder()->isPaid() && $be2bill->isPaymentModuleFor($event->getOrder())){
+        if ($event->getOrder()->isPaid() && $be2bill->isPaymentModuleFor($event->getOrder())) {
             $contact_email = \Thelia\Model\ConfigQuery::read('store_email', false);
 
             Tlog::getInstance()->debug("Sending confirmation email from store contact e-mail $contact_email");
 
-            if($contact_email){
+            if ($contact_email) {
                 $message = MessageQuery::create()
                     ->filterByName(Be2Bill::CONFIRMATION_MESSAGE_NAME)
                     ->findOne();

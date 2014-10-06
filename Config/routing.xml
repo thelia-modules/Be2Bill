@@ -31,7 +31,7 @@
         <default key="_controller">Be2Bill\Controller\admin\ConfigurationController::configure</default>
     </route>
 
-    <route id="be2bill.payment.redirect" path="be2bill/redirect/{type}">
+    <route id="be2bill.payment.redirect" path="be2bill/redirect/payment">
         <default key="_controller">Be2Bill\Controller\PaymentController::redirectBe2BillRequest</default>
     </route>
 

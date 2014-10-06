@@ -97,7 +97,7 @@ class Be2Bill extends AbstractPaymentModule
     public function getBe2BillParameters(Order $order, $operationtype)
     {
 
-        $amount = $order->getTotalAmount();
+        $amount = $order->getTotalAmount()*100;
 
         $customer = $order->getCustomer();
 

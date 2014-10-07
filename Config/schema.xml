@@ -1,8 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database defaultIdMethod="native" name="thelia" namespace="Be2Bill\Model">
+
     <table name="be2bill_config" >
         <column name="name" required="true" size="128" type="VARCHAR" primaryKey="true"/>
         <column name="value" type="LONGVARCHAR" />
+    </table>
+
+    <table name="be2bill_transaction">
+        <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
+        <column name="order_id"  required="true" type="INTEGER" />
+        <column name="customer_id" required="true" type="INTEGER" />
+        <column name="transaction_id" required="true" type="INTEGER" />
+        <column name="operationtype" required="true" type="VARCHAR" size="255"/>
+        <column name="dsecure" required="true" type="VARCHAR" size="255" />
+        <column name="execcode" required="true" type="VARCHAR" size="255" />
+        <column name="message" required="true" type="VARCHAR" size="255" />
+        <column name="amount" required="true" type="VARCHAR" size="255" />
+        <column name="clientemail" required="true" type="VARCHAR" size="255" />
+        <column name="cardcode" required="true" type="VARCHAR" size="255" />
+        <column name="cardvaliditydate" required="true" type="VARCHAR" size="255" />
+        <column name="cardfullname" required="true" type="VARCHAR" size="255" />
+        <column name="cardtype" required="true" type="VARCHAR" size="255" />
+
+        <column name="refunded" type="BOOLEAN" defaultValue="0" required="true" />
+        <column name="refundedby" type="VARCHAR" size="255"/>
+
+        <foreign-key foreignTable="order" name="fk_be2bill_transaction_order_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="order_id" />
+        </foreign-key>
+        <foreign-key foreignTable="customer" name="fk_be2bill_transaction_customer_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="customer_id" />
+        </foreign-key>
+        <index name="idx_be2bill_transaction_order_id">
+            <index-column name="order_id" />
+        </index>
+
+        <behavior name="timestampable" />
     </table>
     <external-schema filename="local/config/schema.xml" referenceOnly="true" />
 </database>

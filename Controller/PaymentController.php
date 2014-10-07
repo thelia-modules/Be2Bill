@@ -10,6 +10,8 @@ namespace Be2Bill\Controller;
 
 
 use Be2Bill\Be2Bill;
+use Be2Bill\Model\Be2billTransaction;
+use Be2Bill\Model\Be2billTransactionQuery;
 use Thelia\Module\BasePaymentModuleController;
 
 class PaymentController extends BasePaymentModuleController
@@ -26,7 +28,7 @@ class PaymentController extends BasePaymentModuleController
         return "Be2Bill";
     }
 
-    public function processBe2BillRequest($type)
+    public function processBe2BillRequest()
     {
         $request = $this->getRequest()->request;
 
@@ -47,32 +49,43 @@ class PaymentController extends BasePaymentModuleController
             //Check the authencity of the request
             if ($be2BillHash == $hash) {
 
-                if ($type == 'notif') {
+                // Payment was accepted
+                if ($request->get('EXECCODE') === 0000) {
 
-                    // Payment was accepted
-                    if ($request->get('EXECCODE') === 0000) {
+                    if ($order->isPaid()) {
+                        $this->getLog()->addInfo($this->getTranslator()->trans("Order ID %id is already paid.", array('%id' => $order_id)));
 
-                        if ($order->isPaid()) {
-                            $this->getLog()->addInfo($this->getTranslator()->trans("Order ID %id is already paid.", array('%id' => $order_id)));
-
-                        } else {
-                            $this->getLog()->addInfo($this->getTranslator()->trans("Order ID %id payment was succesful.", array('%id' => $order_id)));
-
-                            $this->confirmPayment($order_id);
-
-                        }
-
-                    // Payment was canceled
-                    } elseif ($request->get('EXECCODE') === 4004) {
-
-                        $this->cancelPayment($order_id);
-
-                    // Payment was not accepted
                     } else {
+                        $this->getLog()->addInfo($this->getTranslator()->trans("Order ID %id payment was succesful.", array('%id' => $order_id)));
 
-                        $this->getLog()->addError($this->getTranslator()->trans("Order ID %id payment failed.", array('%id' => $order_id)));
+                        $this->confirmPayment($order_id);
 
+                        $transaction = new Be2billTransaction();
+                        $transaction->setCustomerId($request->get('CLIENTIDENT'))
+                            ->setOrderId($request->get('ORDERID'))
+                            ->setTransactionId($request->get('TRANSACTIONID'))
+                            ->setOperationtype($request->get('OPERATIONTYPE'))
+                            ->setDsecure($request->get('3DSECURE'))
+                            ->setExeccode($request->get('EXECCODE'))
+                            ->setMessage($request->get('MESSAGE'))
+                            ->setAmount($request->get('AMOUNT')/100)
+                            ->setClientemail($request->get('CLIENTEMAIL'))
+                            ->setCardcode($request->get('CARDCODE'))
+                            ->setCardvaliditydate($request->get('CARDVALIDITYDATE'))
+                            ->setCardfullname($request->get('CARDFULLNAME'))
+                            ->setCardtype($request->get('CARDTYPE'));
+
+                        $transaction->save();
                     }
+
+                // Payment was canceled
+                } elseif ($request->get('EXECCODE') === 4004) {
+
+                    $this->cancelPayment($order_id);
+
+                // Payment was not accepted
+                } else {
+                    $this->getLog()->addError($this->getTranslator()->trans("Order ID %id payment failed.", array('%id' => $order_id)));
                 }
                 echo 'OK';
 

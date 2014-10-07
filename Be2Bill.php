@@ -40,7 +40,7 @@ class Be2Bill extends AbstractPaymentModule
         // Create payment confirmation message from templates, if not already defined
         $email_templates_dir = __DIR__.DS.'I18n'.DS.'email-templates'.DS;
 
-        if(null == MessageQuery::create()->findOneByName(self::CONFIRMATION_MESSAGE_NAME)){
+        if (null == MessageQuery::create()->findOneByName(self::CONFIRMATION_MESSAGE_NAME)) {
 
             $message = new Message();
 
@@ -75,7 +75,8 @@ class Be2Bill extends AbstractPaymentModule
      *  If this method return a \Thelia\Core\HttpFoundation\Response instance, this response is send to the
      *  browser.
      *
-     *  In many cases, it's necessary to send a form to the payment gateway. On your response you can return this form already
+     *  In many cases, it's necessary to send a form to the payment gateway.
+     * On your response you can return this form already
      *  completed, ready to be sent
      *
      * @param  \Thelia\Model\Order $order processed order
@@ -86,7 +87,8 @@ class Be2Bill extends AbstractPaymentModule
         $be2bill_params = $this->getBe2BillParameters($order, 'payment');
         $be2bill_params['HASH'] = $this->be2BillHash($be2bill_params);
 
-        if(false === $platformUrl = Be2billConfigQuery::read('url', false)){
+
+        if (false === $platformUrl = Be2billConfigQuery::read('url', false)) {
             throw new \InvalidArgumentException("The platform URL is not defined, please check Be2Bill module configuration.");
         }
 
@@ -97,39 +99,44 @@ class Be2Bill extends AbstractPaymentModule
     public function getBe2BillParameters(Order $order, $operationtype)
     {
 
-        $amount = $order->getTotalAmount()*100;
+        $amount = round($order->getTotalAmount(), 2)*100;
+
 
         $customer = $order->getCustomer();
 
-        $address = $customer->getDefaultAddress();
+        $invoiceAddress = $order->getOrderAddressRelatedByInvoiceOrderAddressId();
 
         $be2bill_params = array(
-            'IDENTIFIER'    => Be2billConfigQuery::read('identifier'),
-            'OPERATIONTYPE' => $operationtype,
-            'DESCRIPTION'   => Be2billConfigQuery::read('description'),
-            'ORDERID'       => $order->getId(),
             'AMOUNT'        => $amount,
-            'VERSION'       => '2.0',
+            'CLIENTADDRESS' => trim($invoiceAddress->getAddress1() . ' ' . $invoiceAddress->getAddress2() . ' ' . $invoiceAddress->getAddress3()),
             'CLIENTIDENT'   => $customer->getId(),
-            'CLIENTADDRESS' => trim($address->getAddress1() . ' ' . $address->getAddress2() . ' ' . $address->getAddress3()),
-            'CLENTEMAIL'    => $customer->getEmail(),
+            'DESCRIPTION'   => 'Commande Be2Bill',
+            'IDENTIFIER'    => Be2billConfigQuery::read('identifier'),
+            'ORDERID'       => $order->getId(),
+            'VERSION'       => '2.0',
+            'OPERATIONTYPE' => 'payment',
             '3DSECURE'      => Be2billConfigQuery::read('3dsecure')
         );
 
         return $be2bill_params;
     }
 
-    public static function be2BillHash(array $params){
+    public static function be2BillHash(array $params)
+    {
 
         ksort($params);
 
         $password = Be2billConfigQuery::read('password');
         $clear_string = $password;
-        foreach ($params as $key => $value)
-        {
-            $clear_string .= $key . '=' . $value . $password;
+
+        foreach ($params as $key => $value) {
+            $clear_string .= $key . '=' . trim($value) . $password;
         }
+
+        $test = $clear_string;
+
         return hash('sha256', $clear_string);
+
     }
 
     /**

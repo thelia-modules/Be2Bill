@@ -32,5 +32,5 @@ http://votresite.fr/be2bill/redirect/payment (Url après traitement)
 http://votresite.fr/cart (Url en cas d'annulation)
 
 3) Renseigner les urls de notifications, c'est cette page qui va passé votre commande en payée ou non :
-http://votresite.fr/be2bill/callback/notif (notification de transactions)
-http://votresite.fr/be2bill/callback/unpayed (notification d'impayés)
+http://votresite.fr/be2bill/callback/payment (notification de transactions)
+http://votresite.fr/be2bill/callback/unpaid (notification d'impayés)

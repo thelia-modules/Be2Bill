@@ -19,20 +19,21 @@ use Thelia\Tools\URL;
 
 class ConfigurationController extends BaseAdminController
 {
-    public function configure(){
+    public function configure()
+    {
 
-        if(null !== $response = $this->checkAuth(AdminResources::MODULE, 'Be2Bill', AccessManager::UPDATE)){
+        if (null !== $response = $this->checkAuth(AdminResources::MODULE, 'Be2Bill', AccessManager::UPDATE)) {
             return $response;
         }
 
         $configForm = new ConfigForm($this->getRequest());
         $message = null;
-        try{
+        try {
 
             $form = $this->validateForm($configForm);
             $data = $form->getData($form);
 
-            foreach($data as $name => $value){
+            foreach ($data as $name => $value) {
                 Be2billConfigQuery::set($name, $value);
             }
 
@@ -54,9 +55,9 @@ class ConfigurationController extends BaseAdminController
 
             $this->redirect(URL::getInstance()->absoluteUrl($route));
 
-        }catch(FormValidationException $e) {
+        } catch (FormValidationException $e) {
             $message = $this->createStandardFormValidationErrorMessage($e);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $message = $e->getMessage();
         }
 

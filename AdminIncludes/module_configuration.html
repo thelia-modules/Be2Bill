@@ -18,7 +18,7 @@
                 </div>
             {/if}
 
-            <form action="{url path='/admin/module/be2bill/configure'}" method="post">
+            <form action="{url path='be2bill.ajax.transactions'}" method="post">
 
                 {form_hidden_fields form=$form}
 
@@ -96,18 +96,17 @@
                             <br/>
                             {intl l="1) Autoriser l'hébergeur à acceder au service Be2Bill en renseignant son adresse IP dans la configuration."}
                             <br/>
-                            {intl l="2) Renseigner les urls de redirections :"}
+                            {intl l="2) Renseigner les urls de notifications :"}
                             <ul>
-                                <li>{intl l="http://votresite.fr/be2bill/redirect/payment (Url après traitement) "}</li>
-                                <li>{intl l="http://votresite.fr/cart (Url en cas d'annulation) "}</li>
+                                <li>http://<strong>site.com</strong>/be2bill/callback/payment {intl l="(notification de transactions)"}</li>
+                                <li>http://<strong>site.com</strong>/be2bill/callback/unpaid {intl l="(notification d'impayés)"}</li>
                             </ul>
-                            {intl l="3) Renseigner les urls de notifications :"}
+                            {intl l="3) Renseigner les urls de redirections :"}
                             <ul>
-                                <li>{intl l="http://votresite.fr/be2bill/callback/payment (notification de transactions)"}</li>
-                                <li>{intl l="http://votresite.fr/be2bill/callback/unpaid (notification d'impayés)"}</li>
+                                <li>http://<strong>site.com</strong>/be2bill/redirect/payment {intl l="(Url après traitement) "}</li>
+                                <li>http://<strong>site.com</strong>be2bill/redirect/cancel {intl l="(Url en cas d'annulation) "}</li>
                             </ul>
                         </div>
-
                     </div>
                 </div>
 
@@ -124,5 +123,57 @@
             <div class="col-md-12 title title-without-tabs">
                 {intl l="Transactions Be2Bill"}
             </div>
+            <div class="col-md-12">
+                <form id="transaction-form" action="/admin/module/be2bill/ajax/transactions" method="get">
+                    {intl l="A partir de : "}
+                    <input type="date" name="transaction-date"/>
+                    {intl l=" interval : "}
+                    <select name="transaction-interval">
+                        <option value="1">{intl l="Jour"}</option>
+                        <option value="7">{intl l="Semaine"}</option>
+                        <option value="31">{intl l="Mois"}</option>
+                    </select>
+                </form>
+            </div>
+
         </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-condensed table-left-aligned">
+                <thead>
+                <tr>
+                    <th>{intl l="ID Be2Bill"}</th>
+                    <th>{intl l="Commande"}</th>
+                    <th>{intl l="Montant"}</th>
+                    <th>{intl l="ID Client"}</th>
+                    <th>{intl l="Nom Client"}</th>
+                    <th>{intl l="Email Client"}</th>
+                    <th>Date</th>
+                    <th>{intl l="Remboursement"}</th>
+                </tr>
+                </thead>
+                <tbody id="list-transaction">
+
+                {loop type="be2bill.transactions" name="be2bill_transactions" }
+                    <tr>
+                        <td>{$TRANSACTIONID}</td>
+                        <td>{$ORDERID}</td>
+                        <td>{$AMOUNT}</td>
+                        <td>{$CUSTOMERID}</td>
+                        <td>{$CUSTOMER}</td>
+                        <td>{$CUSTOMEREMAIL}</td>
+                        <td>{$DATE}</td>
+                        <td>
+                            {if $REFUNDED == 0}
+                                <button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " } <span class="glyphicon glyphicon-repeat"></span></button>
+                            {else}
+                                {intl l="Remboursé par :"} {$REFUNDEDBY}
+                            {/if}
+                        </td>
+                    </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

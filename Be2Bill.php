@@ -133,8 +133,6 @@ class Be2Bill extends AbstractPaymentModule
             $clear_string .= $key . '=' . trim($value) . $password;
         }
 
-        $test = $clear_string;
-
         return hash('sha256', $clear_string);
 
     }

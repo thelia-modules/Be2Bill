@@ -8,10 +8,10 @@ use \PDO;
 use Be2Bill\Model\Be2billTransaction as ChildBe2billTransaction;
 use Be2Bill\Model\Be2billTransactionQuery as ChildBe2billTransactionQuery;
 use Be2Bill\Model\Map\Be2billTransactionTableMap;
-use Be2Bill\Model\Thelia\Model\Customer as ChildCustomer;
-use Be2Bill\Model\Thelia\Model\Order as ChildOrder;
-use Be2Bill\Model\Thelia\Model\CustomerQuery;
-use Be2Bill\Model\Thelia\Model\OrderQuery;
+use Thelia\Model\Customer as ChildCustomer;
+use Thelia\Model\Order as ChildOrder;
+use Thelia\Model\CustomerQuery;
+use Thelia\Model\OrderQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -78,7 +78,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
 
     /**
      * The value for the transaction_id field.
-     * @var        int
+     * @var        string
      */
     protected $transaction_id;
 
@@ -492,7 +492,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
     /**
      * Get the [transaction_id] column value.
      *
-     * @return   int
+     * @return   string
      */
     public function getTransactionId()
     {
@@ -746,13 +746,13 @@ abstract class Be2billTransaction implements ActiveRecordInterface
     /**
      * Set the value of [transaction_id] column.
      *
-     * @param      int $v new value
+     * @param      string $v new value
      * @return   \Be2Bill\Model\Be2billTransaction The current object (for fluent API support)
      */
     public function setTransactionId($v)
     {
         if ($v !== null) {
-            $v = (int) $v;
+            $v = (string) $v;
         }
 
         if ($this->transaction_id !== $v) {
@@ -1117,7 +1117,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
             $this->customer_id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : Be2billTransactionTableMap::translateFieldName('TransactionId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->transaction_id = (null !== $col) ? (int) $col : null;
+            $this->transaction_id = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : Be2billTransactionTableMap::translateFieldName('Operationtype', TableMap::TYPE_PHPNAME, $indexType)];
             $this->operationtype = (null !== $col) ? (string) $col : null;
@@ -1496,7 +1496,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->customer_id, PDO::PARAM_INT);
                         break;
                     case 'TRANSACTION_ID':
-                        $stmt->bindValue($identifier, $this->transaction_id, PDO::PARAM_INT);
+                        $stmt->bindValue($identifier, $this->transaction_id, PDO::PARAM_STR);
                         break;
                     case 'OPERATIONTYPE':
                         $stmt->bindValue($identifier, $this->operationtype, PDO::PARAM_STR);

@@ -8,6 +8,7 @@
         <!-- sample definition
         <loop name="MySuperLoop" class="MyModule\Loop\MySuperLoop" />
         -->
+        <loop name="be2bill.transactions" class="Be2Bill\Loop\TransactionLoop"/>
     </loops>
 
     <forms>

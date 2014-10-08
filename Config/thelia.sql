@@ -27,7 +27,7 @@ CREATE TABLE `be2bill_transaction`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `order_id` INTEGER NOT NULL,
     `customer_id` INTEGER NOT NULL,
-    `transaction_id` INTEGER NOT NULL,
+    `transaction_id` VARCHAR(255) NOT NULL,
     `operationtype` VARCHAR(255) NOT NULL,
     `dsecure` VARCHAR(255) NOT NULL,
     `execcode` VARCHAR(255) NOT NULL,

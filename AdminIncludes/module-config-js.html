@@ -1,0 +1,33 @@
+<script>
+    $(document).ready(function(){
+        $("select[name=transaction-interval]").change(function(){
+            $(this).parents('form').submit();
+        });
+        $("input[name=transaction-date]").change(function(){
+            $(this).parents('form').submit();
+        });
+
+        $("#transaction-form").on('submit', function(e) {
+            e.preventDefault();
+
+            var $this = $(this);
+
+            var tr_interval = $("select[name=transaction-interval]").val();
+            var tr_date = $("input[name=transaction-date]").val();
+
+            if(tr_interval !== null && tr_date){
+
+                $.ajax({
+                    url: $this.attr('action'),
+                    type: $this.attr('method'),
+                    data: $this.serialize(),
+                    success: function(html) {
+                        var html = 'OK';
+                        $("#list-transaction").html(html);
+                    }
+
+                });
+            }
+        });
+    });
+</script>

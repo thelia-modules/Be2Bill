@@ -26,11 +26,10 @@ N'oubliez pas d'aller configurer votre compte dans l'extranet Be2bill :
 
 1) Autoriser l'hébergeur à acceder au service Be2Bill en renseignant son adresse IP dans la configuration.
 
-2) Renseigner les urls de redirections :
+2) Renseigner les urls de notifications, c'est cette page qui va passé votre commande en payée ou non :
+   http://votresite.fr/be2bill/callback/payment (notification de transactions)
+   http://votresite.fr/be2bill/callback/unpaid (notification d'impayés)
 
-http://votresite.fr/be2bill/redirect/payment (Url après traitement)
-http://votresite.fr/cart (Url en cas d'annulation)
-
-3) Renseigner les urls de notifications, c'est cette page qui va passé votre commande en payée ou non :
-http://votresite.fr/be2bill/callback/payment (notification de transactions)
-http://votresite.fr/be2bill/callback/unpaid (notification d'impayés)
+3)Renseigner les urls de redirections :
+    http://votresite.fr/be2bill/redirect/payment (Url après traitement)
+    http://votresite.fr/be2bill/redirect/cancel (Url en cas d'annulation)

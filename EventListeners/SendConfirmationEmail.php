@@ -39,6 +39,14 @@ class SendConfirmationEmail extends BaseAction implements EventSubscriberInterfa
         $this->mailer = $mailer;
     }
 
+    /**
+     * @return \Thelia\Mailer\MailerFactory
+     */
+    public function getMailer()
+    {
+        return $this->mailer;
+    }
+
     public function updateOrderStatus(OrderEvent $event)
     {
         $be2bill = new Be2Bill();

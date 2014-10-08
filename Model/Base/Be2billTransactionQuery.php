@@ -79,7 +79,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBe2billTransaction findOneById(int $id) Return the first ChildBe2billTransaction filtered by the id column
  * @method     ChildBe2billTransaction findOneByOrderId(int $order_id) Return the first ChildBe2billTransaction filtered by the order_id column
  * @method     ChildBe2billTransaction findOneByCustomerId(int $customer_id) Return the first ChildBe2billTransaction filtered by the customer_id column
- * @method     ChildBe2billTransaction findOneByTransactionId(int $transaction_id) Return the first ChildBe2billTransaction filtered by the transaction_id column
+ * @method     ChildBe2billTransaction findOneByTransactionId(string $transaction_id) Return the first ChildBe2billTransaction filtered by the transaction_id column
  * @method     ChildBe2billTransaction findOneByOperationtype(string $operationtype) Return the first ChildBe2billTransaction filtered by the operationtype column
  * @method     ChildBe2billTransaction findOneByDsecure(string $dsecure) Return the first ChildBe2billTransaction filtered by the dsecure column
  * @method     ChildBe2billTransaction findOneByExeccode(string $execcode) Return the first ChildBe2billTransaction filtered by the execcode column
@@ -98,7 +98,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     array findById(int $id) Return ChildBe2billTransaction objects filtered by the id column
  * @method     array findByOrderId(int $order_id) Return ChildBe2billTransaction objects filtered by the order_id column
  * @method     array findByCustomerId(int $customer_id) Return ChildBe2billTransaction objects filtered by the customer_id column
- * @method     array findByTransactionId(int $transaction_id) Return ChildBe2billTransaction objects filtered by the transaction_id column
+ * @method     array findByTransactionId(string $transaction_id) Return ChildBe2billTransaction objects filtered by the transaction_id column
  * @method     array findByOperationtype(string $operationtype) Return ChildBe2billTransaction objects filtered by the operationtype column
  * @method     array findByDsecure(string $dsecure) Return ChildBe2billTransaction objects filtered by the dsecure column
  * @method     array findByExeccode(string $execcode) Return ChildBe2billTransaction objects filtered by the execcode column
@@ -422,36 +422,24 @@ abstract class Be2billTransactionQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByTransactionId(1234); // WHERE transaction_id = 1234
-     * $query->filterByTransactionId(array(12, 34)); // WHERE transaction_id IN (12, 34)
-     * $query->filterByTransactionId(array('min' => 12)); // WHERE transaction_id > 12
+     * $query->filterByTransactionId('fooValue');   // WHERE transaction_id = 'fooValue'
+     * $query->filterByTransactionId('%fooValue%'); // WHERE transaction_id LIKE '%fooValue%'
      * </code>
      *
-     * @param     mixed $transactionId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $transactionId The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildBe2billTransactionQuery The current query, for fluid interface
      */
     public function filterByTransactionId($transactionId = null, $comparison = null)
     {
-        if (is_array($transactionId)) {
-            $useMinMax = false;
-            if (isset($transactionId['min'])) {
-                $this->addUsingAlias(Be2billTransactionTableMap::TRANSACTION_ID, $transactionId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($transactionId['max'])) {
-                $this->addUsingAlias(Be2billTransactionTableMap::TRANSACTION_ID, $transactionId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
+        if (null === $comparison) {
+            if (is_array($transactionId)) {
                 $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $transactionId)) {
+                $transactionId = str_replace('*', '%', $transactionId);
+                $comparison = Criteria::LIKE;
             }
         }
 

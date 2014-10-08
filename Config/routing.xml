@@ -32,21 +32,31 @@
         <default key="_controller">Be2Bill\Controller\admin\ConfigurationController::configure</default>
     </route>
 
-    <route id="be2bill.payment.redirect" path="be2bill/redirect/payment">
+    <route id="be2bill.payment.redirect.payment" path="/be2bill/redirect/payment">
         <default key="_controller">Be2Bill\Controller\PaymentController::redirectBe2BillRequest</default>
     </route>
 
-    <route id="be2bill.payment.confirmation" path="be2bill/callback/payment" methods="post">
+    <route id="be2bill.payment.redirect.cancel" path="/be2bill/redirect/cancel">
+        <default key="_controller">Be2Bill\Controller\PaymentController::redirectBe2BillCancel</default>
+    </route>
+
+    <route id="be2bill.payment.confirmation" path="/be2bill/callback/payment" methods="post">
         <default key="_controller">Be2Bill\Controller\PaymentController::processBe2BillRequest</default>
     </route>
 
-    <route id="be2bill.payment.unpaid" path="be2bill/callback/unpaid" methods="post">
+    <route id="be2bill.payment.unpaid" path="/be2bill/callback/unpaid" methods="post">
         <default key="_controller">Be2Bill\Controller\PaymentController::processBe2BillUnpaidRequest</default>
+    </route>
+
+    <route id="be2bill.ajax.transactions" path="/admin/module/be2bill/ajax/transactions">
+        <default key="_controller">Be2Bill\Controller\admin\Be2BillController::listAjaxTransaction</default>
     </route>
 
     <route id="be2bill.refund" path="/admin/module/be2bill/refund" methods="post">
         <default key="_controller">Be2Bill\Controller\admin\Be2BillController::refundTransaction</default>
     </route>
+
+
 
 
 </routes>

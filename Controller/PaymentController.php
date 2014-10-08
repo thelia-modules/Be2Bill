@@ -50,7 +50,7 @@ class PaymentController extends BasePaymentModuleController
             if ($be2BillHash == $hash) {
 
                 // Payment was accepted
-                if ($request->get('EXECCODE') === 0000) {
+                if ($request->get('EXECCODE') == 0000) {
 
                     if ($order->isPaid()) {
                         $this->getLog()->addInfo($this->getTranslator()->trans("Order ID %id is already paid.", array('%id' => $order_id)));
@@ -76,10 +76,11 @@ class PaymentController extends BasePaymentModuleController
                             ->setCardtype($request->get('CARDTYPE'));
 
                         $transaction->save();
+
                     }
 
                 // Payment was canceled
-                } elseif ($request->get('EXECCODE') === 4004) {
+                } elseif ($request->get('EXECCODE') == 4004) {
 
                     $this->cancelPayment($order_id);
 
@@ -96,7 +97,7 @@ class PaymentController extends BasePaymentModuleController
         }
     }
 
-    public function redirectBe2BillRequest($type)
+    public function redirectBe2BillRequest()
     {
         $request = $this->getRequest()->query;
 
@@ -108,14 +109,23 @@ class PaymentController extends BasePaymentModuleController
 
 
         if ($be2BillHash == $hash) {
-            if ($type == 'success') {
+            if ($request->get('EXECCODE') == 0000) {
                 $this->redirectToSuccessPage($params['ORDERID']);
             } else {
-                $message = $this->getTranslator()->trans('Error n° %code', array('%code' => $params['EXECCODE']));
+                $message = $this->getTranslator()->trans('Error n° %code : %message', array('%code' => $params['EXECCODE'], '%message' => $params['MESSAGE']));
                 $this->redirectToFailurePage($params['ORDERID'], $message);
             }
         }
 
     }
+
+    public function redirectBe2BillCancel()
+    {
+        $request = $this->getRequest()->query;
+
+        $this->cancelPayment($request->get('ORDERID'));
+    }
+
+
 
 }

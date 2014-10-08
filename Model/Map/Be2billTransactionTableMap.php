@@ -214,7 +214,7 @@ class Be2billTransactionTableMap extends TableMap
         $this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('ORDER_ID', 'OrderId', 'INTEGER', 'order', 'ID', true, null, null);
         $this->addForeignKey('CUSTOMER_ID', 'CustomerId', 'INTEGER', 'customer', 'ID', true, null, null);
-        $this->addColumn('TRANSACTION_ID', 'TransactionId', 'INTEGER', true, null, null);
+        $this->addColumn('TRANSACTION_ID', 'TransactionId', 'VARCHAR', true, 255, null);
         $this->addColumn('OPERATIONTYPE', 'Operationtype', 'VARCHAR', true, 255, null);
         $this->addColumn('DSECURE', 'Dsecure', 'VARCHAR', true, 255, null);
         $this->addColumn('EXECCODE', 'Execcode', 'VARCHAR', true, 255, null);

@@ -129,7 +129,7 @@
                     <input type="date" name="transaction-date"/>
                     {intl l=" interval : "}
                     <select name="transaction-interval">
-                        <option value="1">{intl l="Jour"}</option>
+                        <option value="0">{intl l="Jour"}</option>
                         <option value="7">{intl l="Semaine"}</option>
                         <option value="31">{intl l="Mois"}</option>
                     </select>
@@ -165,7 +165,12 @@
                         <td>{$DATE}</td>
                         <td>
                             {if $REFUNDED == 0}
-                                <button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " } <span class="glyphicon glyphicon-repeat"></span></button>
+                                <form id="refund-form" action="/admin/module/be2bill/refund" method="post">
+                                    <input type="hidden" name="transaction-id" value="{$TRANSACTIONID}"/>
+                                    <input type="hidden" name="transaction-amount" value="{$AMOUNT}"/>
+                                    <input type="hidden" name="order-id" value="{$ORDERID}"/>
+                                    <button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " } <span class="glyphicon glyphicon-repeat"></span></button>
+                                </form>
                             {else}
                                 {intl l="Remboursé par :"} {$REFUNDEDBY}
                             {/if}

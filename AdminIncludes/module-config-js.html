@@ -21,13 +21,27 @@
                     url: $this.attr('action'),
                     type: $this.attr('method'),
                     data: $this.serialize(),
-                    success: function(html) {
-                        var html = 'OK';
+                    success: function(data) {
+                        var html = '';
+                        $.each(data, function(i, val){
+                            var created = new Date(val.CreatedAt.date);
+
+                            if ( val.Refunded === false ) {
+                                var refunded = '<button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " } <span class="glyphicon glyphicon-repeat"></span></button>';
+                            } else {
+                                var refunded = '{intl l="Remboursé par :"} '+val.Refundedby;
+                            }
+                            html += val.refunded+'<tr><td>'+val.TransactionId+'</td><td>'+val.OrderId+'</td><td>'+val.Amount+'</td><td>'+val.CustomerId+'</td><td>'+val.firstname+' '+val.lastname+'</td><td>'+val.Clientemail+'</td><td>'+created.toLocaleString()+'</td><td>'+refunded+'</td></tr>'
+                            ;
+                        });
                         $("#list-transaction").html(html);
                     }
 
                 });
             }
         });
+
+
+
     });
 </script>

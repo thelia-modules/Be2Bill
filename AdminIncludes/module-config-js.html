@@ -31,7 +31,7 @@
                             } else {
                                 var refunded = '{intl l="Remboursé par :"} '+val.Refundedby;
                             }
-                            html += val.refunded+'<tr><td>'+val.TransactionId+'</td><td>'+val.OrderId+'</td><td>'+val.Amount+'</td><td>'+val.CustomerId+'</td><td>'+val.firstname+' '+val.lastname+'</td><td>'+val.Clientemail+'</td><td>'+created.toLocaleString()+'</td><td>'+refunded+'</td></tr>'
+                            html += val.refunded+'<tr><td>'+val.TransactionId+'</td><td>'+val.OrderId+'</td><td>'+val.Amount+'</td><td>'+val.CustomerId+'</td><td>'+val.firstname+' '+val.lastname+'</td><td>'+val.Clientemail+'</td><td>'+created.toLocaleString()+'</td><td id="refund-'+val.OrderId+'">'+refunded+'</td></tr>'
                             ;
                         });
                         $("#list-transaction").html(html);
@@ -39,6 +39,26 @@
 
                 });
             }
+        });
+
+       $("#refund-form").on('submit', function(e){
+            e.preventDefault();
+
+            var $this = $(this);
+            if (confirm("{intl l='Cette opération est irréversible. Êtes-vous sûr de vouloir rembourser cette transaction ?'}")){
+                $.ajax({
+                    url: $this.attr('action'),
+                    type: $this.attr('method'),
+                    data : $this.serialize(),
+                    success: function(data) {
+                        if( data.orderId ){
+                            $("#refund-"+data.orderId).html("Refunded by"+data.admin);
+                        }
+                        alert(data);
+                    }
+                });
+            }
+
         });
 
 

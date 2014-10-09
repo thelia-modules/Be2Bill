@@ -92,7 +92,7 @@ class Be2Bill extends AbstractPaymentModule
             throw new \InvalidArgumentException("The platform URL is not defined, please check Be2Bill module configuration.");
         }
 
-        return $this->generateGatewayFormResponse($order, $platformUrl, $be2bill_params);
+        return $this->generateGatewayFormResponse($order, "https://".Be2billConfigQuery::read('url').".be2bill.com/front/form/process", $be2bill_params);
 
     }
 
@@ -130,13 +130,18 @@ class Be2Bill extends AbstractPaymentModule
         $clear_string = $password;
 
         foreach ($params as $key => $value) {
-            $clear_string .= $key . '=' . trim($value) . $password;
+            if (is_array($value) == true) {
+                ksort($value);
+                foreach ($value as $index => $val) {
+                    $clear_string .= $key . '[' . $index . ']=' . $val . $password;
+                }
+            } else {
+                $clear_string .= $key . '=' . $value . $password;
+            }
         }
-
         return hash('sha256', $clear_string);
 
     }
-
     /**
      *
      * This method is call on Payment loop.

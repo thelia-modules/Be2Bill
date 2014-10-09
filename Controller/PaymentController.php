@@ -13,6 +13,7 @@ use Be2Bill\Be2Bill;
 use Be2Bill\Model\Be2billTransaction;
 use Be2Bill\Model\Be2billTransactionQuery;
 use Thelia\Module\BasePaymentModuleController;
+use Thelia\Core\HttpFoundation\Response;
 
 class PaymentController extends BasePaymentModuleController
 {
@@ -88,11 +89,11 @@ class PaymentController extends BasePaymentModuleController
                 } else {
                     $this->getLog()->addError($this->getTranslator()->trans("Order ID %id payment failed.", array('%id' => $order_id)));
                 }
-                echo 'OK';
+                return Response::create('OK');
 
             } else {
                 $this->getLog()->addError($this->getTranslator()->trans("Response could not be authentified."));
-                echo 'ERROR';
+                return Response::create('ERROR');
             }
         }
     }

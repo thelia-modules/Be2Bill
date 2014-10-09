@@ -15,12 +15,18 @@ use Be2Bill\Model\Be2billTransaction;
 use Be2Bill\Model\Be2billTransactionQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Thelia\Controller\Admin\BaseAdminController;
+use Thelia\Core\Security\AccessManager;
+use Thelia\Core\Security\Resource\AdminResources;
 
 class Be2BillController extends BaseAdminController
 {
 
     public function listAjaxTransaction()
     {
+        if (null !== $response = $this->checkAuth(AdminResources::MODULE, 'Be2Bill', AccessManager::VIEW)) {
+            return $response;
+        }
+
         $request = $this->getRequest()->query;
 
         $startDate = date('Y-m-d', strtotime($request->get('transaction-date')));
@@ -39,15 +45,18 @@ class Be2BillController extends BaseAdminController
 
     public function refundTransaction()
     {
+        if (null !== $response = $this->checkAuth(AdminResources::MODULE, 'Be2Bill', AccessManager::UPDATE)) {
+            return $response;
+        }
+
         $request = $this->getRequest()->request;
         $transaction_id = $request->get('transaction-id');
         $order_id = $request->get('order-id');
-        $amount = $request->get('transaction-amount')*100;
 
         $params = array(
             'method' => 'refund',
             'params' => array(
-                'DESCRIPTION' => 'Be2Bnd',
+                'DESCRIPTION' => 'Remboursement Be 2 Bill',
                 'IDENTIFIER' => Be2billConfigQuery::read('identifier'),
                 'OPERATIONTYPE' => 'refund',
                 'ORDERID' => $order_id,
@@ -56,40 +65,33 @@ class Be2BillController extends BaseAdminController
             )
         );
 
-        $params['params']['HASH'] = "azdfzsdefsfqsfsqdfqdsfdqqg";
+        $params['params']['HASH'] = Be2Bill::be2BillHash($params['params']);
 
         $resource =curl_init();
 
-        curl_setopt($resource, CURLOPT_URL, Be2billConfigQuery::read('url', false));
+        curl_setopt($resource, CURLOPT_URL, "https://".Be2billConfigQuery::read('url').".be2bill.com/front/service/rest/process");
         curl_setopt($resource, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($resource, CURLOPT_POST, true);
-        curl_setopt($resource, CURLOPT_POSTFIELDS, http_build_query($params['params']));
+        curl_setopt($resource, CURLOPT_POSTFIELDS, http_build_query($params));
 
         $serialized = curl_exec($resource);
 
-        if( $serialized !== false ) {
-            $result = json_decode( $serialized,true );
-            var_dump($serialized);
-            // 3DS
-            if( $result['EXECCODE'] == '0001' )
-            {
-                echo base64_decode( $result['3DSECUREHTML'] );
-            }
-            // Wallet
-            elseif( $result['EXECCODE'] == '0002' )
-            {
-                echo base64_decode( $result['REDIRECTHTML'] );
-            }
-            else
-            {
-                if( $result['EXECCODE'] == '0000' )
-                {
-                    var_dump($result);
-                }
-                else
-                {
-                    var_dump($result);
-                }
+        if ($serialized !== false) {
+
+            $result = json_decode($serialized, true);
+
+            if ($result['EXECCODE'] == '0000') {
+                $admin = $this->getSecurityContext()->getAdminUser()->getUsername();
+                $transaction = new Be2billTransaction();
+                $transaction->setRefunded(true);
+                $transaction->setRefundedby($admin);
+
+                $transaction->save();
+
+                return $this->jsonResponse(json_encode(['orderId'=>$order_id, 'admin'=>$admin]));
+            } else {
+
+                return $this->jsonResponse(json_encode($result['MESSAGE']));
             }
         }
 

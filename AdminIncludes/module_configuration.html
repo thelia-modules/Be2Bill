@@ -18,7 +18,7 @@
                 </div>
             {/if}
 
-            <form action="{url path='be2bill.ajax.transactions'}" method="post">
+            <form action="{url path='/admin/module/be2bill/configure'}" method="post">
 
                 {form_hidden_fields form=$form}
 
@@ -163,7 +163,7 @@
                         <td>{$CUSTOMER}</td>
                         <td>{$CUSTOMEREMAIL}</td>
                         <td>{$DATE}</td>
-                        <td>
+                        <td id="refund-{$ORDERID}">
                             {if $REFUNDED == 0}
                                 <form id="refund-form" action="/admin/module/be2bill/refund" method="post">
                                     <input type="hidden" name="transaction-id" value="{$TRANSACTIONID}"/>

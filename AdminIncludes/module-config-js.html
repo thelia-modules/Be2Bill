@@ -1,9 +1,42 @@
+<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js" ></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/humanity/jquery-ui.css" >
+
 <script>
     $(document).ready(function(){
+        var dateToday = new Date();
+        dateToday.setDate(dateToday.getDate() - 7);
+        var d = dateToday.getDate();
+        var m = dateToday.getMonth() + 1;
+        var y = dateToday.getFullYear();
+
+        var intDate = '' + (d <= 9 ? '0' + d : d) + '/' + (m<=9 ? '0' + m : m) + '/' + y;
+        var intDateAlt = '' + (m<=9 ? '0' + m : m) + '/'  + (d <= 9 ? '0' + d : d) + '/' + y;
+
+        $("#datepicker").val(intDate);
+        $("#datepicker-alt").val(intDateAlt);
+        $("#datepicker").datepicker({
+            firstDay:1,
+            defaultDate: dateToday,
+            closeText: 'Fermer',
+            prevText: 'Précédent',
+            nextText: 'Suivant',
+            currentText: 'Aujourd\'hui',
+            monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+            dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+            dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+            dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+            weekHeader: 'Sem.',
+            dateFormat: 'dd/\mm/\yy',
+            altField: '#datepicker-alt',
+            altFormat: 'mm/\dd/\yy'
+
+        });
+
         $("select[name=transaction-interval]").change(function(){
             $(this).parents('form').submit();
         });
-        $("input[name=transaction-date]").change(function(){
+        $("#datepicker").change(function(){
             $(this).parents('form').submit();
         });
 
@@ -23,15 +56,24 @@
                     data: $this.serialize(),
                     success: function(data) {
                         var html = '';
+                        if( data == '' ){
+                            html += ' <tr><td>{intl l="Aucune transaction trouvée pour cette période."}</td></tr>';
+                        }
+
                         $.each(data, function(i, val){
-                            var created = new Date(val.CreatedAt.date);
+                            var t = val.CreatedAt.date.split(/[- :]/);
+                            var created = t[2]+'/'+t[1]+'/'+t[0]+' '+t[3]+':'+t[4];
 
                             if ( val.Refunded === false ) {
-                                var refunded = '<button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " } <span class="glyphicon glyphicon-repeat"></span></button>';
+
+                                var refunded = '<form class="refund-form" action="{url path="/admin/module/be2bill/refund"}" method="post"><input type="hidden" name="'+val.TransactionId+'" value="{$TRANSACTIONID}"/><input type="hidden" name="order-id" value="'+val.OrderId+'"/>';
+                                refunded += '<button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " } <span class="glyphicon glyphicon-repeat"></span></button></form>';
+
                             } else {
+
                                 var refunded = '{intl l="Remboursé par :"} '+val.Refundedby;
                             }
-                            html += val.refunded+'<tr><td>'+val.TransactionId+'</td><td>'+val.OrderId+'</td><td>'+val.Amount+'</td><td>'+val.CustomerId+'</td><td>'+val.firstname+' '+val.lastname+'</td><td>'+val.Clientemail+'</td><td>'+created.toLocaleString()+'</td><td id="refund-'+val.OrderId+'">'+refunded+'</td></tr>'
+                            html += val.refunded+'<tr><td>'+val.TransactionId+'</td><td>'+val.OrderId+'</td><td>'+val.Amount+'</td><td>'+val.CustomerId+'</td><td>'+val.lastname+' '+val.firstname+'</td><td>'+val.Clientemail+'</td><td>'+created+'</td><td id="refund-'+val.OrderId+'">'+refunded+'</td></tr>'
                             ;
                         });
                         $("#list-transaction").html(html);
@@ -41,7 +83,7 @@
             }
         });
 
-       $("#refund-form").on('submit', function(e){
+       $(".refund-form").on('submit', function(e){
             e.preventDefault();
 
             var $this = $(this);
@@ -52,9 +94,10 @@
                     data : $this.serialize(),
                     success: function(data) {
                         if( data.orderId ){
-                            $("#refund-"+data.orderId).html("Refunded by"+data.admin);
+                            $("#refund-"+data.orderId).html("{intl l='Remboursé par :'} "+data.admin);
+                        } else {
+                            alert(data);
                         }
-                        alert(data);
                     }
                 });
             }

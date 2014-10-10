@@ -92,7 +92,7 @@ class Be2Bill extends AbstractPaymentModule
             throw new \InvalidArgumentException("The platform URL is not defined, please check Be2Bill module configuration.");
         }
 
-        return $this->generateGatewayFormResponse($order, "https://".Be2billConfigQuery::read('url').".be2bill.com/front/form/process", $be2bill_params);
+        return $this->generateGatewayFormResponse($order, "https://".Be2billConfigQuery::read('url')."/front/form/process", $be2bill_params);
 
     }
 
@@ -115,9 +115,9 @@ class Be2Bill extends AbstractPaymentModule
             'ORDERID'       => $order->getId(),
             'VERSION'       => '2.0',
             'OPERATIONTYPE' => 'payment',
+            'LANGUAGE'      => strtoupper($order->getLang()->getCode()),
             '3DSECURE'      => Be2billConfigQuery::read('3dsecure')
         );
-
         return $be2bill_params;
     }
 

@@ -2,15 +2,15 @@
 <module>
     <fullnamespace>Be2Bill\Be2Bill</fullnamespace>
     <descriptive locale="en_US">
-        <title>Pay with Be2Bill</title>
+        <title>Be2Bill</title>
     </descriptive>
     <descriptive locale="fr_FR">
-        <title>Payer avec Be2Bill</title>
+        <title>Be2Bill</title>
     </descriptive>
-    <version></version>
+    <version>1.0</version>
     <author>
-        <name></name>
-        <email></email>
+        <name>Vincent Lopes-Vicente</name>
+        <email>vlopes@openstudio.fr</email>
     </author>
     <type>payment</type>
     <thelia>2.0.0</thelia>

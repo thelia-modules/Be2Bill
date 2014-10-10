@@ -64,12 +64,11 @@ class Be2BillController extends BaseAdminController
                 'VERSION' => '2.0',
             )
         );
-
         $params['params']['HASH'] = Be2Bill::be2BillHash($params['params']);
 
         $resource =curl_init();
 
-        curl_setopt($resource, CURLOPT_URL, "https://".Be2billConfigQuery::read('url').".be2bill.com/front/service/rest/process");
+        curl_setopt($resource, CURLOPT_URL, "https://".Be2billConfigQuery::read('url')."/front/service/rest/process");
         curl_setopt($resource, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($resource, CURLOPT_POST, true);
         curl_setopt($resource, CURLOPT_POSTFIELDS, http_build_query($params));
@@ -82,7 +81,7 @@ class Be2BillController extends BaseAdminController
 
             if ($result['EXECCODE'] == '0000') {
                 $admin = $this->getSecurityContext()->getAdminUser()->getUsername();
-                $transaction = new Be2billTransaction();
+                $transaction = Be2billTransactionQuery::create()->findOneByTransactionId($transaction_id);
                 $transaction->setRefunded(true);
                 $transaction->setRefundedby($admin);
 
@@ -90,10 +89,10 @@ class Be2BillController extends BaseAdminController
 
                 return $this->jsonResponse(json_encode(['orderId'=>$order_id, 'admin'=>$admin]));
             } else {
-
                 return $this->jsonResponse(json_encode($result['MESSAGE']));
             }
+        } else {
+            return $this->jsonResponse(json_encode('Erreur'));
         }
-
     }
 }

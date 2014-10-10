@@ -2,7 +2,7 @@
     <div class="col-md-12 general-block-decorator">
         <div class="row">
             <div class="col-md-12 title title-without-tabs">
-                {intl l="Configuration Be2Bill"}
+                {intl l="Configuration Be 2 Bill"}
             </div>
         </div>
 
@@ -34,7 +34,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
+                                    <label for="{$name}" class="control-label">{$label}</label>
                                     <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
                                     <span class="help-block">{$label_attr.help}</span>
                                 </div>
@@ -46,7 +46,7 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
+                                <label for="{$name}" class="control-label">{$label}</label>
                                 <input id="{$name}" type="password" name="{$name}" value="{$value}" class="form-control"/>
                                 <span class="help-block">{$label_attr.help}</span>
                             </div>
@@ -57,7 +57,7 @@
 
                         <div class="col-md-6 ">
                             <div class="form-group">
-                                <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
+                                <label for="{$name}" class="control-label">{$label}</label>
                                 <select id="{$name}" name="{$name}" class="form-control">
                                     <option value="no" {if ({$value} === "no")} selected="selected"{/if} >Non</option>
                                     <option value="yes" {if ({$value} === "yes")} selected="selected"{/if} >Oui</option>
@@ -71,7 +71,7 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
+                                <label for="{$name}" class="control-label">{$label}</label>
                                 <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
                                 <span class="help-block">{$label_attr.help}</span>
                             </div>
@@ -83,7 +83,7 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="{$name}" class="control-label">{intl l="{$label}"}</label>
+                                <label for="{$name}" class="control-label">{$label}</label>
                                 <textarea id="{$name}" name="{$name}" class="form-control">{$value}</textarea>
                                 <span class="help-block">{$label_attr.help}</span>
                             </div>
@@ -124,13 +124,15 @@
                 {intl l="Transactions Be2Bill"}
             </div>
             <div class="col-md-12">
-                <form id="transaction-form" action="/admin/module/be2bill/ajax/transactions" method="get">
+                <form id="transaction-form" action="{url path='/admin/module/be2bill/ajax/transactions'}" method="get">
                     {intl l="A partir de : "}
-                    <input type="date" name="transaction-date"/>
+
+                    <input id="datepicker" type="text" name="date"/>
+                    <input id="datepicker-alt" type="hidden" name="transaction-date"/>
                     {intl l=" interval : "}
                     <select name="transaction-interval">
-                        <option value="0">{intl l="Jour"}</option>
-                        <option value="7">{intl l="Semaine"}</option>
+                        <option value="1">{intl l="Jour"}</option>
+                        <option value="7" selected="selected">{intl l="Semaine"}</option>
                         <option value="31">{intl l="Mois"}</option>
                     </select>
                 </form>
@@ -153,30 +155,33 @@
                 </tr>
                 </thead>
                 <tbody id="list-transaction">
-
-                {loop type="be2bill.transactions" name="be2bill_transactions" }
-                    <tr>
-                        <td>{$TRANSACTIONID}</td>
-                        <td>{$ORDERID}</td>
-                        <td>{$AMOUNT}</td>
-                        <td>{$CUSTOMERID}</td>
-                        <td>{$CUSTOMER}</td>
-                        <td>{$CUSTOMEREMAIL}</td>
-                        <td>{$DATE}</td>
-                        <td id="refund-{$ORDERID}">
-                            {if $REFUNDED == 0}
-                                <form id="refund-form" action="/admin/module/be2bill/refund" method="post">
-                                    <input type="hidden" name="transaction-id" value="{$TRANSACTIONID}"/>
-                                    <input type="hidden" name="transaction-amount" value="{$AMOUNT}"/>
-                                    <input type="hidden" name="order-id" value="{$ORDERID}"/>
-                                    <button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " } <span class="glyphicon glyphicon-repeat"></span></button>
-                                </form>
-                            {else}
-                                {intl l="Remboursé par :"} {$REFUNDEDBY}
-                            {/if}
-                        </td>
-                    </tr>
-                {/loop}
+                {ifloop rel="be2bill_transactions"}
+                    {loop type="be2bill.transactions" name="be2bill_transactions" }
+                        <tr>
+                            <td>{$TRANSACTIONID}</td>
+                            <td>{$ORDERID}</td>
+                            <td>{$AMOUNT}</td>
+                            <td>{$CUSTOMERID}</td>
+                            <td>{$CUSTOMER}</td>
+                            <td>{$CUSTOMEREMAIL}</td>
+                            <td>{$DATE}</td>
+                            <td id="refund-{$ORDERID}">
+                                {if $REFUNDED == 0}
+                                    <form class="refund-form" action="{url path='/admin/module/be2bill/refund'}" method="post">
+                                        <input type="hidden" name="transaction-id" value="{$TRANSACTIONID}"/>
+                                        <input type="hidden" name="order-id" value="{$ORDERID}"/>
+                                        <button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " } <span class="glyphicon glyphicon-repeat"></span></button>
+                                    </form>
+                                {else}
+                                    {intl l="Remboursé par :"} {$REFUNDEDBY}
+                                {/if}
+                            </td>
+                        </tr>
+                    {/loop}
+                {/ifloop}
+                {elseloop rel="be2bill_transactions"}
+                    <tr><td>{intl l="Aucune transaction trouvée pour cette période."}</td></tr>
+                {/elseloop}
                 </tbody>
             </table>
         </div>

@@ -36,7 +36,7 @@ class TransactionLoop extends BaseLoop implements PropelSearchLoopInterface
             $customer = $transaction->getCustomer()->getLastname().' '.$transaction->getCustomer()->getFirstname();
 
             $loopResultRow->set('ORDERID', $transaction->getOrderId())
-                ->set('DATE', $transaction->getCreatedAt('d/m/Y H:i:s'))
+                ->set('DATE', $transaction->getCreatedAt('d/m/Y H:i'))
                 ->set('TRANSACTIONID', $transaction->getTransactionId())
                 ->set('AMOUNT', $transaction->getAmount())
                 ->set('CUSTOMERID', $transaction->getCustomerId())

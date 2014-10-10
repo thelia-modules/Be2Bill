@@ -46,7 +46,7 @@ class ConfigForm  extends BaseForm
                     'constraints'   => array(new NotBlank()),
                     'required'      => true,
                     'label'         => 'Identifier',
-                    'data'          => Be2billConfigQuery::read('identifier', '0000000000'),
+                    'data'          => Be2billConfigQuery::read('identifier'),
                     'label_attr'    => array(
                                         'help' => 'Identifiant du compte'
                                     )
@@ -57,7 +57,7 @@ class ConfigForm  extends BaseForm
                 'text',
                 array(
                     'label' => 'Mot de passe',
-                    'data' => Be2billConfigQuery::read('password', "thelia1234"),
+                    'data' => Be2billConfigQuery::read('password'),
                     'label_attr'    => array(
                                             'help' => 'Mote de passe Be2Bill'
                                     )
@@ -80,7 +80,7 @@ class ConfigForm  extends BaseForm
                 array(
                     'label' => 'Url',
                     'constraints' => array(new NotBlank()),
-                    'data' => Be2billConfigQuery::read('url', 'https:// [type d\'environnement] .be2bill.com/front/form/process'),
+                    'data' => Be2billConfigQuery::read('url', '[type d\'environnement].be2bill.com'),
                     'required' => true,
                     'label_attr' => array(
                         'help' => 'Url Web Service'

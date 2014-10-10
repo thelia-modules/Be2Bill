@@ -113,7 +113,7 @@ class PaymentController extends BasePaymentModuleController
             if ($request->get('EXECCODE') == 0000) {
                 $this->redirectToSuccessPage($params['ORDERID']);
             } else {
-                $message = $this->getTranslator()->trans('Error n° %code : %message', array('%code' => $params['EXECCODE'], '%message' => $params['MESSAGE']));
+                $message = $this->getTranslator()->trans('Erreur n° %code : %message', array('%code' => $params['EXECCODE'], '%message' => $params['MESSAGE']));
                 $this->redirectToFailurePage($params['ORDERID'], $message);
             }
         }

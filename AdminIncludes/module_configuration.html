@@ -2,7 +2,7 @@
     <div class="col-md-12 general-block-decorator">
         <div class="row">
             <div class="col-md-12 title title-without-tabs">
-                {intl l="Configuration Be 2 Bill"}
+                {intl l="Configuration Be 2 Bill" d="be2bill.ai"}
             </div>
         </div>
 
@@ -59,8 +59,8 @@
                             <div class="form-group">
                                 <label for="{$name}" class="control-label">{$label}</label>
                                 <select id="{$name}" name="{$name}" class="form-control">
-                                    <option value="no" {if ({$value} === "no")} selected="selected"{/if} >Non</option>
-                                    <option value="yes" {if ({$value} === "yes")} selected="selected"{/if} >Oui</option>
+                                    <option value="no" {if ({$value} === "no")} selected="selected"{/if} >{intl l='Non' d='be2bill.ai'}</option>
+                                    <option value="yes" {if ({$value} === "yes")} selected="selected"{/if} >{intl l='Oui' d='be2bill.ai'}</option>
                                 </select>
                             </div>
                         </div>
@@ -92,19 +92,19 @@
                         {/form_field}
 
                         <div class="col-md-6">
-                            <strong>{intl l="N'oubliez pas d'aller configurer votre compte dans l'extranet Be2bill :"}</strong>
+                            <strong>{intl l="N'oubliez pas d'aller configurer votre compte dans l'extranet Be2bill :" d="be2bill.ai"}</strong>
                             <br/>
-                            {intl l="1) Autoriser l'hébergeur à acceder au service Be2Bill en renseignant son adresse IP dans la configuration."}
+                            {intl l="1) Autoriser l'hébergeur à acceder au service Be2Bill en renseignant son adresse IP dans la configuration." d="be2bill.ai"}
                             <br/>
-                            {intl l="2) Renseigner les urls de notifications :"}
+                            {intl l="2) Renseigner les urls de notifications :" d="be2bill.ai"}
                             <ul>
-                                <li>http://<strong>site.com</strong>/be2bill/callback/payment {intl l="(notification de transactions)"}</li>
-                                <li>http://<strong>site.com</strong>/be2bill/callback/unpaid {intl l="(notification d'impayés)"}</li>
+                                <li>http://<strong>site.com</strong>/be2bill/callback/payment {intl l="(notification de transactions)" d="be2bill.ai"}</li>
+                                <li>http://<strong>site.com</strong>/be2bill/callback/unpaid {intl l="(notification d'impayés)" d="be2bill.ai"}</li>
                             </ul>
-                            {intl l="3) Renseigner les urls de redirections :"}
+                            {intl l="3) Renseigner les urls de redirections :" d="be2bill.ai"}
                             <ul>
-                                <li>http://<strong>site.com</strong>/be2bill/redirect/payment {intl l="(Url après traitement) "}</li>
-                                <li>http://<strong>site.com</strong>be2bill/redirect/cancel {intl l="(Url en cas d'annulation) "}</li>
+                                <li>http://<strong>site.com</strong>/be2bill/redirect/payment {intl l="(Url après traitement) " d="be2bill.ai"}</li>
+                                <li>http://<strong>site.com</strong>/be2bill/redirect/cancel {intl l="(Url en cas d'annulation) " d="be2bill.ai"}</li>
                             </ul>
                         </div>
                     </div>
@@ -121,37 +121,39 @@
     <div class="col-md-12 general-block-decorator">
         <div class="row">
             <div class="col-md-12 title title-without-tabs">
-                {intl l="Transactions Be2Bill"}
+                {intl l="Transactions Be2Bill" d="be2bill.ai"}
             </div>
             <div class="col-md-12">
                 <form id="transaction-form" action="{url path='/admin/module/be2bill/ajax/transactions'}" method="get">
-                    {intl l="A partir de : "}
+                    {intl l="A partir de : " d="be2bill.ai"}
 
                     <input id="datepicker" type="text" name="date"/>
                     <input id="datepicker-alt" type="hidden" name="transaction-date"/>
-                    {intl l=" interval : "}
+                    {intl l=" interval : " d="be2bill.ai"}
                     <select name="transaction-interval">
-                        <option value="1">{intl l="Jour"}</option>
-                        <option value="7" selected="selected">{intl l="Semaine"}</option>
-                        <option value="31">{intl l="Mois"}</option>
+                        <option value="1">{intl l="Jour" d="be2bill.ai"}</option>
+                        <option value="7" selected="selected">{intl l="Semaine" d="be2bill.ai"}</option>
+                        <option value="31">{intl l="Mois" d="be2bill.ai"}</option>
                     </select>
                 </form>
             </div>
-
         </div>
-
+        <br/>
+        <div id="alert-refund" role="alert"></div>
         <div class="table-responsive">
+
             <table class="table table-striped table-condensed table-left-aligned">
+
                 <thead>
                 <tr>
-                    <th>{intl l="ID Be2Bill"}</th>
-                    <th>{intl l="Commande"}</th>
-                    <th>{intl l="Montant"}</th>
-                    <th>{intl l="ID Client"}</th>
-                    <th>{intl l="Nom Client"}</th>
-                    <th>{intl l="Email Client"}</th>
+                    <th>{intl l="ID Be2Bill" d="be2bill.ai"}</th>
+                    <th>{intl l="Commande" d="be2bill.ai"}</th>
+                    <th>{intl l="Montant" d="be2bill.ai"}</th>
+                    <th>{intl l="ID Client" d="be2bill.ai"}</th>
+                    <th>{intl l="Nom Client" d="be2bill.ai"}</th>
+                    <th>{intl l="Email Client" d="be2bill.ai"}</th>
                     <th>Date</th>
-                    <th>{intl l="Remboursement"}</th>
+                    <th>{intl l="Remboursement" d="be2bill.ai"}</th>
                 </tr>
                 </thead>
                 <tbody id="list-transaction">
@@ -170,17 +172,17 @@
                                     <form class="refund-form" action="{url path='/admin/module/be2bill/refund'}" method="post">
                                         <input type="hidden" name="transaction-id" value="{$TRANSACTIONID}"/>
                                         <input type="hidden" name="order-id" value="{$ORDERID}"/>
-                                        <button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " } <span class="glyphicon glyphicon-repeat"></span></button>
+                                        <button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " d="be2bill.ai"} <span class="glyphicon glyphicon-repeat"></span></button>
                                     </form>
                                 {else}
-                                    {intl l="Remboursé par :"} {$REFUNDEDBY}
+                                    {intl l="Remboursé par :" d="be2bill.ai"} {$REFUNDEDBY}
                                 {/if}
                             </td>
                         </tr>
                     {/loop}
                 {/ifloop}
                 {elseloop rel="be2bill_transactions"}
-                    <tr><td>{intl l="Aucune transaction trouvée pour cette période."}</td></tr>
+                    <tr><td>{intl l="Aucune transaction trouvée pour cette période." d="be2bill.ai"}</td></tr>
                 {/elseloop}
                 </tbody>
             </table>

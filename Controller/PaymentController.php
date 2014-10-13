@@ -43,7 +43,7 @@ class PaymentController extends BasePaymentModuleController
 
         $order_id = intval($request->get('ORDERID'));
 
-        $this->getLog()->addInfo($this->getTranslator()->trans("Be2Bill platform request received for order ID %id.", array('%id' => $order_id)));
+        $this->getLog()->addInfo($this->getTranslator()->trans("Be2Bill platform request received for order ID %id.", array('%id' => $order_id), Be2Bill::MODULE_DOMAIN));
 
         if (null !== $order = $this->getOrder($order_id)) {
 
@@ -54,10 +54,10 @@ class PaymentController extends BasePaymentModuleController
                 if ($request->get('EXECCODE') == 0000) {
 
                     if ($order->isPaid()) {
-                        $this->getLog()->addInfo($this->getTranslator()->trans("Order ID %id is already paid.", array('%id' => $order_id)));
+                        $this->getLog()->addInfo($this->getTranslator()->trans("Order ID %id is already paid.", array('%id' => $order_id), Be2Bill::MODULE_DOMAIN));
 
                     } else {
-                        $this->getLog()->addInfo($this->getTranslator()->trans("Order ID %id payment was succesful.", array('%id' => $order_id)));
+                        $this->getLog()->addInfo($this->getTranslator()->trans("Order ID %id payment was succesful.", array('%id' => $order_id), Be2Bill::MODULE_DOMAIN));
 
                         $this->confirmPayment($order_id);
 
@@ -87,12 +87,12 @@ class PaymentController extends BasePaymentModuleController
 
                 // Payment was not accepted
                 } else {
-                    $this->getLog()->addError($this->getTranslator()->trans("Order ID %id payment failed.", array('%id' => $order_id)));
+                    $this->getLog()->addError($this->getTranslator()->trans("Order ID %id payment failed.", array('%id' => $order_id), Be2Bill::MODULE_DOMAIN));
                 }
                 return Response::create('OK');
 
             } else {
-                $this->getLog()->addError($this->getTranslator()->trans("Response could not be authentified."));
+                $this->getLog()->addError($this->getTranslator()->trans("Response could not be authentified.", array(), Be2Bill::MODULE_DOMAIN));
                 return Response::create('ERROR');
             }
         }
@@ -113,7 +113,7 @@ class PaymentController extends BasePaymentModuleController
             if ($request->get('EXECCODE') == 0000) {
                 $this->redirectToSuccessPage($params['ORDERID']);
             } else {
-                $message = $this->getTranslator()->trans('Erreur n° %code : %message', array('%code' => $params['EXECCODE'], '%message' => $params['MESSAGE']));
+                $message = $this->getTranslator()->trans('Erreur n° %code : %message', array('%code' => $params['EXECCODE'], '%message' => $params['MESSAGE']), Be2Bill::MODULE_DOMAIN);
                 $this->redirectToFailurePage($params['ORDERID'], $message);
             }
         }
@@ -122,11 +122,11 @@ class PaymentController extends BasePaymentModuleController
 
     public function redirectBe2BillCancel()
     {
+
         $request = $this->getRequest()->query;
 
-        $this->cancelPayment($request->get('ORDERID'));
+        //$this->cancelPayment($request->get('ORDERID'));
+
+        $this->redirectToFailurePage($request->get('ORDERID'), $this->getTranslator()->trans('Votre commande n° %commande a bien était annulé.', array('%commande' => $request->get('ORDERID')), Be2Bill::MODULE_DOMAIN));
     }
-
-
-
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<database defaultIdMethod="native" name="thelia" >
+<database defaultIdMethod="native" name="thelia" namespace="Be2Bill\Model">
 
-    <table name="be2bill_config" namespace="Be2Bill\Model">
+    <table name="be2bill_config" >
         <column name="name" required="true" size="128" type="VARCHAR" primaryKey="true"/>
         <column name="value" type="LONGVARCHAR" />
     </table>
 
-    <table name="be2bill_transaction" namespace="Be2Bill\Model">
+    <table name="be2bill_transaction" >
         <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
         <column name="order_id"  required="true" type="INTEGER" />
         <column name="customer_id" required="true" type="INTEGER" />

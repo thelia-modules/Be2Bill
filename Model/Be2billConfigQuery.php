@@ -4,7 +4,6 @@ namespace Be2Bill\Model;
 
 use Be2Bill\Model\Base\Be2billConfigQuery as BaseBe2billConfigQuery;
 
-
 /**
  * Skeleton subclass for performing query and update operations on the 'be2bill_config' table.
  *
@@ -18,18 +17,20 @@ use Be2Bill\Model\Base\Be2billConfigQuery as BaseBe2billConfigQuery;
 class Be2billConfigQuery extends BaseBe2billConfigQuery
 {
 
-    public static function read($name, $default=null){
+    public static function read($name, $default = null)
+    {
 
         $value = self::create()->findOneByName($name);
 
         return $value ? $value->getValue() : $default;
     }
 
-    public static function set($name, $value){
+    public static function set($name, $value)
+    {
 
         $config = self::create()->findOneByName($name);
 
-        if( null == $config){
+        if (null == $config) {
             $config = new Be2billConfig();
 
             $config->setName($name);

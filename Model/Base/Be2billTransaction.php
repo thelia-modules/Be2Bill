@@ -8,6 +8,10 @@ use \PDO;
 use Be2Bill\Model\Be2billTransaction as ChildBe2billTransaction;
 use Be2Bill\Model\Be2billTransactionQuery as ChildBe2billTransactionQuery;
 use Be2Bill\Model\Map\Be2billTransactionTableMap;
+use Be2Bill\Model\Thelia\Model\Customer as ChildCustomer;
+use Be2Bill\Model\Thelia\Model\Order as ChildOrder;
+use Be2Bill\Model\Thelia\Model\CustomerQuery;
+use Be2Bill\Model\Thelia\Model\OrderQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -19,10 +23,6 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
-use Thelia\Model\Customer as ChildCustomer;
-use Thelia\Model\Order as ChildOrder;
-use Thelia\Model\CustomerQuery;
-use Thelia\Model\OrderQuery;
 
 abstract class Be2billTransaction implements ActiveRecordInterface
 {

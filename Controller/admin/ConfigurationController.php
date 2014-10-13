@@ -11,6 +11,7 @@ namespace Be2Bill\Controller\admin;
 
 use Be2Bill\Form\ConfigForm;
 use Be2Bill\Model\Be2billConfigQuery;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Core\Security\Resource\AdminResources;
@@ -41,7 +42,7 @@ class ConfigurationController extends BaseAdminController
             $this->adminLogAppend(
                 "be2bill.configuration.message",
                 AccessManager::UPDATE,
-                sprintf("Be2bill configuration updated")
+                "Be2bill configuration updated"
             );
 
             // Redirect to the success URL,
@@ -53,7 +54,7 @@ class ConfigurationController extends BaseAdminController
                 $route = '/admin/modules';
             }
 
-            $this->redirect(URL::getInstance()->absoluteUrl($route));
+            return RedirectResponse::create(URL::getInstance()->absoluteUrl($route));
 
         } catch (FormValidationException $e) {
             $message = $this->createStandardFormValidationErrorMessage($e);
@@ -78,4 +79,4 @@ class ConfigurationController extends BaseAdminController
         return $response;
 
     }
-} 
+}

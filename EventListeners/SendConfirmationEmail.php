@@ -17,7 +17,7 @@ use Thelia\Core\Event\TheliaEvents;
 use Thelia\Core\Template\ParserInterface;
 use Thelia\Log\Tlog;
 use Thelia\Mailer\MailerFactory;
-use Thelia\Model\Base\ConfigQuery;
+use Thelia\Model\ConfigQuery;
 use Thelia\Model\MessageQuery;
 
 class SendConfirmationEmail extends BaseAction implements EventSubscriberInterface
@@ -52,7 +52,7 @@ class SendConfirmationEmail extends BaseAction implements EventSubscriberInterfa
         $be2bill = new Be2Bill();
 
         if ($event->getOrder()->isPaid() && $be2bill->isPaymentModuleFor($event->getOrder())) {
-            $contact_email = \Thelia\Model\ConfigQuery::read('store_email', false);
+            $contact_email = ConfigQuery::read('store_email', false);
 
             Tlog::getInstance()->debug("Sending confirmation email from store contact e-mail $contact_email");
 
@@ -75,7 +75,7 @@ class SendConfirmationEmail extends BaseAction implements EventSubscriberInterfa
 
                 $instance = \Swift_Message::newInstance()
                             ->addTo($customer->getEmail(), $customer->getFirstname()." ".$customer->getLastname())
-                            ->addFrom($contact_email, \Thelia\Model\ConfigQuery::read('store_name'))
+                            ->addFrom($contact_email, ConfigQuery::read('store_name'))
                 ;
 
                 $message->buildMessage($this->parser, $instance);

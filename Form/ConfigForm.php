@@ -9,11 +9,13 @@
 namespace Be2Bill\Form;
 
 
+use Be2Bill\Be2Bill;
 use Be2Bill\Model\Be2billConfigQuery;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Thelia\Core\Translation\Translator;
 use Thelia\Form\BaseForm;
 
-class ConfigForm  extends BaseForm
+class ConfigForm extends BaseForm
 {
 
     /**
@@ -38,6 +40,8 @@ class ConfigForm  extends BaseForm
      */
     protected function buildForm()
     {
+        $translator = Translator::getInstance();
+
         $this->formBuilder
             ->add(
                 'identifier',
@@ -45,10 +49,10 @@ class ConfigForm  extends BaseForm
                 array(
                     'constraints'   => array(new NotBlank()),
                     'required'      => true,
-                    'label'         => 'Identifier',
+                    'label'         => $translator->trans('Identifiant du compte Be 2 Bill', array(), Be2Bill::MODULE_DOMAIN),
                     'data'          => Be2billConfigQuery::read('identifier'),
                     'label_attr'    => array(
-                                        'help' => 'Identifiant du compte'
+                                        'help' => $translator->trans('Identifiant du compte', array(), Be2Bill::MODULE_DOMAIN)
                                     )
                 )
             )
@@ -56,10 +60,10 @@ class ConfigForm  extends BaseForm
                 'password',
                 'text',
                 array(
-                    'label' => 'Mot de passe',
+                    'label' => $translator->trans('Mot de passe', array(), Be2Bill::MODULE_DOMAIN),
                     'data' => Be2billConfigQuery::read('password'),
                     'label_attr'    => array(
-                                            'help' => 'Mote de passe Be2Bill'
+                                            'help' => $translator->trans('Mot de passe Be2Bill', array(), Be2Bill::MODULE_DOMAIN)
                                     )
                 )
             )
@@ -67,10 +71,10 @@ class ConfigForm  extends BaseForm
                 'description',
                 'textarea',
                 array(
-                    'label' => 'Description',
+                    'label' => $translator->trans('Description', array(), Be2Bill::MODULE_DOMAIN),
                     'data' => Be2billConfigQuery::read('description', 'Commande Be2Bill'),
                     'label_attr' => array(
-                        'help' => 'Description du panier de la transaction / chaîne 510 max'
+                        'help' =>  $translator->trans('Description du panier de la transaction / chaîne 510 max', array(), Be2Bill::MODULE_DOMAIN)
                     )
                 )
             )
@@ -80,10 +84,10 @@ class ConfigForm  extends BaseForm
                 array(
                     'label' => 'Url',
                     'constraints' => array(new NotBlank()),
-                    'data' => Be2billConfigQuery::read('url', '[type d\'environnement].be2bill.com'),
+                    'data' => Be2billConfigQuery::read('url', $translator->trans('[type d\'environnement].be2bill.com', array(), Be2Bill::MODULE_DOMAIN)),
                     'required' => true,
                     'label_attr' => array(
-                        'help' => 'Url Web Service'
+                        'help' => $translator->trans('Url Web Service', array(), Be2Bill::MODULE_DOMAIN)
                     )
 
                 )

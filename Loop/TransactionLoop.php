@@ -90,7 +90,7 @@ class TransactionLoop extends BaseLoop implements PropelSearchLoopInterface
      */
     public function buildModelCriteria()
     {
-        $be2BillTransactionQuery = new Be2billTransactionQuery();
+        $be2BillTransactionQuery = Be2billTransactionQuery::create();
         if (null == $this->getInterval()) {
             $be2BillTransactionQuery->recentlyCreated()->orderByCreatedAt(Criteria::DESC);
         }

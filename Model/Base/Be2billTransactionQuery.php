@@ -7,8 +7,6 @@ use \PDO;
 use Be2Bill\Model\Be2billTransaction as ChildBe2billTransaction;
 use Be2Bill\Model\Be2billTransactionQuery as ChildBe2billTransactionQuery;
 use Be2Bill\Model\Map\Be2billTransactionTableMap;
-use Thelia\Model\Customer;
-use Thelia\Model\Order;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -17,6 +15,8 @@ use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
+use Thelia\Model\Customer;
+use Thelia\Model\Order;
 
 /**
  * Base class that represents a query for the 'be2bill_transaction' table.
@@ -879,16 +879,16 @@ abstract class Be2billTransactionQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Be2Bill\Model\Thelia\Model\Order object
+     * Filter the query by a related \Thelia\Model\Order object
      *
-     * @param \Be2Bill\Model\Thelia\Model\Order|ObjectCollection $order The related object(s) to use as filter
+     * @param \Thelia\Model\Order|ObjectCollection $order The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildBe2billTransactionQuery The current query, for fluid interface
      */
     public function filterByOrder($order, $comparison = null)
     {
-        if ($order instanceof \Be2Bill\Model\Thelia\Model\Order) {
+        if ($order instanceof \Thelia\Model\Order) {
             return $this
                 ->addUsingAlias(Be2billTransactionTableMap::ORDER_ID, $order->getId(), $comparison);
         } elseif ($order instanceof ObjectCollection) {
@@ -899,7 +899,7 @@ abstract class Be2billTransactionQuery extends ModelCriteria
             return $this
                 ->addUsingAlias(Be2billTransactionTableMap::ORDER_ID, $order->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByOrder() only accepts arguments of type \Be2Bill\Model\Thelia\Model\Order or Collection');
+            throw new PropelException('filterByOrder() only accepts arguments of type \Thelia\Model\Order or Collection');
         }
     }
 
@@ -944,26 +944,26 @@ abstract class Be2billTransactionQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   \Be2Bill\Model\Thelia\Model\OrderQuery A secondary query class using the current class as primary query
+     * @return   \Thelia\Model\OrderQuery A secondary query class using the current class as primary query
      */
     public function useOrderQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinOrder($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Order', '\Be2Bill\Model\Thelia\Model\OrderQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'Order', '\Thelia\Model\OrderQuery');
     }
 
     /**
-     * Filter the query by a related \Be2Bill\Model\Thelia\Model\Customer object
+     * Filter the query by a related \Thelia\Model\Customer object
      *
-     * @param \Be2Bill\Model\Thelia\Model\Customer|ObjectCollection $customer The related object(s) to use as filter
+     * @param \Thelia\Model\Customer|ObjectCollection $customer The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildBe2billTransactionQuery The current query, for fluid interface
      */
     public function filterByCustomer($customer, $comparison = null)
     {
-        if ($customer instanceof \Be2Bill\Model\Thelia\Model\Customer) {
+        if ($customer instanceof \Thelia\Model\Customer) {
             return $this
                 ->addUsingAlias(Be2billTransactionTableMap::CUSTOMER_ID, $customer->getId(), $comparison);
         } elseif ($customer instanceof ObjectCollection) {
@@ -974,7 +974,7 @@ abstract class Be2billTransactionQuery extends ModelCriteria
             return $this
                 ->addUsingAlias(Be2billTransactionTableMap::CUSTOMER_ID, $customer->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByCustomer() only accepts arguments of type \Be2Bill\Model\Thelia\Model\Customer or Collection');
+            throw new PropelException('filterByCustomer() only accepts arguments of type \Thelia\Model\Customer or Collection');
         }
     }
 
@@ -1019,13 +1019,13 @@ abstract class Be2billTransactionQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   \Be2Bill\Model\Thelia\Model\CustomerQuery A secondary query class using the current class as primary query
+     * @return   \Thelia\Model\CustomerQuery A secondary query class using the current class as primary query
      */
     public function useCustomerQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinCustomer($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Customer', '\Be2Bill\Model\Thelia\Model\CustomerQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'Customer', '\Thelia\Model\CustomerQuery');
     }
 
     /**

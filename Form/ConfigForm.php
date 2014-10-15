@@ -80,7 +80,7 @@ class ConfigForm extends BaseForm
                     'constraints' => array(new NotBlank()),
                     'data' => Be2billConfigQuery::read('url', $translator->trans('[type d\'environnement].be2bill.com', array(), Be2Bill::MODULE_DOMAIN)),
                     'required' => true,
-                    'label_attr' => array('help' => $translator->trans('Url Web Service', array(), Be2Bill::MODULE_DOMAIN))
+                    'label_attr' => array('help' => $translator->trans('Url Web Service fournis par be2bill, exemple : "secure-magenta.be2bill.com" .', array(), Be2Bill::MODULE_DOMAIN))
                 )
             )
             ->add(

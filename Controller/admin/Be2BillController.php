@@ -94,7 +94,7 @@ class Be2BillController extends BaseAdminController
                 return $this->jsonResponse(json_encode($result['MESSAGE']), 500);
             }
         } else {
-            return $this->jsonResponse(json_encode($translator->trans('Erreur lors du remboursement de la commande n&#176; %orderId', ['%orderId' => $order_id], Be2Bill::MODULE_DOMAIN)), 500);
+            return $this->jsonResponse(json_encode($translator->trans('La commande n&#176; %orderId n\'as pas pu être remboursée.', ['%orderId' => $order_id], Be2Bill::MODULE_DOMAIN)), 500);
         }
 
     }

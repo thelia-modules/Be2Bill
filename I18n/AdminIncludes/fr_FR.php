@@ -15,7 +15,7 @@ return array(
     'Commande' => 'Commande',
     'Configuration Be 2 Bill' => 'Configurationsss Be 2 Bill',
     'Email Client' => 'Email Client',
-    'Erreur 500: ' => 'Erreur 500: ',
+    'Erreur : ' => 'Erreur :',
     'ID Be2Bill' => 'ID Be2Bill',
     'ID Client' => 'ID Client',
     'Jour' => 'Jour',
@@ -30,4 +30,5 @@ return array(
     'Remboursé par :' => 'Remboursé par :',
     'Semaine' => 'Semaine',
     'Transactions Be2Bill' => 'Transactions Be2Bill',
+    'VotreSite.com' => 'VotreSite.com',
 );

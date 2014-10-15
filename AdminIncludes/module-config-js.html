@@ -96,7 +96,7 @@
                     }
                 }).fail(function(jqXHR){
                     $("#alert-refund").addClass("alert alert-danger");
-                    $("#alert-refund").html("{intl l='Erreur 500: ' d='be2bill.ai'} "+jqXHR.responseText);
+                    $("#alert-refund").html("{intl l='Erreur : ' d='be2bill.ai'} "+jqXHR.responseText);
                 });
             }
 

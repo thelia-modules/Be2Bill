@@ -1,4 +1,4 @@
-Plugin Be2bill
+Plugin Be2bill (FR)
 -------------------
 
 Ce plugin permet d'ajouter le mode de paiement Be2bill (http://www.be2bill.com)
@@ -33,3 +33,39 @@ N'oubliez pas d'aller configurer votre compte dans l'extranet Be2bill :
 3)Renseigner les urls de redirections :
     http://votresite.fr/be2bill/redirect/payment (Url après traitement)
     http://votresite.fr/be2bill/redirect/cancel (Url en cas d'annulation)
+
+------------------------------------------------------------------------------------------------------------------------
+
+Be2bill plugin (EN)
+-------------------
+
+This plugin add Be2Bill payment method (http://www.be2bill.com)
+
+Configuration
+-------------
+
+This plugin is configurable in thelia back office :
+
+Identifier : Be2Bill account identifier (this is not the email).
+
+Mot de passe : Be2Bill password.
+
+Url : Web service url given by Be2Bill, exemple : "secure-magenta.be2bill.com" .
+
+3DSecure : if you want active 3DSecure for payment
+
+Description : Description of the transaction (string / 510 char max).
+
+-------------
+
+Don't forget to configure your account in Be2Bill extranet :
+
+1) Allow the host to access the service by filling its IP address in the Be2bill configuration.
+
+2) Fill the notifications urls :
+   http://site.com/be2bill/callback/payment (notification of transactions)
+   http://site.com/be2bill/callback/unpaid (unpaid notification)
+
+3) Fill the redirect urls :
+   http://site.com/be2bill/redirect/payment ( Url after treatment)
+   http://site.com/be2bill/redirect/cancel ( Cancel url)

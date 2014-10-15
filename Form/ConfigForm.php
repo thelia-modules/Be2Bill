@@ -51,9 +51,7 @@ class ConfigForm extends BaseForm
                     'required'      => true,
                     'label'         => $translator->trans('Identifiant du compte Be 2 Bill', array(), Be2Bill::MODULE_DOMAIN),
                     'data'          => Be2billConfigQuery::read('identifier'),
-                    'label_attr'    => array(
-                                        'help' => $translator->trans('Identifiant du compte', array(), Be2Bill::MODULE_DOMAIN)
-                                    )
+                    'label_attr'    => array('help' => $translator->trans('Identifiant du compte', array(), Be2Bill::MODULE_DOMAIN))
                 )
             )
             ->add(
@@ -62,9 +60,7 @@ class ConfigForm extends BaseForm
                 array(
                     'label' => $translator->trans('Mot de passe', array(), Be2Bill::MODULE_DOMAIN),
                     'data' => Be2billConfigQuery::read('password'),
-                    'label_attr'    => array(
-                                            'help' => $translator->trans('Mot de passe Be2Bill', array(), Be2Bill::MODULE_DOMAIN)
-                                    )
+                    'label_attr' => array('help' => $translator->trans('Mot de passe Be2Bill', array(), Be2Bill::MODULE_DOMAIN))
                 )
             )
             ->add(
@@ -73,9 +69,7 @@ class ConfigForm extends BaseForm
                 array(
                     'label' => $translator->trans('Description', array(), Be2Bill::MODULE_DOMAIN),
                     'data' => Be2billConfigQuery::read('description', 'Commande Be2Bill'),
-                    'label_attr' => array(
-                        'help' =>  $translator->trans('Description du panier de la transaction / chaîne 510 max', array(), Be2Bill::MODULE_DOMAIN)
-                    )
+                    'label_attr' => array('help' =>  $translator->trans('Description du panier de la transaction / chaîne 510 max', array(), Be2Bill::MODULE_DOMAIN))
                 )
             )
             ->add(
@@ -86,10 +80,7 @@ class ConfigForm extends BaseForm
                     'constraints' => array(new NotBlank()),
                     'data' => Be2billConfigQuery::read('url', $translator->trans('[type d\'environnement].be2bill.com', array(), Be2Bill::MODULE_DOMAIN)),
                     'required' => true,
-                    'label_attr' => array(
-                        'help' => $translator->trans('Url Web Service', array(), Be2Bill::MODULE_DOMAIN)
-                    )
-
+                    'label_attr' => array('help' => $translator->trans('Url Web Service', array(), Be2Bill::MODULE_DOMAIN))
                 )
             )
             ->add(
@@ -99,7 +90,8 @@ class ConfigForm extends BaseForm
                     'label' => '3DSecure',
                     'data' => Be2billConfigQuery::read('3dsecure', 0)
                 )
-            );
+            )
+        ;
     }
 
     /**

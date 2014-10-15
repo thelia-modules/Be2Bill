@@ -10,6 +10,7 @@ namespace Be2Bill\Controller\admin;
 
 
 use Be2Bill\Be2Bill;
+use Be2Bill\Model\Be2billConfigQuery;
 use Be2Bill\Model\Be2billTransactionQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Thelia\Controller\Admin\BaseAdminController;
@@ -53,7 +54,7 @@ class Be2BillController extends BaseAdminController
         $order_id = $request->get('order-id');
 
         $translator = Translator::getInstance();
-        /*
+
         $params = array(
             'method' => 'refund',
             'params' => array(
@@ -95,9 +96,6 @@ class Be2BillController extends BaseAdminController
         } else {
             return $this->jsonResponse(json_encode($translator->trans('Erreur lors du remboursement de la commande n&#176; %orderId', ['%orderId' => $order_id], Be2Bill::MODULE_DOMAIN)), 500);
         }
-        */
-        $admin = $this->getSecurityContext()->getAdminUser()->getUsername();
 
-        return $this->jsonResponse(json_encode($translator->trans('Erreur lors du remboursement de la commande n&#176; %orderId', ['%orderId' => $order_id], Be2Bill::MODULE_DOMAIN)), 500);
     }
 }

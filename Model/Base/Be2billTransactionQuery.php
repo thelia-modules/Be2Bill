@@ -7,6 +7,8 @@ use \PDO;
 use Be2Bill\Model\Be2billTransaction as ChildBe2billTransaction;
 use Be2Bill\Model\Be2billTransactionQuery as ChildBe2billTransactionQuery;
 use Be2Bill\Model\Map\Be2billTransactionTableMap;
+use Thelia\Model\Customer;
+use Thelia\Model\Order;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -15,8 +17,6 @@ use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
-use Thelia\Model\Customer;
-use Thelia\Model\Order;
 
 /**
  * Base class that represents a query for the 'be2bill_transaction' table.

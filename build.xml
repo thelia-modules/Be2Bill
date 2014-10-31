@@ -48,8 +48,8 @@
             <arg value="--extensions=php" />
             <arg value="--report-width=500" />
             <arg value="--ignore=autoload.php" />
-            <arg value="--ignore={$basedir}/Model/Base/*" />
-            <arg value="--ignore={$basedir}/Model/Map/*" />
+            <arg value="--ignore=Model/Base/*" />
+            <arg value="--ignore=Model/Map/*" />
             <arg path="${basedir}" />
         </exec>
     </target>
@@ -64,8 +64,8 @@
             <arg value="--standard=build/phpcs.xml" />
             <arg value="--extensions=php" />
             <arg value="--ignore=autoload.php" />
-            <arg value="--ignore={$basedir}/Model/Base/*" />
-            <arg value="--ignore={$basedir}/Model/Map/*" />
+            <arg value="--ignore=Model/Base/*" />
+            <arg value="--ignore=Model/Map/*" />
             <arg path="${basedir}" />
         </exec>
     </target>

@@ -7,11 +7,11 @@
     <!-- <property name="toolsdir" value="${basedir}/vendor/bin/"/> -->
 
     <target name="build"
-            depends="prepare,lint,phpcs-ci"
+            depends="prepare,lint,phpcs-ci,cs-fixer"
             description=""/>
 
     <target name="build-parallel"
-            depends="prepare,lint,phpcs-ci"
+            depends="prepare,lint,phpcs-ci,cs-fixer"
             description=""/>
 
 
@@ -69,5 +69,13 @@
             <arg path="${basedir}" />
         </exec>
     </target>
-
+    <target name="cs-fixer">
+        <exec executable="php-cs-fixer" failonerror="true">
+            <arg value="fix" />
+            <arg value="--config-file=.php-cs" />
+            <arg value="-v" />
+            <arg value="--diff" />
+            <arg value="--dry-run" />
+        </exec>
+    </target>
 </project>

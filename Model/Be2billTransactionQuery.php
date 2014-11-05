@@ -4,7 +4,6 @@ namespace Be2Bill\Model;
 
 use Be2Bill\Model\Base\Be2billTransactionQuery as BaseBe2billTransactionQuery;
 
-
 /**
  * Skeleton subclass for performing query and update operations on the 'be2bill_transaction' table.
  *
@@ -17,5 +16,4 @@ use Be2Bill\Model\Base\Be2billTransactionQuery as BaseBe2billTransactionQuery;
  */
 class Be2billTransactionQuery extends BaseBe2billTransactionQuery
 {
-
-} // Be2billTransactionQuery
+}

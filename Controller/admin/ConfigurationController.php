@@ -8,7 +8,6 @@
 
 namespace Be2Bill\Controller\admin;
 
-
 use Be2Bill\Form\ConfigForm;
 use Be2Bill\Model\Be2billConfigQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -22,7 +21,6 @@ class ConfigurationController extends BaseAdminController
 {
     public function configure()
     {
-
         if (null !== $response = $this->checkAuth(AdminResources::MODULE, 'Be2Bill', AccessManager::UPDATE)) {
             return $response;
         }
@@ -30,7 +28,6 @@ class ConfigurationController extends BaseAdminController
         $configForm = new ConfigForm($this->getRequest());
         $message = null;
         try {
-
             $form = $this->validateForm($configForm);
             $data = $form->getData($form);
 
@@ -55,7 +52,6 @@ class ConfigurationController extends BaseAdminController
             }
 
             return RedirectResponse::create(URL::getInstance()->absoluteUrl($route));
-
         } catch (FormValidationException $e) {
             $message = $this->createStandardFormValidationErrorMessage($e);
         } catch (\Exception $e) {
@@ -77,6 +73,5 @@ class ConfigurationController extends BaseAdminController
         }
 
         return $response;
-
     }
 }

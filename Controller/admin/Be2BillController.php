@@ -8,7 +8,6 @@
 
 namespace Be2Bill\Controller\admin;
 
-
 use Be2Bill\Be2Bill;
 use Be2Bill\Model\Be2billConfigQuery;
 use Be2Bill\Model\Be2billTransactionQuery;
@@ -20,7 +19,6 @@ use Thelia\Core\Translation\Translator;
 
 class Be2BillController extends BaseAdminController
 {
-
     public function listAjaxTransaction()
     {
         if (null !== $response = $this->checkAuth(AdminResources::MODULE, 'Be2Bill', AccessManager::VIEW)) {
@@ -40,7 +38,6 @@ class Be2BillController extends BaseAdminController
         $transactions = $transactionQuery->filterByCreatedAt(array('min' => $startDate, 'max' => $endDate))->orderByCreatedAt(Criteria::DESC)->find()->toJSON(false, true);
 
         return $this->jsonResponse($transactions);
-
     }
 
     public function refundTransaction()
@@ -78,7 +75,6 @@ class Be2BillController extends BaseAdminController
         $serialized = curl_exec($resource);
 
         if ($serialized !== false) {
-
             $result = json_decode($serialized, true);
 
             if ($result['EXECCODE'] == '0000') {
@@ -96,6 +92,5 @@ class Be2BillController extends BaseAdminController
         } else {
             return $this->jsonResponse(json_encode($translator->trans('La commande n&#176; %orderId n\'as pas pu être remboursée.', ['%orderId' => $order_id], Be2Bill::MODULE_DOMAIN)), 500);
         }
-
     }
 }

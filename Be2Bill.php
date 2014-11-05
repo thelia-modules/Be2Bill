@@ -12,7 +12,6 @@
 
 namespace Be2Bill;
 
-
 use Be2Bill\Model\Be2billConfigQuery;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Thelia\Install\Database;
@@ -45,7 +44,6 @@ class Be2Bill extends AbstractPaymentModule
         $email_templates_dir = __DIR__.DS.'I18n'.DS.'email-templates'.DS;
 
         if (null == MessageQuery::create()->findOneByName(self::CONFIRMATION_MESSAGE_NAME)) {
-
             $message = new Message();
 
             $message->setName(self::CONFIRMATION_MESSAGE_NAME)
@@ -97,7 +95,6 @@ class Be2Bill extends AbstractPaymentModule
         }
 
         return $this->generateGatewayFormResponse($order, "https://".Be2billConfigQuery::read('url').self::URL_PAYMENT_FORM, $be2bill_params);
-
     }
 
     public function getBe2BillParameters(Order $order)
@@ -126,7 +123,6 @@ class Be2Bill extends AbstractPaymentModule
 
     public static function be2BillHash(array $params)
     {
-
         ksort($params);
 
         $password = Be2billConfigQuery::read('password');
@@ -143,7 +139,6 @@ class Be2Bill extends AbstractPaymentModule
             }
         }
         return hash('sha256', $clearString);
-
     }
     /**
      *

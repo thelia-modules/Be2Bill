@@ -8,7 +8,6 @@
 
 namespace Be2Bill\Loop;
 
-
 use Be2Bill\Model\Be2billTransactionQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Thelia\Core\Template\Element\BaseLoop;
@@ -20,7 +19,6 @@ use Thelia\Core\Template\Loop\Argument\ArgumentCollection;
 
 class TransactionLoop extends BaseLoop implements PropelSearchLoopInterface
 {
-
     /**
      * @param LoopResult $loopResult
      *
@@ -30,7 +28,6 @@ class TransactionLoop extends BaseLoop implements PropelSearchLoopInterface
     {
         /** @var \Be2Bill\Model\Be2BillTransaction $transaction */
         foreach ($loopResult->getResultDataCollection() as $transaction) {
-
             $loopResultRow = new LoopResultRow($transaction);
 
             $customer = $transaction->getCustomer()->getLastname().' '.$transaction->getCustomer()->getFirstname();

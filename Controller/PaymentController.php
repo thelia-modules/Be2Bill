@@ -8,7 +8,6 @@
 
 namespace Be2Bill\Controller;
 
-
 use Be2Bill\Be2Bill;
 use Be2Bill\Model\Be2billTransaction;
 use Be2Bill\Model\Be2billTransactionQuery;
@@ -17,7 +16,6 @@ use Thelia\Core\HttpFoundation\Response;
 
 class PaymentController extends BasePaymentModuleController
 {
-
     /**
      * Return a module identifier used to calculate the name of the log file,
      * and in the log messages.
@@ -46,16 +44,12 @@ class PaymentController extends BasePaymentModuleController
         $this->getLog()->addInfo($this->getTranslator()->trans("Be2Bill platform request received for order ID %id.", array('%id' => $order_id), Be2Bill::MODULE_DOMAIN));
 
         if (null !== $order = $this->getOrder($order_id)) {
-
             //Check the authencity of the request
             if ($be2BillHash == $hash) {
-
                 // Payment was accepted
                 if ($request->get('EXECCODE') == 0000) {
-
                     if ($order->isPaid()) {
                         $this->getLog()->addInfo($this->getTranslator()->trans("Order ID %id is already paid.", array('%id' => $order_id), Be2Bill::MODULE_DOMAIN));
-
                     } else {
                         $this->getLog()->addInfo($this->getTranslator()->trans("Order ID %id payment was succesful.", array('%id' => $order_id), Be2Bill::MODULE_DOMAIN));
 
@@ -77,12 +71,10 @@ class PaymentController extends BasePaymentModuleController
                             ->setCardtype($request->get('CARDTYPE'));
 
                         $transaction->save();
-
                     }
 
                 // Payment was canceled
                 } elseif ($request->get('EXECCODE') == 4004) {
-
                     $this->cancelPayment($order_id);
 
                 // Payment was not accepted
@@ -90,7 +82,6 @@ class PaymentController extends BasePaymentModuleController
                     $this->getLog()->addError($this->getTranslator()->trans("Order ID %id payment failed.", array('%id' => $order_id), Be2Bill::MODULE_DOMAIN));
                 }
                 return Response::create('OK');
-
             } else {
                 $this->getLog()->addError($this->getTranslator()->trans("Response could not be authentified.", array(), Be2Bill::MODULE_DOMAIN));
                 return Response::create('ERROR');
@@ -117,12 +108,10 @@ class PaymentController extends BasePaymentModuleController
                 $this->redirectToFailurePage($params['ORDERID'], $message);
             }
         }
-
     }
 
     public function redirectBe2BillCancel()
     {
-
         $request = $this->getRequest()->query;
 
         //$this->cancelPayment($request->get('ORDERID'));

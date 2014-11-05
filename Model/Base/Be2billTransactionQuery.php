@@ -117,7 +117,6 @@ use Propel\Runtime\Exception\PropelException;
  */
 abstract class Be2billTransactionQuery extends ModelCriteria
 {
-
     /**
      * Initializes internal state of \Be2Bill\Model\Base\Be2billTransactionQuery object.
      *
@@ -273,7 +272,6 @@ abstract class Be2billTransactionQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(Be2billTransactionTableMap::ID, $key, Criteria::EQUAL);
     }
 
@@ -286,7 +284,6 @@ abstract class Be2billTransactionQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(Be2billTransactionTableMap::ID, $keys, Criteria::IN);
     }
 
@@ -1089,16 +1086,16 @@ abstract class Be2billTransactionQuery extends ModelCriteria
      */
      public function delete(ConnectionInterface $con = null)
      {
-        if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(Be2billTransactionTableMap::DATABASE_NAME);
-        }
+         if (null === $con) {
+             $con = Propel::getServiceContainer()->getWriteConnection(Be2billTransactionTableMap::DATABASE_NAME);
+         }
 
-        $criteria = $this;
+         $criteria = $this;
 
         // Set the correct dbName
         $criteria->setDbName(Be2billTransactionTableMap::DATABASE_NAME);
 
-        $affectedRows = 0; // initialize var to track total num of affected rows
+         $affectedRows = 0; // initialize var to track total num of affected rows
 
         try {
             // use transaction because $criteria could contain info
@@ -1106,7 +1103,7 @@ abstract class Be2billTransactionQuery extends ModelCriteria
             $con->beginTransaction();
 
 
-        Be2billTransactionTableMap::removeInstanceFromPool($criteria);
+            Be2billTransactionTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
             Be2billTransactionTableMap::clearRelatedInstancePool();
@@ -1117,7 +1114,7 @@ abstract class Be2billTransactionQuery extends ModelCriteria
             $con->rollBack();
             throw $e;
         }
-    }
+     }
 
     // timestampable behavior
 
@@ -1184,5 +1181,4 @@ abstract class Be2billTransactionQuery extends ModelCriteria
     {
         return $this->addAscendingOrderByColumn(Be2billTransactionTableMap::CREATED_AT);
     }
-
 } // Be2billTransactionQuery

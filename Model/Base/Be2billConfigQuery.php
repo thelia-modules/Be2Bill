@@ -40,7 +40,6 @@ use Propel\Runtime\Exception\PropelException;
  */
 abstract class Be2billConfigQuery extends ModelCriteria
 {
-
     /**
      * Initializes internal state of \Be2Bill\Model\Base\Be2billConfigQuery object.
      *
@@ -196,7 +195,6 @@ abstract class Be2billConfigQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(Be2billConfigTableMap::NAME, $key, Criteria::EQUAL);
     }
 
@@ -209,7 +207,6 @@ abstract class Be2billConfigQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(Be2billConfigTableMap::NAME, $keys, Criteria::IN);
     }
 
@@ -332,16 +329,16 @@ abstract class Be2billConfigQuery extends ModelCriteria
      */
      public function delete(ConnectionInterface $con = null)
      {
-        if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(Be2billConfigTableMap::DATABASE_NAME);
-        }
+         if (null === $con) {
+             $con = Propel::getServiceContainer()->getWriteConnection(Be2billConfigTableMap::DATABASE_NAME);
+         }
 
-        $criteria = $this;
+         $criteria = $this;
 
         // Set the correct dbName
         $criteria->setDbName(Be2billConfigTableMap::DATABASE_NAME);
 
-        $affectedRows = 0; // initialize var to track total num of affected rows
+         $affectedRows = 0; // initialize var to track total num of affected rows
 
         try {
             // use transaction because $criteria could contain info
@@ -349,7 +346,7 @@ abstract class Be2billConfigQuery extends ModelCriteria
             $con->beginTransaction();
 
 
-        Be2billConfigTableMap::removeInstanceFromPool($criteria);
+            Be2billConfigTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
             Be2billConfigTableMap::clearRelatedInstancePool();
@@ -360,6 +357,5 @@ abstract class Be2billConfigQuery extends ModelCriteria
             $con->rollBack();
             throw $e;
         }
-    }
-
+     }
 } // Be2billConfigQuery

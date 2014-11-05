@@ -288,8 +288,7 @@ class Be2billTransactionTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-
-            return (int) $row[
+        return (int) $row[
                             $indexType == TableMap::TYPE_NUM
                             ? 0 + $offset
                             : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
@@ -448,10 +447,10 @@ class Be2billTransactionTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-      $dbMap = Propel::getServiceContainer()->getDatabaseMap(Be2billTransactionTableMap::DATABASE_NAME);
-      if (!$dbMap->hasTable(Be2billTransactionTableMap::TABLE_NAME)) {
-        $dbMap->addTableObject(new Be2billTransactionTableMap());
-      }
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(Be2billTransactionTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(Be2billTransactionTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new Be2billTransactionTableMap());
+        }
     }
 
     /**
@@ -467,31 +466,36 @@ class Be2billTransactionTableMap extends TableMap
      */
      public static function doDelete($values, ConnectionInterface $con = null)
      {
-        if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(Be2billTransactionTableMap::DATABASE_NAME);
-        }
+         if (null === $con) {
+             $con = Propel::getServiceContainer()->getWriteConnection(Be2billTransactionTableMap::DATABASE_NAME);
+         }
 
-        if ($values instanceof Criteria) {
-            // rename for clarity
+         if ($values instanceof Criteria) {
+             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Be2Bill\Model\Be2billTransaction) { // it's a model object
+         } elseif ($values instanceof \Be2Bill\Model\Be2billTransaction) {
+             // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
-        } else { // it's a primary key, or an array of pks
+         } else {
+             // it's a primary key, or an array of pks
             $criteria = new Criteria(Be2billTransactionTableMap::DATABASE_NAME);
-            $criteria->add(Be2billTransactionTableMap::ID, (array) $values, Criteria::IN);
-        }
+             $criteria->add(Be2billTransactionTableMap::ID, (array) $values, Criteria::IN);
+         }
 
-        $query = Be2billTransactionQuery::create()->mergeWith($criteria);
+         $query = Be2billTransactionQuery::create()->mergeWith($criteria);
 
-        if ($values instanceof Criteria) { Be2billTransactionTableMap::clearInstancePool();
-        } elseif (!is_object($values)) { // it's a primary key, or an array of pks
-            foreach ((array) $values as $singleval) { Be2billTransactionTableMap::removeInstanceFromPool($singleval);
+         if ($values instanceof Criteria) {
+             Be2billTransactionTableMap::clearInstancePool();
+         } elseif (!is_object($values)) {
+             // it's a primary key, or an array of pks
+            foreach ((array) $values as $singleval) {
+                Be2billTransactionTableMap::removeInstanceFromPool($singleval);
             }
-        }
+         }
 
-        return $query->delete($con);
-    }
+         return $query->delete($con);
+     }
 
     /**
      * Deletes all rows from the be2bill_transaction table.
@@ -546,7 +550,6 @@ class Be2billTransactionTableMap extends TableMap
 
         return $pk;
     }
-
 } // Be2billTransactionTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

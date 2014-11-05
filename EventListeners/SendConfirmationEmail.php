@@ -8,7 +8,6 @@
 
 namespace Be2Bill\EventListeners;
 
-
 use Be2Bill\Be2Bill;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Thelia\Action\BaseAction;
@@ -22,7 +21,6 @@ use Thelia\Model\MessageQuery;
 
 class SendConfirmationEmail extends BaseAction implements EventSubscriberInterface
 {
-
     /**
      * @var MailerFactory
      */
@@ -87,7 +85,6 @@ class SendConfirmationEmail extends BaseAction implements EventSubscriberInterfa
         } else {
             Tlog::getInstance()->debug("No confirmation email sent (order not paid, or not the proper payment module.");
         }
-
     }
 
     public static function getSubscribedEvents()

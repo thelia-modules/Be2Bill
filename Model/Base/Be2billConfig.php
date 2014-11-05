@@ -186,7 +186,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
         }
 
         if (null === $this->getPrimaryKey()
-            || null === $obj->getPrimaryKey())  {
+            || null === $obj->getPrimaryKey()) {
             return false;
         }
 
@@ -336,7 +336,6 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function getName()
     {
-
         return $this->name;
     }
 
@@ -347,7 +346,6 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function getValue()
     {
-
         return $this->value;
     }
 
@@ -428,8 +426,6 @@ abstract class Be2billConfig implements ActiveRecordInterface
     public function hydrate($row, $startcol = 0, $rehydrate = false, $indexType = TableMap::TYPE_NUM)
     {
         try {
-
-
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : Be2billConfigTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
             $this->name = (null !== $col) ? (string) $col : null;
 
@@ -444,7 +440,6 @@ abstract class Be2billConfig implements ActiveRecordInterface
             }
 
             return $startcol + 2; // 2 = Be2billConfigTableMap::NUM_HYDRATE_COLUMNS.
-
         } catch (Exception $e) {
             throw new PropelException("Error populating \Be2Bill\Model\Be2billConfig object", 0, $e);
         }
@@ -502,8 +497,8 @@ abstract class Be2billConfig implements ActiveRecordInterface
         }
         $this->hydrate($row, 0, true, $dataFetcher->getIndexType()); // rehydrate
 
-        if ($deep) {  // also de-associate any related objects?
-
+        if ($deep) {
+            // also de-associate any related objects?
         } // if (deep)
     }
 
@@ -627,7 +622,6 @@ abstract class Be2billConfig implements ActiveRecordInterface
             }
 
             $this->alreadyInSave = false;
-
         }
 
         return $affectedRows;
@@ -831,8 +825,12 @@ abstract class Be2billConfig implements ActiveRecordInterface
     {
         $keys = Be2billConfigTableMap::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setName($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setValue($arr[$keys[1]]);
+        if (array_key_exists($keys[0], $arr)) {
+            $this->setName($arr[$keys[0]]);
+        }
+        if (array_key_exists($keys[1], $arr)) {
+            $this->setValue($arr[$keys[1]]);
+        }
     }
 
     /**
@@ -844,8 +842,12 @@ abstract class Be2billConfig implements ActiveRecordInterface
     {
         $criteria = new Criteria(Be2billConfigTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(Be2billConfigTableMap::NAME)) $criteria->add(Be2billConfigTableMap::NAME, $this->name);
-        if ($this->isColumnModified(Be2billConfigTableMap::VALUE)) $criteria->add(Be2billConfigTableMap::VALUE, $this->value);
+        if ($this->isColumnModified(Be2billConfigTableMap::NAME)) {
+            $criteria->add(Be2billConfigTableMap::NAME, $this->name);
+        }
+        if ($this->isColumnModified(Be2billConfigTableMap::VALUE)) {
+            $criteria->add(Be2billConfigTableMap::VALUE, $this->value);
+        }
 
         return $criteria;
     }
@@ -892,7 +894,6 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-
         return null === $this->getName();
     }
 
@@ -965,7 +966,6 @@ abstract class Be2billConfig implements ActiveRecordInterface
     {
         if ($deep) {
         } // if ($deep)
-
     }
 
     /**
@@ -994,7 +994,6 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function postSave(ConnectionInterface $con = null)
     {
-
     }
 
     /**
@@ -1013,7 +1012,6 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function postInsert(ConnectionInterface $con = null)
     {
-
     }
 
     /**
@@ -1032,7 +1030,6 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function postUpdate(ConnectionInterface $con = null)
     {
-
     }
 
     /**
@@ -1051,7 +1048,6 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function postDelete(ConnectionInterface $con = null)
     {
-
     }
 
 
@@ -1095,5 +1091,4 @@ abstract class Be2billConfig implements ActiveRecordInterface
 
         throw new BadMethodCallException(sprintf('Call to undefined method: %s.', $name));
     }
-
 }

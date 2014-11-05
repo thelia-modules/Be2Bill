@@ -16,10 +16,8 @@ use Be2Bill\Model\Base\Be2billConfigQuery as BaseBe2billConfigQuery;
  */
 class Be2billConfigQuery extends BaseBe2billConfigQuery
 {
-
     public static function read($name, $default = null)
     {
-
         $value = self::create()->findOneByName($name);
 
         return $value ? $value->getValue() : $default;
@@ -27,7 +25,6 @@ class Be2billConfigQuery extends BaseBe2billConfigQuery
 
     public static function set($name, $value)
     {
-
         $config = self::create()->findOneByName($name);
 
         if (null == $config) {
@@ -37,6 +34,5 @@ class Be2billConfigQuery extends BaseBe2billConfigQuery
         }
 
         $config->setValue($value)->save();
-
     }
 }

@@ -8,7 +8,6 @@
 
 namespace Be2Bill\Form;
 
-
 use Be2Bill\Be2Bill;
 use Be2Bill\Model\Be2billConfigQuery;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -17,7 +16,6 @@ use Thelia\Form\BaseForm;
 
 class ConfigForm extends BaseForm
 {
-
     /**
      *
      * in this function you add all the fields you need for your Form.

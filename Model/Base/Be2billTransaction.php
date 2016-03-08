@@ -8,10 +8,6 @@ use \PDO;
 use Be2Bill\Model\Be2billTransaction as ChildBe2billTransaction;
 use Be2Bill\Model\Be2billTransactionQuery as ChildBe2billTransactionQuery;
 use Be2Bill\Model\Map\Be2billTransactionTableMap;
-use Thelia\Model\Customer as ChildCustomer;
-use Thelia\Model\Order as ChildOrder;
-use Thelia\Model\CustomerQuery;
-use Thelia\Model\OrderQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -23,6 +19,10 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
+use Thelia\Model\Customer as ChildCustomer;
+use Thelia\Model\Order as ChildOrder;
+use Thelia\Model\CustomerQuery;
+use Thelia\Model\OrderQuery;
 
 abstract class Be2billTransaction implements ActiveRecordInterface
 {
@@ -81,6 +81,13 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      * @var        string
      */
     protected $transaction_id;
+
+    /**
+     * The value for the method_name field.
+     * Note: this column has a database default value of: ''
+     * @var        string
+     */
+    protected $method_name;
 
     /**
      * The value for the operationtype field.
@@ -143,6 +150,12 @@ abstract class Be2billTransaction implements ActiveRecordInterface
     protected $cardtype;
 
     /**
+     * The value for the transaction field.
+     * @var        string
+     */
+    protected $transaction;
+
+    /**
      * The value for the refunded field.
      * Note: this column has a database default value of: false
      * @var        boolean
@@ -193,6 +206,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function applyDefaultValues()
     {
+        $this->method_name = '';
         $this->refunded = false;
     }
 
@@ -313,7 +327,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
         }
 
         if (null === $this->getPrimaryKey()
-            || null === $obj->getPrimaryKey()) {
+            || null === $obj->getPrimaryKey())  {
             return false;
         }
 
@@ -463,6 +477,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getId()
     {
+
         return $this->id;
     }
 
@@ -473,6 +488,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getOrderId()
     {
+
         return $this->order_id;
     }
 
@@ -483,6 +499,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getCustomerId()
     {
+
         return $this->customer_id;
     }
 
@@ -493,7 +510,19 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getTransactionId()
     {
+
         return $this->transaction_id;
+    }
+
+    /**
+     * Get the [method_name] column value.
+     *
+     * @return   string
+     */
+    public function getMethodName()
+    {
+
+        return $this->method_name;
     }
 
     /**
@@ -503,6 +532,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getOperationtype()
     {
+
         return $this->operationtype;
     }
 
@@ -513,6 +543,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getDsecure()
     {
+
         return $this->dsecure;
     }
 
@@ -523,6 +554,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getExeccode()
     {
+
         return $this->execcode;
     }
 
@@ -533,6 +565,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getMessage()
     {
+
         return $this->message;
     }
 
@@ -543,6 +576,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getAmount()
     {
+
         return $this->amount;
     }
 
@@ -553,6 +587,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getClientemail()
     {
+
         return $this->clientemail;
     }
 
@@ -563,6 +598,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getCardcode()
     {
+
         return $this->cardcode;
     }
 
@@ -573,6 +609,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getCardvaliditydate()
     {
+
         return $this->cardvaliditydate;
     }
 
@@ -583,6 +620,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getCardfullname()
     {
+
         return $this->cardfullname;
     }
 
@@ -593,7 +631,19 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getCardtype()
     {
+
         return $this->cardtype;
+    }
+
+    /**
+     * Get the [transaction] column value.
+     *
+     * @return   string
+     */
+    public function getTransaction()
+    {
+
+        return $this->transaction;
     }
 
     /**
@@ -603,6 +653,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getRefunded()
     {
+
         return $this->refunded;
     }
 
@@ -613,6 +664,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function getRefundedby()
     {
+
         return $this->refundedby;
     }
 
@@ -627,7 +679,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getCreatedAt($format = null)
+    public function getCreatedAt($format = NULL)
     {
         if ($format === null) {
             return $this->created_at;
@@ -647,7 +699,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getUpdatedAt($format = null)
+    public function getUpdatedAt($format = NULL)
     {
         if ($format === null) {
             return $this->updated_at;
@@ -747,6 +799,27 @@ abstract class Be2billTransaction implements ActiveRecordInterface
 
         return $this;
     } // setTransactionId()
+
+    /**
+     * Set the value of [method_name] column.
+     *
+     * @param      string $v new value
+     * @return   \Be2Bill\Model\Be2billTransaction The current object (for fluent API support)
+     */
+    public function setMethodName($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->method_name !== $v) {
+            $this->method_name = $v;
+            $this->modifiedColumns[Be2billTransactionTableMap::METHOD_NAME] = true;
+        }
+
+
+        return $this;
+    } // setMethodName()
 
     /**
      * Set the value of [operationtype] column.
@@ -959,6 +1032,27 @@ abstract class Be2billTransaction implements ActiveRecordInterface
     } // setCardtype()
 
     /**
+     * Set the value of [transaction] column.
+     *
+     * @param      string $v new value
+     * @return   \Be2Bill\Model\Be2billTransaction The current object (for fluent API support)
+     */
+    public function setTransaction($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->transaction !== $v) {
+            $this->transaction = $v;
+            $this->modifiedColumns[Be2billTransactionTableMap::TRANSACTION] = true;
+        }
+
+
+        return $this;
+    } // setTransaction()
+
+    /**
      * Sets the value of the [refunded] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -1060,9 +1154,13 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
-        if ($this->refunded !== false) {
-            return false;
-        }
+            if ($this->method_name !== '') {
+                return false;
+            }
+
+            if ($this->refunded !== false) {
+                return false;
+            }
 
         // otherwise, everything was equal, so return TRUE
         return true;
@@ -1089,6 +1187,8 @@ abstract class Be2billTransaction implements ActiveRecordInterface
     public function hydrate($row, $startcol = 0, $rehydrate = false, $indexType = TableMap::TYPE_NUM)
     {
         try {
+
+
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : Be2billTransactionTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
@@ -1101,49 +1201,55 @@ abstract class Be2billTransaction implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : Be2billTransactionTableMap::translateFieldName('TransactionId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->transaction_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : Be2billTransactionTableMap::translateFieldName('Operationtype', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : Be2billTransactionTableMap::translateFieldName('MethodName', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->method_name = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : Be2billTransactionTableMap::translateFieldName('Operationtype', TableMap::TYPE_PHPNAME, $indexType)];
             $this->operationtype = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : Be2billTransactionTableMap::translateFieldName('Dsecure', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : Be2billTransactionTableMap::translateFieldName('Dsecure', TableMap::TYPE_PHPNAME, $indexType)];
             $this->dsecure = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : Be2billTransactionTableMap::translateFieldName('Execcode', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : Be2billTransactionTableMap::translateFieldName('Execcode', TableMap::TYPE_PHPNAME, $indexType)];
             $this->execcode = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : Be2billTransactionTableMap::translateFieldName('Message', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : Be2billTransactionTableMap::translateFieldName('Message', TableMap::TYPE_PHPNAME, $indexType)];
             $this->message = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : Be2billTransactionTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : Be2billTransactionTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->amount = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : Be2billTransactionTableMap::translateFieldName('Clientemail', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : Be2billTransactionTableMap::translateFieldName('Clientemail', TableMap::TYPE_PHPNAME, $indexType)];
             $this->clientemail = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : Be2billTransactionTableMap::translateFieldName('Cardcode', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : Be2billTransactionTableMap::translateFieldName('Cardcode', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cardcode = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : Be2billTransactionTableMap::translateFieldName('Cardvaliditydate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : Be2billTransactionTableMap::translateFieldName('Cardvaliditydate', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cardvaliditydate = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : Be2billTransactionTableMap::translateFieldName('Cardfullname', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : Be2billTransactionTableMap::translateFieldName('Cardfullname', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cardfullname = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : Be2billTransactionTableMap::translateFieldName('Cardtype', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : Be2billTransactionTableMap::translateFieldName('Cardtype', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cardtype = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : Be2billTransactionTableMap::translateFieldName('Refunded', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : Be2billTransactionTableMap::translateFieldName('Transaction', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->transaction = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : Be2billTransactionTableMap::translateFieldName('Refunded', TableMap::TYPE_PHPNAME, $indexType)];
             $this->refunded = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : Be2billTransactionTableMap::translateFieldName('Refundedby', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : Be2billTransactionTableMap::translateFieldName('Refundedby', TableMap::TYPE_PHPNAME, $indexType)];
             $this->refundedby = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : Be2billTransactionTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : Be2billTransactionTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, '\DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : Be2billTransactionTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : Be2billTransactionTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1156,7 +1262,8 @@ abstract class Be2billTransaction implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 18; // 18 = Be2billTransactionTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 20; // 20 = Be2billTransactionTableMap::NUM_HYDRATE_COLUMNS.
+
         } catch (Exception $e) {
             throw new PropelException("Error populating \Be2Bill\Model\Be2billTransaction object", 0, $e);
         }
@@ -1220,8 +1327,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
         }
         $this->hydrate($row, 0, true, $dataFetcher->getIndexType()); // rehydrate
 
-        if ($deep) {
-            // also de-associate any related objects?
+        if ($deep) {  // also de-associate any related objects?
 
             $this->aOrder = null;
             $this->aCustomer = null;
@@ -1378,6 +1484,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
             }
 
             $this->alreadyInSave = false;
+
         }
 
         return $affectedRows;
@@ -1414,6 +1521,9 @@ abstract class Be2billTransaction implements ActiveRecordInterface
         if ($this->isColumnModified(Be2billTransactionTableMap::TRANSACTION_ID)) {
             $modifiedColumns[':p' . $index++]  = 'TRANSACTION_ID';
         }
+        if ($this->isColumnModified(Be2billTransactionTableMap::METHOD_NAME)) {
+            $modifiedColumns[':p' . $index++]  = 'METHOD_NAME';
+        }
         if ($this->isColumnModified(Be2billTransactionTableMap::OPERATIONTYPE)) {
             $modifiedColumns[':p' . $index++]  = 'OPERATIONTYPE';
         }
@@ -1443,6 +1553,9 @@ abstract class Be2billTransaction implements ActiveRecordInterface
         }
         if ($this->isColumnModified(Be2billTransactionTableMap::CARDTYPE)) {
             $modifiedColumns[':p' . $index++]  = 'CARDTYPE';
+        }
+        if ($this->isColumnModified(Be2billTransactionTableMap::TRANSACTION)) {
+            $modifiedColumns[':p' . $index++]  = 'TRANSACTION';
         }
         if ($this->isColumnModified(Be2billTransactionTableMap::REFUNDED)) {
             $modifiedColumns[':p' . $index++]  = 'REFUNDED';
@@ -1479,6 +1592,9 @@ abstract class Be2billTransaction implements ActiveRecordInterface
                     case 'TRANSACTION_ID':
                         $stmt->bindValue($identifier, $this->transaction_id, PDO::PARAM_STR);
                         break;
+                    case 'METHOD_NAME':
+                        $stmt->bindValue($identifier, $this->method_name, PDO::PARAM_STR);
+                        break;
                     case 'OPERATIONTYPE':
                         $stmt->bindValue($identifier, $this->operationtype, PDO::PARAM_STR);
                         break;
@@ -1508,6 +1624,9 @@ abstract class Be2billTransaction implements ActiveRecordInterface
                         break;
                     case 'CARDTYPE':
                         $stmt->bindValue($identifier, $this->cardtype, PDO::PARAM_STR);
+                        break;
+                    case 'TRANSACTION':
+                        $stmt->bindValue($identifier, $this->transaction, PDO::PARAM_STR);
                         break;
                     case 'REFUNDED':
                         $stmt->bindValue($identifier, (int) $this->refunded, PDO::PARAM_INT);
@@ -1596,45 +1715,51 @@ abstract class Be2billTransaction implements ActiveRecordInterface
                 return $this->getTransactionId();
                 break;
             case 4:
-                return $this->getOperationtype();
+                return $this->getMethodName();
                 break;
             case 5:
-                return $this->getDsecure();
+                return $this->getOperationtype();
                 break;
             case 6:
-                return $this->getExeccode();
+                return $this->getDsecure();
                 break;
             case 7:
-                return $this->getMessage();
+                return $this->getExeccode();
                 break;
             case 8:
-                return $this->getAmount();
+                return $this->getMessage();
                 break;
             case 9:
-                return $this->getClientemail();
+                return $this->getAmount();
                 break;
             case 10:
-                return $this->getCardcode();
+                return $this->getClientemail();
                 break;
             case 11:
-                return $this->getCardvaliditydate();
+                return $this->getCardcode();
                 break;
             case 12:
-                return $this->getCardfullname();
+                return $this->getCardvaliditydate();
                 break;
             case 13:
-                return $this->getCardtype();
+                return $this->getCardfullname();
                 break;
             case 14:
-                return $this->getRefunded();
+                return $this->getCardtype();
                 break;
             case 15:
-                return $this->getRefundedby();
+                return $this->getTransaction();
                 break;
             case 16:
-                return $this->getCreatedAt();
+                return $this->getRefunded();
                 break;
             case 17:
+                return $this->getRefundedby();
+                break;
+            case 18:
+                return $this->getCreatedAt();
+                break;
+            case 19:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1670,20 +1795,22 @@ abstract class Be2billTransaction implements ActiveRecordInterface
             $keys[1] => $this->getOrderId(),
             $keys[2] => $this->getCustomerId(),
             $keys[3] => $this->getTransactionId(),
-            $keys[4] => $this->getOperationtype(),
-            $keys[5] => $this->getDsecure(),
-            $keys[6] => $this->getExeccode(),
-            $keys[7] => $this->getMessage(),
-            $keys[8] => $this->getAmount(),
-            $keys[9] => $this->getClientemail(),
-            $keys[10] => $this->getCardcode(),
-            $keys[11] => $this->getCardvaliditydate(),
-            $keys[12] => $this->getCardfullname(),
-            $keys[13] => $this->getCardtype(),
-            $keys[14] => $this->getRefunded(),
-            $keys[15] => $this->getRefundedby(),
-            $keys[16] => $this->getCreatedAt(),
-            $keys[17] => $this->getUpdatedAt(),
+            $keys[4] => $this->getMethodName(),
+            $keys[5] => $this->getOperationtype(),
+            $keys[6] => $this->getDsecure(),
+            $keys[7] => $this->getExeccode(),
+            $keys[8] => $this->getMessage(),
+            $keys[9] => $this->getAmount(),
+            $keys[10] => $this->getClientemail(),
+            $keys[11] => $this->getCardcode(),
+            $keys[12] => $this->getCardvaliditydate(),
+            $keys[13] => $this->getCardfullname(),
+            $keys[14] => $this->getCardtype(),
+            $keys[15] => $this->getTransaction(),
+            $keys[16] => $this->getRefunded(),
+            $keys[17] => $this->getRefundedby(),
+            $keys[18] => $this->getCreatedAt(),
+            $keys[19] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1744,45 +1871,51 @@ abstract class Be2billTransaction implements ActiveRecordInterface
                 $this->setTransactionId($value);
                 break;
             case 4:
-                $this->setOperationtype($value);
+                $this->setMethodName($value);
                 break;
             case 5:
-                $this->setDsecure($value);
+                $this->setOperationtype($value);
                 break;
             case 6:
-                $this->setExeccode($value);
+                $this->setDsecure($value);
                 break;
             case 7:
-                $this->setMessage($value);
+                $this->setExeccode($value);
                 break;
             case 8:
-                $this->setAmount($value);
+                $this->setMessage($value);
                 break;
             case 9:
-                $this->setClientemail($value);
+                $this->setAmount($value);
                 break;
             case 10:
-                $this->setCardcode($value);
+                $this->setClientemail($value);
                 break;
             case 11:
-                $this->setCardvaliditydate($value);
+                $this->setCardcode($value);
                 break;
             case 12:
-                $this->setCardfullname($value);
+                $this->setCardvaliditydate($value);
                 break;
             case 13:
-                $this->setCardtype($value);
+                $this->setCardfullname($value);
                 break;
             case 14:
-                $this->setRefunded($value);
+                $this->setCardtype($value);
                 break;
             case 15:
-                $this->setRefundedby($value);
+                $this->setTransaction($value);
                 break;
             case 16:
-                $this->setCreatedAt($value);
+                $this->setRefunded($value);
                 break;
             case 17:
+                $this->setRefundedby($value);
+                break;
+            case 18:
+                $this->setCreatedAt($value);
+                break;
+            case 19:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1809,60 +1942,26 @@ abstract class Be2billTransaction implements ActiveRecordInterface
     {
         $keys = Be2billTransactionTableMap::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) {
-            $this->setId($arr[$keys[0]]);
-        }
-        if (array_key_exists($keys[1], $arr)) {
-            $this->setOrderId($arr[$keys[1]]);
-        }
-        if (array_key_exists($keys[2], $arr)) {
-            $this->setCustomerId($arr[$keys[2]]);
-        }
-        if (array_key_exists($keys[3], $arr)) {
-            $this->setTransactionId($arr[$keys[3]]);
-        }
-        if (array_key_exists($keys[4], $arr)) {
-            $this->setOperationtype($arr[$keys[4]]);
-        }
-        if (array_key_exists($keys[5], $arr)) {
-            $this->setDsecure($arr[$keys[5]]);
-        }
-        if (array_key_exists($keys[6], $arr)) {
-            $this->setExeccode($arr[$keys[6]]);
-        }
-        if (array_key_exists($keys[7], $arr)) {
-            $this->setMessage($arr[$keys[7]]);
-        }
-        if (array_key_exists($keys[8], $arr)) {
-            $this->setAmount($arr[$keys[8]]);
-        }
-        if (array_key_exists($keys[9], $arr)) {
-            $this->setClientemail($arr[$keys[9]]);
-        }
-        if (array_key_exists($keys[10], $arr)) {
-            $this->setCardcode($arr[$keys[10]]);
-        }
-        if (array_key_exists($keys[11], $arr)) {
-            $this->setCardvaliditydate($arr[$keys[11]]);
-        }
-        if (array_key_exists($keys[12], $arr)) {
-            $this->setCardfullname($arr[$keys[12]]);
-        }
-        if (array_key_exists($keys[13], $arr)) {
-            $this->setCardtype($arr[$keys[13]]);
-        }
-        if (array_key_exists($keys[14], $arr)) {
-            $this->setRefunded($arr[$keys[14]]);
-        }
-        if (array_key_exists($keys[15], $arr)) {
-            $this->setRefundedby($arr[$keys[15]]);
-        }
-        if (array_key_exists($keys[16], $arr)) {
-            $this->setCreatedAt($arr[$keys[16]]);
-        }
-        if (array_key_exists($keys[17], $arr)) {
-            $this->setUpdatedAt($arr[$keys[17]]);
-        }
+        if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setOrderId($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setCustomerId($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setTransactionId($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setMethodName($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setOperationtype($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setDsecure($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setExeccode($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setMessage($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setAmount($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setClientemail($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setCardcode($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setCardvaliditydate($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setCardfullname($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setCardtype($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setTransaction($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setRefunded($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setRefundedby($arr[$keys[17]]);
+        if (array_key_exists($keys[18], $arr)) $this->setCreatedAt($arr[$keys[18]]);
+        if (array_key_exists($keys[19], $arr)) $this->setUpdatedAt($arr[$keys[19]]);
     }
 
     /**
@@ -1874,60 +1973,26 @@ abstract class Be2billTransaction implements ActiveRecordInterface
     {
         $criteria = new Criteria(Be2billTransactionTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(Be2billTransactionTableMap::ID)) {
-            $criteria->add(Be2billTransactionTableMap::ID, $this->id);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::ORDER_ID)) {
-            $criteria->add(Be2billTransactionTableMap::ORDER_ID, $this->order_id);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::CUSTOMER_ID)) {
-            $criteria->add(Be2billTransactionTableMap::CUSTOMER_ID, $this->customer_id);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::TRANSACTION_ID)) {
-            $criteria->add(Be2billTransactionTableMap::TRANSACTION_ID, $this->transaction_id);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::OPERATIONTYPE)) {
-            $criteria->add(Be2billTransactionTableMap::OPERATIONTYPE, $this->operationtype);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::DSECURE)) {
-            $criteria->add(Be2billTransactionTableMap::DSECURE, $this->dsecure);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::EXECCODE)) {
-            $criteria->add(Be2billTransactionTableMap::EXECCODE, $this->execcode);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::MESSAGE)) {
-            $criteria->add(Be2billTransactionTableMap::MESSAGE, $this->message);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::AMOUNT)) {
-            $criteria->add(Be2billTransactionTableMap::AMOUNT, $this->amount);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::CLIENTEMAIL)) {
-            $criteria->add(Be2billTransactionTableMap::CLIENTEMAIL, $this->clientemail);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::CARDCODE)) {
-            $criteria->add(Be2billTransactionTableMap::CARDCODE, $this->cardcode);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::CARDVALIDITYDATE)) {
-            $criteria->add(Be2billTransactionTableMap::CARDVALIDITYDATE, $this->cardvaliditydate);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::CARDFULLNAME)) {
-            $criteria->add(Be2billTransactionTableMap::CARDFULLNAME, $this->cardfullname);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::CARDTYPE)) {
-            $criteria->add(Be2billTransactionTableMap::CARDTYPE, $this->cardtype);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::REFUNDED)) {
-            $criteria->add(Be2billTransactionTableMap::REFUNDED, $this->refunded);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::REFUNDEDBY)) {
-            $criteria->add(Be2billTransactionTableMap::REFUNDEDBY, $this->refundedby);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::CREATED_AT)) {
-            $criteria->add(Be2billTransactionTableMap::CREATED_AT, $this->created_at);
-        }
-        if ($this->isColumnModified(Be2billTransactionTableMap::UPDATED_AT)) {
-            $criteria->add(Be2billTransactionTableMap::UPDATED_AT, $this->updated_at);
-        }
+        if ($this->isColumnModified(Be2billTransactionTableMap::ID)) $criteria->add(Be2billTransactionTableMap::ID, $this->id);
+        if ($this->isColumnModified(Be2billTransactionTableMap::ORDER_ID)) $criteria->add(Be2billTransactionTableMap::ORDER_ID, $this->order_id);
+        if ($this->isColumnModified(Be2billTransactionTableMap::CUSTOMER_ID)) $criteria->add(Be2billTransactionTableMap::CUSTOMER_ID, $this->customer_id);
+        if ($this->isColumnModified(Be2billTransactionTableMap::TRANSACTION_ID)) $criteria->add(Be2billTransactionTableMap::TRANSACTION_ID, $this->transaction_id);
+        if ($this->isColumnModified(Be2billTransactionTableMap::METHOD_NAME)) $criteria->add(Be2billTransactionTableMap::METHOD_NAME, $this->method_name);
+        if ($this->isColumnModified(Be2billTransactionTableMap::OPERATIONTYPE)) $criteria->add(Be2billTransactionTableMap::OPERATIONTYPE, $this->operationtype);
+        if ($this->isColumnModified(Be2billTransactionTableMap::DSECURE)) $criteria->add(Be2billTransactionTableMap::DSECURE, $this->dsecure);
+        if ($this->isColumnModified(Be2billTransactionTableMap::EXECCODE)) $criteria->add(Be2billTransactionTableMap::EXECCODE, $this->execcode);
+        if ($this->isColumnModified(Be2billTransactionTableMap::MESSAGE)) $criteria->add(Be2billTransactionTableMap::MESSAGE, $this->message);
+        if ($this->isColumnModified(Be2billTransactionTableMap::AMOUNT)) $criteria->add(Be2billTransactionTableMap::AMOUNT, $this->amount);
+        if ($this->isColumnModified(Be2billTransactionTableMap::CLIENTEMAIL)) $criteria->add(Be2billTransactionTableMap::CLIENTEMAIL, $this->clientemail);
+        if ($this->isColumnModified(Be2billTransactionTableMap::CARDCODE)) $criteria->add(Be2billTransactionTableMap::CARDCODE, $this->cardcode);
+        if ($this->isColumnModified(Be2billTransactionTableMap::CARDVALIDITYDATE)) $criteria->add(Be2billTransactionTableMap::CARDVALIDITYDATE, $this->cardvaliditydate);
+        if ($this->isColumnModified(Be2billTransactionTableMap::CARDFULLNAME)) $criteria->add(Be2billTransactionTableMap::CARDFULLNAME, $this->cardfullname);
+        if ($this->isColumnModified(Be2billTransactionTableMap::CARDTYPE)) $criteria->add(Be2billTransactionTableMap::CARDTYPE, $this->cardtype);
+        if ($this->isColumnModified(Be2billTransactionTableMap::TRANSACTION)) $criteria->add(Be2billTransactionTableMap::TRANSACTION, $this->transaction);
+        if ($this->isColumnModified(Be2billTransactionTableMap::REFUNDED)) $criteria->add(Be2billTransactionTableMap::REFUNDED, $this->refunded);
+        if ($this->isColumnModified(Be2billTransactionTableMap::REFUNDEDBY)) $criteria->add(Be2billTransactionTableMap::REFUNDEDBY, $this->refundedby);
+        if ($this->isColumnModified(Be2billTransactionTableMap::CREATED_AT)) $criteria->add(Be2billTransactionTableMap::CREATED_AT, $this->created_at);
+        if ($this->isColumnModified(Be2billTransactionTableMap::UPDATED_AT)) $criteria->add(Be2billTransactionTableMap::UPDATED_AT, $this->updated_at);
 
         return $criteria;
     }
@@ -1974,6 +2039,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
+
         return null === $this->getId();
     }
 
@@ -1993,6 +2059,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
         $copyObj->setOrderId($this->getOrderId());
         $copyObj->setCustomerId($this->getCustomerId());
         $copyObj->setTransactionId($this->getTransactionId());
+        $copyObj->setMethodName($this->getMethodName());
         $copyObj->setOperationtype($this->getOperationtype());
         $copyObj->setDsecure($this->getDsecure());
         $copyObj->setExeccode($this->getExeccode());
@@ -2003,13 +2070,14 @@ abstract class Be2billTransaction implements ActiveRecordInterface
         $copyObj->setCardvaliditydate($this->getCardvaliditydate());
         $copyObj->setCardfullname($this->getCardfullname());
         $copyObj->setCardtype($this->getCardtype());
+        $copyObj->setTransaction($this->getTransaction());
         $copyObj->setRefunded($this->getRefunded());
         $copyObj->setRefundedby($this->getRefundedby());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(null); // this is a auto-increment column, so set to default value
+            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -2045,7 +2113,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
     public function setOrder(ChildOrder $v = null)
     {
         if ($v === null) {
-            $this->setOrderId(null);
+            $this->setOrderId(NULL);
         } else {
             $this->setOrderId($v->getId());
         }
@@ -2096,7 +2164,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
     public function setCustomer(ChildCustomer $v = null)
     {
         if ($v === null) {
-            $this->setCustomerId(null);
+            $this->setCustomerId(NULL);
         } else {
             $this->setCustomerId($v->getId());
         }
@@ -2146,6 +2214,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
         $this->order_id = null;
         $this->customer_id = null;
         $this->transaction_id = null;
+        $this->method_name = null;
         $this->operationtype = null;
         $this->dsecure = null;
         $this->execcode = null;
@@ -2156,6 +2225,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
         $this->cardvaliditydate = null;
         $this->cardfullname = null;
         $this->cardtype = null;
+        $this->transaction = null;
         $this->refunded = null;
         $this->refundedby = null;
         $this->created_at = null;
@@ -2226,6 +2296,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function postSave(ConnectionInterface $con = null)
     {
+
     }
 
     /**
@@ -2244,6 +2315,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function postInsert(ConnectionInterface $con = null)
     {
+
     }
 
     /**
@@ -2262,6 +2334,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function postUpdate(ConnectionInterface $con = null)
     {
+
     }
 
     /**
@@ -2280,6 +2353,7 @@ abstract class Be2billTransaction implements ActiveRecordInterface
      */
     public function postDelete(ConnectionInterface $con = null)
     {
+
     }
 
 
@@ -2323,4 +2397,5 @@ abstract class Be2billTransaction implements ActiveRecordInterface
 
         throw new BadMethodCallException(sprintf('Call to undefined method: %s.', $name));
     }
+
 }

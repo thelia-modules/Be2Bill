@@ -16,10 +16,12 @@ use Be2Bill\Model\Be2billConfigQuery;
 use Be2Bill\Model\Be2billMethod;
 use Be2Bill\Model\Be2billMethodQuery;
 use Propel\Runtime\Connection\ConnectionInterface;
+use Symfony\Component\Finder\Finder;
 use Thelia\Core\HttpFoundation\Response;
 use Thelia\Core\Translation\Translator;
 use Thelia\Install\Database;
 use Thelia\Log\Tlog;
+use Thelia\Model\LangQuery;
 use Thelia\Model\Message;
 use Thelia\Model\MessageQuery;
 use Thelia\Model\ModuleImageQuery;
@@ -46,38 +48,82 @@ class Be2Bill extends AbstractPaymentModule
     {
         $database = new Database($con);
 
-        $database->insertSql(null, array(
-            __DIR__ . DS . 'Config' . DS . 'thelia.sql'
-        ));
+        try {
+            Be2billConfigQuery::create()->findOne();
+        } catch (\Exception $ex) {
+            $database->insertSql(null, array(__DIR__ . DS . 'Config' . DS . 'thelia.sql'));
+        }
 
         // initialize config var
         $this->initializeConfig();
 
-        // Create payment confirmation message from templates, if not already defined
-        $email_templates_dir = __DIR__ . DS . 'I18n' . DS . 'email-templates' . DS;
+        // create message
+        if (null === MessageQuery::create()->findOneByName(self::CONFIRMATION_MESSAGE_NAME)) {
+            $translator = Translator::getInstance();
 
-        if (null == MessageQuery::create()->findOneByName(self::CONFIRMATION_MESSAGE_NAME)) {
             $message = new Message();
+            $message
+                ->setName(self::CONFIRMATION_MESSAGE_NAME)
+                ->setHtmlTemplateFileName('be2bill-payment-confirmation.html')
+                ->setHtmlLayoutFileName('')
+                ->setTextTemplateFileName('be2bill-payment-confirmation.txt')
+                ->setTextLayoutFileName('')
+                ->setSecured(0);
 
-            $message->setName(self::CONFIRMATION_MESSAGE_NAME)
-                ->setLocale('en_US')
-                ->setTitle('Be2Bill payment confirmation')
-                ->setSubject('Payment of order {$order_ref}')
-                ->setHtmlMessage(file_get_contents($email_templates_dir . 'en.html'))
-                ->setTextMessage(file_get_contents($email_templates_dir . 'en.txt'))
-                ->setLocale('fr_FR')
-                ->setTitle('Confirmation de paiement par Be2Bill')
-                ->setSubject('Confirmation du paiement de votre commande {$order_ref}')
-                ->setHtmlMessage(file_get_contents($email_templates_dir . 'fr.html'))
-                ->setTextMessage(file_get_contents($email_templates_dir . 'fr.txt'))
-                ->save()
-            ;
+            $languages = LangQuery::create()->find();
+
+            foreach ($languages as $language) {
+                $locale = $language->getLocale();
+
+                $message->setLocale($locale);
+                $message->setSubject(
+                    $translator->trans('Payment of order {$order_ref}.', [], self::MODULE_DOMAIN, $locale)
+                );
+                $message->setTitle(
+                    $translator->trans('Be2Bill payment confirmation', [], self::MODULE_DOMAIN, $locale)
+                );
+            }
+
+            $message->save();
         }
+
 
         $module = $this->getModuleModel();
 
         if (ModuleImageQuery::create()->filterByModule($module)->count() == 0) {
             $this->deployImageFolder($module, sprintf('%s/images', __DIR__), $con);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function update($currentVersion, $newVersion, ConnectionInterface $con = null)
+    {
+        parent::update($currentVersion, $newVersion, $con);
+
+        // add missing variables
+        $this->initializeConfig();
+
+        // update db
+        $finder = Finder::create()
+            ->name('*.sql')
+            ->depth(0)
+            ->sortByName()
+            ->in(__DIR__ . DS . 'Config' . DS . 'update');
+
+        $updates = [];
+        /** @var \SplFileInfo $file */
+        foreach ($finder as $file) {
+            $version = $file->getBasename('.sql');
+            if (version_compare($currentVersion, $version) == -1) {
+                $updates[] = $file->getRealPath();
+            }
+        }
+
+        if (count($updates) > 0) {
+            $database = new Database($con);
+            $database->insertSql(null, $updates);
         }
     }
 
@@ -275,15 +321,6 @@ class Be2Bill extends AbstractPaymentModule
         return 'yes' === Be2billConfigQuery::read('activated', 'yes');
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function update($currentVersion, $newVersion, ConnectionInterface $con = null)
-    {
-        parent::update($currentVersion, $newVersion, $con);
-
-        $this->initializeConfig();
-    }
 
     private function initializeConfig()
     {

@@ -15,7 +15,7 @@
         <!--
         <form name="MyFormName" class="MyModule\Form\MySuperForm" />
         -->
-        <form name="be2bill.configuration.form" class="Be2Bill\Form\ConfigForm" />
+        <form name="be2bill.configuration.form" class="Be2Bill\Form\ConfigForm"/>
     </forms>
 
     <commands>
@@ -26,14 +26,24 @@
 
 
     <services>
-        <service id="send.be2bill.mail" class="Be2Bill\EventListeners\SendConfirmationEmail" scope="request">
+        <service id="be2bill.service.mail" class="Be2Bill\EventListeners\SendConfirmationEmail" scope="request">
             <argument type="service" id="thelia.parser"/>
             <argument type="service" id="mailer"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service id="be2bill.service.order" class="Be2Bill\EventListeners\Order" scope="request">
+            <argument type="service" id="request"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
     </services>
 
+    <hooks>
+        <hook id="be2bill.hook" class="Be2Bill\Hook\HookManager" scope="request">
+            <tag name="hook.event_listener" event="order-invoice.payment-extra" type="front" method="onOrderInvoice"/>
+            <tag name="hook.event_listener" event="order-invoice.javascript-initialization" type="front" method="onOrderInvoiceJavascriptInitialization"/>
+        </hook>
+    </hooks>
 
     <!--
     <exports>

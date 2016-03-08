@@ -42,6 +42,17 @@ class ConfigForm extends BaseForm
 
         $this->formBuilder
             ->add(
+                'activated',
+                'text',
+                array(
+                    'constraints'   => array(new NotBlank()),
+                    'required'      => true,
+                    'label'         => $translator->trans('Activer le module', array(), Be2Bill::MODULE_DOMAIN),
+                    'data'          => Be2billConfigQuery::read('activated', 'yes'),
+                    'label_attr'    => array('help' => $translator->trans('Active le paiement Be2Bill', array(), Be2Bill::MODULE_DOMAIN))
+                )
+            )
+            ->add(
                 'identifier',
                 'text',
                 array(
@@ -86,7 +97,35 @@ class ConfigForm extends BaseForm
                 'text',
                 array(
                     'label' => '3DSecure',
-                    'data' => Be2billConfigQuery::read('3dsecure', 0)
+                    'data' => Be2billConfigQuery::read('3dsecure', "no")
+                )
+            )
+            ->add(
+                'paypal',
+                'text',
+                array(
+                    'label' => 'PayPal',
+                    'data' => Be2billConfigQuery::read('paypal', "no")
+                )
+            )
+            ->add(
+                'paypal-identifier',
+                'text',
+                array(
+                    'constraints'   => array(new NotBlank()),
+                    'required'      => true,
+                    'label'         => $translator->trans('Identifiant du compte Be 2 Bill pour PayPal', array(), Be2Bill::MODULE_DOMAIN),
+                    'data'          => Be2billConfigQuery::read('paypal-identifier'),
+                    'label_attr'    => array('help' => $translator->trans('Identifiant du compte', array(), Be2Bill::MODULE_DOMAIN))
+                )
+            )
+            ->add(
+                'paypal-password',
+                'text',
+                array(
+                    'label' => $translator->trans('Mot de passe pour PayPal', array(), Be2Bill::MODULE_DOMAIN),
+                    'data' => Be2billConfigQuery::read('paypal-password'),
+                    'label_attr' => array('help' => $translator->trans('Mot de passe Be2Bill pour PayPal', array(), Be2Bill::MODULE_DOMAIN))
                 )
             )
         ;

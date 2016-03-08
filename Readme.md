@@ -20,6 +20,12 @@ Url : URL fournie par Be2bill pour accéder à leur service de type : secure-tes
 
 Description : Courte description du panier de la transaction (maximum 510 charactéres).
 
+Le module be2bill peut également être configuré pour utiliser Paypal. Il faut pour cela activer
+ce type de compte dans l'intranet be2bill. Une fois activé, il faudra activer l'option Paypal
+dans la page de configuration du module et renseigner les identifiant et mot de passe donnés par be2bill
+pour Paypal.
+
+
 -------------
 
 N'oubliez pas d'aller configurer votre compte dans l'extranet Be2bill :
@@ -33,6 +39,8 @@ N'oubliez pas d'aller configurer votre compte dans l'extranet Be2bill :
 3) Renseigner les urls de redirections :
     http://votresite.fr/be2bill/redirect/payment (Url après traitement)
     http://votresite.fr/be2bill/redirect/cancel (Url en cas d'annulation)
+
+*Les URLs sont les mêmes pour les comptes "carte bancaire" et "PayPal".*
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -56,6 +64,11 @@ Url : Web service url given by Be2Bill, exemple : "secure-magenta.be2bill.com" .
 
 Description : Description of the transaction (string / 510 char max).
 
+The be2bill module can be used with Paypal account.
+First, you should activate the Paypal account on your be2bill account.
+Next you have to activate the option in the configuration page of the module and set the
+PayPal identifier and password send by be2bill.
+
 -------------
 
 Don't forget to configure your account in Be2Bill extranet :
@@ -69,3 +82,5 @@ Don't forget to configure your account in Be2Bill extranet :
 3) Fill in the redirect urls :
    http://site.com/be2bill/redirect/payment ( Url after treatment)
    http://site.com/be2bill/redirect/cancel ( Cancel url)
+
+*Urls are similar for "Card" and "PayPal" accounts.*

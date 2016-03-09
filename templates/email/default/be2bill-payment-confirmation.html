@@ -41,19 +41,19 @@
     <div id="entete">
         <h1 id="logotexte">{config key="store_name"}</h1>
 
-        <h2 id="info">{int l="The payment of your order is confirmed" domain="be2bill.email.default"}</h2>
+        <h2 id="info">{intl l="The payment of your order is confirmed" domain="be2bill.email.default"}</h2>
 
-        <h3 id="commande">{int l="Reference %ref" domain="be2bill.email.default" ref="{$order_ref}"}</h3>
+        <h3 id="commande">{intl l="Reference %ref" domain="be2bill.email.default" ref="{$order_ref}"}</h3>
     </div>
 
     <p id="liencompte">
-        {int l="Your invoice is now available in your customer account on " domain="be2bill.email.default"}
+        {intl l="Your invoice is now available in your customer account on " domain="be2bill.email.default"}
         <a href="{config key="url_site"}">{config key="store_name"}</a>.
     </p>
 
-    <p>{int l="Thank you for your order !" domain="be2bill.email.default"}</p>
+    <p>{intl l="Thank you for your order !" domain="be2bill.email.default"}</p>
 
-    <p>{int l="The %site team." domain="be2bill.email.default" site="{config key="store_name"}"}</p>
+    <p>{intl l="The %site team." domain="be2bill.email.default" site="{config key="store_name"}"}</p>
 </div>
 </body>
 </html>

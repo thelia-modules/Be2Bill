@@ -28,6 +28,7 @@ CREATE TABLE `be2bill_transaction`
     `order_id` INTEGER NOT NULL,
     `customer_id` INTEGER NOT NULL,
     `transaction_id` VARCHAR(255) NOT NULL,
+    `method_name` VARCHAR(255) DEFAULT '',
     `operationtype` VARCHAR(255) NOT NULL,
     `dsecure` VARCHAR(255) NOT NULL,
     `execcode` VARCHAR(255) NOT NULL,
@@ -38,6 +39,7 @@ CREATE TABLE `be2bill_transaction`
     `cardvaliditydate` VARCHAR(255) NOT NULL,
     `cardfullname` VARCHAR(255) NOT NULL,
     `cardtype` VARCHAR(255) NOT NULL,
+    `transaction` TEXT,
     `refunded` TINYINT(1) DEFAULT 0 NOT NULL,
     `refundedby` VARCHAR(255),
     `created_at` DATETIME,
@@ -53,6 +55,26 @@ CREATE TABLE `be2bill_transaction`
     CONSTRAINT `fk_be2bill_transaction_customer_id`
         FOREIGN KEY (`customer_id`)
         REFERENCES `customer` (`id`)
+        ON UPDATE RESTRICT
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- be2bill_method
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `be2bill_method`;
+
+CREATE TABLE `be2bill_method`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `order_id` INTEGER NOT NULL,
+    `method` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `FI_be2bill_method_order_id` (`order_id`),
+    CONSTRAINT `fk_be2bill_method_order_id`
+        FOREIGN KEY (`order_id`)
+        REFERENCES `order` (`id`)
         ON UPDATE RESTRICT
         ON DELETE CASCADE
 ) ENGINE=InnoDB;

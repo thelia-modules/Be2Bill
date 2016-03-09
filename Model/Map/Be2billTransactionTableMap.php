@@ -58,7 +58,7 @@ class Be2billTransactionTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 18;
+    const NUM_COLUMNS = 20;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class Be2billTransactionTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 18;
+    const NUM_HYDRATE_COLUMNS = 20;
 
     /**
      * the column name for the ID field
@@ -89,6 +89,11 @@ class Be2billTransactionTableMap extends TableMap
      * the column name for the TRANSACTION_ID field
      */
     const TRANSACTION_ID = 'be2bill_transaction.TRANSACTION_ID';
+
+    /**
+     * the column name for the METHOD_NAME field
+     */
+    const METHOD_NAME = 'be2bill_transaction.METHOD_NAME';
 
     /**
      * the column name for the OPERATIONTYPE field
@@ -141,6 +146,11 @@ class Be2billTransactionTableMap extends TableMap
     const CARDTYPE = 'be2bill_transaction.CARDTYPE';
 
     /**
+     * the column name for the TRANSACTION field
+     */
+    const TRANSACTION = 'be2bill_transaction.TRANSACTION';
+
+    /**
      * the column name for the REFUNDED field
      */
     const REFUNDED = 'be2bill_transaction.REFUNDED';
@@ -172,12 +182,12 @@ class Be2billTransactionTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'OrderId', 'CustomerId', 'TransactionId', 'Operationtype', 'Dsecure', 'Execcode', 'Message', 'Amount', 'Clientemail', 'Cardcode', 'Cardvaliditydate', 'Cardfullname', 'Cardtype', 'Refunded', 'Refundedby', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_STUDLYPHPNAME => array('id', 'orderId', 'customerId', 'transactionId', 'operationtype', 'dsecure', 'execcode', 'message', 'amount', 'clientemail', 'cardcode', 'cardvaliditydate', 'cardfullname', 'cardtype', 'refunded', 'refundedby', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(Be2billTransactionTableMap::ID, Be2billTransactionTableMap::ORDER_ID, Be2billTransactionTableMap::CUSTOMER_ID, Be2billTransactionTableMap::TRANSACTION_ID, Be2billTransactionTableMap::OPERATIONTYPE, Be2billTransactionTableMap::DSECURE, Be2billTransactionTableMap::EXECCODE, Be2billTransactionTableMap::MESSAGE, Be2billTransactionTableMap::AMOUNT, Be2billTransactionTableMap::CLIENTEMAIL, Be2billTransactionTableMap::CARDCODE, Be2billTransactionTableMap::CARDVALIDITYDATE, Be2billTransactionTableMap::CARDFULLNAME, Be2billTransactionTableMap::CARDTYPE, Be2billTransactionTableMap::REFUNDED, Be2billTransactionTableMap::REFUNDEDBY, Be2billTransactionTableMap::CREATED_AT, Be2billTransactionTableMap::UPDATED_AT, ),
-        self::TYPE_RAW_COLNAME   => array('ID', 'ORDER_ID', 'CUSTOMER_ID', 'TRANSACTION_ID', 'OPERATIONTYPE', 'DSECURE', 'EXECCODE', 'MESSAGE', 'AMOUNT', 'CLIENTEMAIL', 'CARDCODE', 'CARDVALIDITYDATE', 'CARDFULLNAME', 'CARDTYPE', 'REFUNDED', 'REFUNDEDBY', 'CREATED_AT', 'UPDATED_AT', ),
-        self::TYPE_FIELDNAME     => array('id', 'order_id', 'customer_id', 'transaction_id', 'operationtype', 'dsecure', 'execcode', 'message', 'amount', 'clientemail', 'cardcode', 'cardvaliditydate', 'cardfullname', 'cardtype', 'refunded', 'refundedby', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
+        self::TYPE_PHPNAME       => array('Id', 'OrderId', 'CustomerId', 'TransactionId', 'MethodName', 'Operationtype', 'Dsecure', 'Execcode', 'Message', 'Amount', 'Clientemail', 'Cardcode', 'Cardvaliditydate', 'Cardfullname', 'Cardtype', 'Transaction', 'Refunded', 'Refundedby', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_STUDLYPHPNAME => array('id', 'orderId', 'customerId', 'transactionId', 'methodName', 'operationtype', 'dsecure', 'execcode', 'message', 'amount', 'clientemail', 'cardcode', 'cardvaliditydate', 'cardfullname', 'cardtype', 'transaction', 'refunded', 'refundedby', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(Be2billTransactionTableMap::ID, Be2billTransactionTableMap::ORDER_ID, Be2billTransactionTableMap::CUSTOMER_ID, Be2billTransactionTableMap::TRANSACTION_ID, Be2billTransactionTableMap::METHOD_NAME, Be2billTransactionTableMap::OPERATIONTYPE, Be2billTransactionTableMap::DSECURE, Be2billTransactionTableMap::EXECCODE, Be2billTransactionTableMap::MESSAGE, Be2billTransactionTableMap::AMOUNT, Be2billTransactionTableMap::CLIENTEMAIL, Be2billTransactionTableMap::CARDCODE, Be2billTransactionTableMap::CARDVALIDITYDATE, Be2billTransactionTableMap::CARDFULLNAME, Be2billTransactionTableMap::CARDTYPE, Be2billTransactionTableMap::TRANSACTION, Be2billTransactionTableMap::REFUNDED, Be2billTransactionTableMap::REFUNDEDBY, Be2billTransactionTableMap::CREATED_AT, Be2billTransactionTableMap::UPDATED_AT, ),
+        self::TYPE_RAW_COLNAME   => array('ID', 'ORDER_ID', 'CUSTOMER_ID', 'TRANSACTION_ID', 'METHOD_NAME', 'OPERATIONTYPE', 'DSECURE', 'EXECCODE', 'MESSAGE', 'AMOUNT', 'CLIENTEMAIL', 'CARDCODE', 'CARDVALIDITYDATE', 'CARDFULLNAME', 'CARDTYPE', 'TRANSACTION', 'REFUNDED', 'REFUNDEDBY', 'CREATED_AT', 'UPDATED_AT', ),
+        self::TYPE_FIELDNAME     => array('id', 'order_id', 'customer_id', 'transaction_id', 'method_name', 'operationtype', 'dsecure', 'execcode', 'message', 'amount', 'clientemail', 'cardcode', 'cardvaliditydate', 'cardfullname', 'cardtype', 'transaction', 'refunded', 'refundedby', 'created_at', 'updated_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, )
     );
 
     /**
@@ -187,12 +197,12 @@ class Be2billTransactionTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'OrderId' => 1, 'CustomerId' => 2, 'TransactionId' => 3, 'Operationtype' => 4, 'Dsecure' => 5, 'Execcode' => 6, 'Message' => 7, 'Amount' => 8, 'Clientemail' => 9, 'Cardcode' => 10, 'Cardvaliditydate' => 11, 'Cardfullname' => 12, 'Cardtype' => 13, 'Refunded' => 14, 'Refundedby' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, ),
-        self::TYPE_STUDLYPHPNAME => array('id' => 0, 'orderId' => 1, 'customerId' => 2, 'transactionId' => 3, 'operationtype' => 4, 'dsecure' => 5, 'execcode' => 6, 'message' => 7, 'amount' => 8, 'clientemail' => 9, 'cardcode' => 10, 'cardvaliditydate' => 11, 'cardfullname' => 12, 'cardtype' => 13, 'refunded' => 14, 'refundedby' => 15, 'createdAt' => 16, 'updatedAt' => 17, ),
-        self::TYPE_COLNAME       => array(Be2billTransactionTableMap::ID => 0, Be2billTransactionTableMap::ORDER_ID => 1, Be2billTransactionTableMap::CUSTOMER_ID => 2, Be2billTransactionTableMap::TRANSACTION_ID => 3, Be2billTransactionTableMap::OPERATIONTYPE => 4, Be2billTransactionTableMap::DSECURE => 5, Be2billTransactionTableMap::EXECCODE => 6, Be2billTransactionTableMap::MESSAGE => 7, Be2billTransactionTableMap::AMOUNT => 8, Be2billTransactionTableMap::CLIENTEMAIL => 9, Be2billTransactionTableMap::CARDCODE => 10, Be2billTransactionTableMap::CARDVALIDITYDATE => 11, Be2billTransactionTableMap::CARDFULLNAME => 12, Be2billTransactionTableMap::CARDTYPE => 13, Be2billTransactionTableMap::REFUNDED => 14, Be2billTransactionTableMap::REFUNDEDBY => 15, Be2billTransactionTableMap::CREATED_AT => 16, Be2billTransactionTableMap::UPDATED_AT => 17, ),
-        self::TYPE_RAW_COLNAME   => array('ID' => 0, 'ORDER_ID' => 1, 'CUSTOMER_ID' => 2, 'TRANSACTION_ID' => 3, 'OPERATIONTYPE' => 4, 'DSECURE' => 5, 'EXECCODE' => 6, 'MESSAGE' => 7, 'AMOUNT' => 8, 'CLIENTEMAIL' => 9, 'CARDCODE' => 10, 'CARDVALIDITYDATE' => 11, 'CARDFULLNAME' => 12, 'CARDTYPE' => 13, 'REFUNDED' => 14, 'REFUNDEDBY' => 15, 'CREATED_AT' => 16, 'UPDATED_AT' => 17, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'order_id' => 1, 'customer_id' => 2, 'transaction_id' => 3, 'operationtype' => 4, 'dsecure' => 5, 'execcode' => 6, 'message' => 7, 'amount' => 8, 'clientemail' => 9, 'cardcode' => 10, 'cardvaliditydate' => 11, 'cardfullname' => 12, 'cardtype' => 13, 'refunded' => 14, 'refundedby' => 15, 'created_at' => 16, 'updated_at' => 17, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'OrderId' => 1, 'CustomerId' => 2, 'TransactionId' => 3, 'MethodName' => 4, 'Operationtype' => 5, 'Dsecure' => 6, 'Execcode' => 7, 'Message' => 8, 'Amount' => 9, 'Clientemail' => 10, 'Cardcode' => 11, 'Cardvaliditydate' => 12, 'Cardfullname' => 13, 'Cardtype' => 14, 'Transaction' => 15, 'Refunded' => 16, 'Refundedby' => 17, 'CreatedAt' => 18, 'UpdatedAt' => 19, ),
+        self::TYPE_STUDLYPHPNAME => array('id' => 0, 'orderId' => 1, 'customerId' => 2, 'transactionId' => 3, 'methodName' => 4, 'operationtype' => 5, 'dsecure' => 6, 'execcode' => 7, 'message' => 8, 'amount' => 9, 'clientemail' => 10, 'cardcode' => 11, 'cardvaliditydate' => 12, 'cardfullname' => 13, 'cardtype' => 14, 'transaction' => 15, 'refunded' => 16, 'refundedby' => 17, 'createdAt' => 18, 'updatedAt' => 19, ),
+        self::TYPE_COLNAME       => array(Be2billTransactionTableMap::ID => 0, Be2billTransactionTableMap::ORDER_ID => 1, Be2billTransactionTableMap::CUSTOMER_ID => 2, Be2billTransactionTableMap::TRANSACTION_ID => 3, Be2billTransactionTableMap::METHOD_NAME => 4, Be2billTransactionTableMap::OPERATIONTYPE => 5, Be2billTransactionTableMap::DSECURE => 6, Be2billTransactionTableMap::EXECCODE => 7, Be2billTransactionTableMap::MESSAGE => 8, Be2billTransactionTableMap::AMOUNT => 9, Be2billTransactionTableMap::CLIENTEMAIL => 10, Be2billTransactionTableMap::CARDCODE => 11, Be2billTransactionTableMap::CARDVALIDITYDATE => 12, Be2billTransactionTableMap::CARDFULLNAME => 13, Be2billTransactionTableMap::CARDTYPE => 14, Be2billTransactionTableMap::TRANSACTION => 15, Be2billTransactionTableMap::REFUNDED => 16, Be2billTransactionTableMap::REFUNDEDBY => 17, Be2billTransactionTableMap::CREATED_AT => 18, Be2billTransactionTableMap::UPDATED_AT => 19, ),
+        self::TYPE_RAW_COLNAME   => array('ID' => 0, 'ORDER_ID' => 1, 'CUSTOMER_ID' => 2, 'TRANSACTION_ID' => 3, 'METHOD_NAME' => 4, 'OPERATIONTYPE' => 5, 'DSECURE' => 6, 'EXECCODE' => 7, 'MESSAGE' => 8, 'AMOUNT' => 9, 'CLIENTEMAIL' => 10, 'CARDCODE' => 11, 'CARDVALIDITYDATE' => 12, 'CARDFULLNAME' => 13, 'CARDTYPE' => 14, 'TRANSACTION' => 15, 'REFUNDED' => 16, 'REFUNDEDBY' => 17, 'CREATED_AT' => 18, 'UPDATED_AT' => 19, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'order_id' => 1, 'customer_id' => 2, 'transaction_id' => 3, 'method_name' => 4, 'operationtype' => 5, 'dsecure' => 6, 'execcode' => 7, 'message' => 8, 'amount' => 9, 'clientemail' => 10, 'cardcode' => 11, 'cardvaliditydate' => 12, 'cardfullname' => 13, 'cardtype' => 14, 'transaction' => 15, 'refunded' => 16, 'refundedby' => 17, 'created_at' => 18, 'updated_at' => 19, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, )
     );
 
     /**
@@ -215,6 +225,7 @@ class Be2billTransactionTableMap extends TableMap
         $this->addForeignKey('ORDER_ID', 'OrderId', 'INTEGER', 'order', 'ID', true, null, null);
         $this->addForeignKey('CUSTOMER_ID', 'CustomerId', 'INTEGER', 'customer', 'ID', true, null, null);
         $this->addColumn('TRANSACTION_ID', 'TransactionId', 'VARCHAR', true, 255, null);
+        $this->addColumn('METHOD_NAME', 'MethodName', 'VARCHAR', false, 255, '');
         $this->addColumn('OPERATIONTYPE', 'Operationtype', 'VARCHAR', true, 255, null);
         $this->addColumn('DSECURE', 'Dsecure', 'VARCHAR', true, 255, null);
         $this->addColumn('EXECCODE', 'Execcode', 'VARCHAR', true, 255, null);
@@ -225,6 +236,7 @@ class Be2billTransactionTableMap extends TableMap
         $this->addColumn('CARDVALIDITYDATE', 'Cardvaliditydate', 'VARCHAR', true, 255, null);
         $this->addColumn('CARDFULLNAME', 'Cardfullname', 'VARCHAR', true, 255, null);
         $this->addColumn('CARDTYPE', 'Cardtype', 'VARCHAR', true, 255, null);
+        $this->addColumn('TRANSACTION', 'Transaction', 'LONGVARCHAR', false, null, null);
         $this->addColumn('REFUNDED', 'Refunded', 'BOOLEAN', true, 1, false);
         $this->addColumn('REFUNDEDBY', 'Refundedby', 'VARCHAR', false, 255, null);
         $this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -288,7 +300,8 @@ class Be2billTransactionTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        return (int) $row[
+
+            return (int) $row[
                             $indexType == TableMap::TYPE_NUM
                             ? 0 + $offset
                             : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
@@ -394,6 +407,7 @@ class Be2billTransactionTableMap extends TableMap
             $criteria->addSelectColumn(Be2billTransactionTableMap::ORDER_ID);
             $criteria->addSelectColumn(Be2billTransactionTableMap::CUSTOMER_ID);
             $criteria->addSelectColumn(Be2billTransactionTableMap::TRANSACTION_ID);
+            $criteria->addSelectColumn(Be2billTransactionTableMap::METHOD_NAME);
             $criteria->addSelectColumn(Be2billTransactionTableMap::OPERATIONTYPE);
             $criteria->addSelectColumn(Be2billTransactionTableMap::DSECURE);
             $criteria->addSelectColumn(Be2billTransactionTableMap::EXECCODE);
@@ -404,6 +418,7 @@ class Be2billTransactionTableMap extends TableMap
             $criteria->addSelectColumn(Be2billTransactionTableMap::CARDVALIDITYDATE);
             $criteria->addSelectColumn(Be2billTransactionTableMap::CARDFULLNAME);
             $criteria->addSelectColumn(Be2billTransactionTableMap::CARDTYPE);
+            $criteria->addSelectColumn(Be2billTransactionTableMap::TRANSACTION);
             $criteria->addSelectColumn(Be2billTransactionTableMap::REFUNDED);
             $criteria->addSelectColumn(Be2billTransactionTableMap::REFUNDEDBY);
             $criteria->addSelectColumn(Be2billTransactionTableMap::CREATED_AT);
@@ -413,6 +428,7 @@ class Be2billTransactionTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.ORDER_ID');
             $criteria->addSelectColumn($alias . '.CUSTOMER_ID');
             $criteria->addSelectColumn($alias . '.TRANSACTION_ID');
+            $criteria->addSelectColumn($alias . '.METHOD_NAME');
             $criteria->addSelectColumn($alias . '.OPERATIONTYPE');
             $criteria->addSelectColumn($alias . '.DSECURE');
             $criteria->addSelectColumn($alias . '.EXECCODE');
@@ -423,6 +439,7 @@ class Be2billTransactionTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.CARDVALIDITYDATE');
             $criteria->addSelectColumn($alias . '.CARDFULLNAME');
             $criteria->addSelectColumn($alias . '.CARDTYPE');
+            $criteria->addSelectColumn($alias . '.TRANSACTION');
             $criteria->addSelectColumn($alias . '.REFUNDED');
             $criteria->addSelectColumn($alias . '.REFUNDEDBY');
             $criteria->addSelectColumn($alias . '.CREATED_AT');
@@ -447,10 +464,10 @@ class Be2billTransactionTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(Be2billTransactionTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(Be2billTransactionTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new Be2billTransactionTableMap());
-        }
+      $dbMap = Propel::getServiceContainer()->getDatabaseMap(Be2billTransactionTableMap::DATABASE_NAME);
+      if (!$dbMap->hasTable(Be2billTransactionTableMap::TABLE_NAME)) {
+        $dbMap->addTableObject(new Be2billTransactionTableMap());
+      }
     }
 
     /**
@@ -466,36 +483,31 @@ class Be2billTransactionTableMap extends TableMap
      */
      public static function doDelete($values, ConnectionInterface $con = null)
      {
-         if (null === $con) {
-             $con = Propel::getServiceContainer()->getWriteConnection(Be2billTransactionTableMap::DATABASE_NAME);
-         }
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getWriteConnection(Be2billTransactionTableMap::DATABASE_NAME);
+        }
 
-         if ($values instanceof Criteria) {
-             // rename for clarity
+        if ($values instanceof Criteria) {
+            // rename for clarity
             $criteria = $values;
-         } elseif ($values instanceof \Be2Bill\Model\Be2billTransaction) {
-             // it's a model object
+        } elseif ($values instanceof \Be2Bill\Model\Be2billTransaction) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
-         } else {
-             // it's a primary key, or an array of pks
+        } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(Be2billTransactionTableMap::DATABASE_NAME);
-             $criteria->add(Be2billTransactionTableMap::ID, (array) $values, Criteria::IN);
-         }
+            $criteria->add(Be2billTransactionTableMap::ID, (array) $values, Criteria::IN);
+        }
 
-         $query = Be2billTransactionQuery::create()->mergeWith($criteria);
+        $query = Be2billTransactionQuery::create()->mergeWith($criteria);
 
-         if ($values instanceof Criteria) {
-             Be2billTransactionTableMap::clearInstancePool();
-         } elseif (!is_object($values)) {
-             // it's a primary key, or an array of pks
-            foreach ((array) $values as $singleval) {
-                Be2billTransactionTableMap::removeInstanceFromPool($singleval);
+        if ($values instanceof Criteria) { Be2billTransactionTableMap::clearInstancePool();
+        } elseif (!is_object($values)) { // it's a primary key, or an array of pks
+            foreach ((array) $values as $singleval) { Be2billTransactionTableMap::removeInstanceFromPool($singleval);
             }
-         }
+        }
 
-         return $query->delete($con);
-     }
+        return $query->delete($con);
+    }
 
     /**
      * Deletes all rows from the be2bill_transaction table.
@@ -550,6 +562,7 @@ class Be2billTransactionTableMap extends TableMap
 
         return $pk;
     }
+
 } // Be2billTransactionTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

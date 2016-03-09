@@ -1,0 +1,11 @@
+{intl l="Dear customer," domain="be2bill.email.default"}
+
+{intl l="The payment of your order is confirmed" domain="be2bill.email.default"}
+
+{intl l="Reference %ref" domain="be2bill.email.default" ref="{$order_ref}"}
+
+{intl l="Your invoice is now available in your customer account on " domain="be2bill.email.default"} : {config key="url_site"}
+
+{intl l="Thank you for your order !" domain="be2bill.email.default"}
+
+{intl l="The %site team." domain="be2bill.email.default" site="{config key="store_name"}"}

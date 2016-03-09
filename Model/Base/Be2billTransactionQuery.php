@@ -7,8 +7,6 @@ use \PDO;
 use Be2Bill\Model\Be2billTransaction as ChildBe2billTransaction;
 use Be2Bill\Model\Be2billTransactionQuery as ChildBe2billTransactionQuery;
 use Be2Bill\Model\Map\Be2billTransactionTableMap;
-use Thelia\Model\Customer;
-use Thelia\Model\Order;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -17,6 +15,8 @@ use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
+use Thelia\Model\Customer;
+use Thelia\Model\Order;
 
 /**
  * Base class that represents a query for the 'be2bill_transaction' table.
@@ -27,6 +27,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBe2billTransactionQuery orderByOrderId($order = Criteria::ASC) Order by the order_id column
  * @method     ChildBe2billTransactionQuery orderByCustomerId($order = Criteria::ASC) Order by the customer_id column
  * @method     ChildBe2billTransactionQuery orderByTransactionId($order = Criteria::ASC) Order by the transaction_id column
+ * @method     ChildBe2billTransactionQuery orderByMethodName($order = Criteria::ASC) Order by the method_name column
  * @method     ChildBe2billTransactionQuery orderByOperationtype($order = Criteria::ASC) Order by the operationtype column
  * @method     ChildBe2billTransactionQuery orderByDsecure($order = Criteria::ASC) Order by the dsecure column
  * @method     ChildBe2billTransactionQuery orderByExeccode($order = Criteria::ASC) Order by the execcode column
@@ -37,6 +38,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBe2billTransactionQuery orderByCardvaliditydate($order = Criteria::ASC) Order by the cardvaliditydate column
  * @method     ChildBe2billTransactionQuery orderByCardfullname($order = Criteria::ASC) Order by the cardfullname column
  * @method     ChildBe2billTransactionQuery orderByCardtype($order = Criteria::ASC) Order by the cardtype column
+ * @method     ChildBe2billTransactionQuery orderByTransaction($order = Criteria::ASC) Order by the transaction column
  * @method     ChildBe2billTransactionQuery orderByRefunded($order = Criteria::ASC) Order by the refunded column
  * @method     ChildBe2billTransactionQuery orderByRefundedby($order = Criteria::ASC) Order by the refundedby column
  * @method     ChildBe2billTransactionQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
@@ -46,6 +48,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBe2billTransactionQuery groupByOrderId() Group by the order_id column
  * @method     ChildBe2billTransactionQuery groupByCustomerId() Group by the customer_id column
  * @method     ChildBe2billTransactionQuery groupByTransactionId() Group by the transaction_id column
+ * @method     ChildBe2billTransactionQuery groupByMethodName() Group by the method_name column
  * @method     ChildBe2billTransactionQuery groupByOperationtype() Group by the operationtype column
  * @method     ChildBe2billTransactionQuery groupByDsecure() Group by the dsecure column
  * @method     ChildBe2billTransactionQuery groupByExeccode() Group by the execcode column
@@ -56,6 +59,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBe2billTransactionQuery groupByCardvaliditydate() Group by the cardvaliditydate column
  * @method     ChildBe2billTransactionQuery groupByCardfullname() Group by the cardfullname column
  * @method     ChildBe2billTransactionQuery groupByCardtype() Group by the cardtype column
+ * @method     ChildBe2billTransactionQuery groupByTransaction() Group by the transaction column
  * @method     ChildBe2billTransactionQuery groupByRefunded() Group by the refunded column
  * @method     ChildBe2billTransactionQuery groupByRefundedby() Group by the refundedby column
  * @method     ChildBe2billTransactionQuery groupByCreatedAt() Group by the created_at column
@@ -80,6 +84,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBe2billTransaction findOneByOrderId(int $order_id) Return the first ChildBe2billTransaction filtered by the order_id column
  * @method     ChildBe2billTransaction findOneByCustomerId(int $customer_id) Return the first ChildBe2billTransaction filtered by the customer_id column
  * @method     ChildBe2billTransaction findOneByTransactionId(string $transaction_id) Return the first ChildBe2billTransaction filtered by the transaction_id column
+ * @method     ChildBe2billTransaction findOneByMethodName(string $method_name) Return the first ChildBe2billTransaction filtered by the method_name column
  * @method     ChildBe2billTransaction findOneByOperationtype(string $operationtype) Return the first ChildBe2billTransaction filtered by the operationtype column
  * @method     ChildBe2billTransaction findOneByDsecure(string $dsecure) Return the first ChildBe2billTransaction filtered by the dsecure column
  * @method     ChildBe2billTransaction findOneByExeccode(string $execcode) Return the first ChildBe2billTransaction filtered by the execcode column
@@ -90,6 +95,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBe2billTransaction findOneByCardvaliditydate(string $cardvaliditydate) Return the first ChildBe2billTransaction filtered by the cardvaliditydate column
  * @method     ChildBe2billTransaction findOneByCardfullname(string $cardfullname) Return the first ChildBe2billTransaction filtered by the cardfullname column
  * @method     ChildBe2billTransaction findOneByCardtype(string $cardtype) Return the first ChildBe2billTransaction filtered by the cardtype column
+ * @method     ChildBe2billTransaction findOneByTransaction(string $transaction) Return the first ChildBe2billTransaction filtered by the transaction column
  * @method     ChildBe2billTransaction findOneByRefunded(boolean $refunded) Return the first ChildBe2billTransaction filtered by the refunded column
  * @method     ChildBe2billTransaction findOneByRefundedby(string $refundedby) Return the first ChildBe2billTransaction filtered by the refundedby column
  * @method     ChildBe2billTransaction findOneByCreatedAt(string $created_at) Return the first ChildBe2billTransaction filtered by the created_at column
@@ -99,6 +105,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     array findByOrderId(int $order_id) Return ChildBe2billTransaction objects filtered by the order_id column
  * @method     array findByCustomerId(int $customer_id) Return ChildBe2billTransaction objects filtered by the customer_id column
  * @method     array findByTransactionId(string $transaction_id) Return ChildBe2billTransaction objects filtered by the transaction_id column
+ * @method     array findByMethodName(string $method_name) Return ChildBe2billTransaction objects filtered by the method_name column
  * @method     array findByOperationtype(string $operationtype) Return ChildBe2billTransaction objects filtered by the operationtype column
  * @method     array findByDsecure(string $dsecure) Return ChildBe2billTransaction objects filtered by the dsecure column
  * @method     array findByExeccode(string $execcode) Return ChildBe2billTransaction objects filtered by the execcode column
@@ -109,6 +116,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     array findByCardvaliditydate(string $cardvaliditydate) Return ChildBe2billTransaction objects filtered by the cardvaliditydate column
  * @method     array findByCardfullname(string $cardfullname) Return ChildBe2billTransaction objects filtered by the cardfullname column
  * @method     array findByCardtype(string $cardtype) Return ChildBe2billTransaction objects filtered by the cardtype column
+ * @method     array findByTransaction(string $transaction) Return ChildBe2billTransaction objects filtered by the transaction column
  * @method     array findByRefunded(boolean $refunded) Return ChildBe2billTransaction objects filtered by the refunded column
  * @method     array findByRefundedby(string $refundedby) Return ChildBe2billTransaction objects filtered by the refundedby column
  * @method     array findByCreatedAt(string $created_at) Return ChildBe2billTransaction objects filtered by the created_at column
@@ -117,6 +125,7 @@ use Propel\Runtime\Exception\PropelException;
  */
 abstract class Be2billTransactionQuery extends ModelCriteria
 {
+
     /**
      * Initializes internal state of \Be2Bill\Model\Base\Be2billTransactionQuery object.
      *
@@ -200,7 +209,7 @@ abstract class Be2billTransactionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT ID, ORDER_ID, CUSTOMER_ID, TRANSACTION_ID, OPERATIONTYPE, DSECURE, EXECCODE, MESSAGE, AMOUNT, CLIENTEMAIL, CARDCODE, CARDVALIDITYDATE, CARDFULLNAME, CARDTYPE, REFUNDED, REFUNDEDBY, CREATED_AT, UPDATED_AT FROM be2bill_transaction WHERE ID = :p0';
+        $sql = 'SELECT ID, ORDER_ID, CUSTOMER_ID, TRANSACTION_ID, METHOD_NAME, OPERATIONTYPE, DSECURE, EXECCODE, MESSAGE, AMOUNT, CLIENTEMAIL, CARDCODE, CARDVALIDITYDATE, CARDFULLNAME, CARDTYPE, TRANSACTION, REFUNDED, REFUNDEDBY, CREATED_AT, UPDATED_AT FROM be2bill_transaction WHERE ID = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -272,6 +281,7 @@ abstract class Be2billTransactionQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
+
         return $this->addUsingAlias(Be2billTransactionTableMap::ID, $key, Criteria::EQUAL);
     }
 
@@ -284,6 +294,7 @@ abstract class Be2billTransactionQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
+
         return $this->addUsingAlias(Be2billTransactionTableMap::ID, $keys, Criteria::IN);
     }
 
@@ -441,6 +452,35 @@ abstract class Be2billTransactionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(Be2billTransactionTableMap::TRANSACTION_ID, $transactionId, $comparison);
+    }
+
+    /**
+     * Filter the query on the method_name column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMethodName('fooValue');   // WHERE method_name = 'fooValue'
+     * $query->filterByMethodName('%fooValue%'); // WHERE method_name LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $methodName The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildBe2billTransactionQuery The current query, for fluid interface
+     */
+    public function filterByMethodName($methodName = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($methodName)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $methodName)) {
+                $methodName = str_replace('*', '%', $methodName);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(Be2billTransactionTableMap::METHOD_NAME, $methodName, $comparison);
     }
 
     /**
@@ -731,6 +771,35 @@ abstract class Be2billTransactionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(Be2billTransactionTableMap::CARDTYPE, $cardtype, $comparison);
+    }
+
+    /**
+     * Filter the query on the transaction column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByTransaction('fooValue');   // WHERE transaction = 'fooValue'
+     * $query->filterByTransaction('%fooValue%'); // WHERE transaction LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $transaction The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildBe2billTransactionQuery The current query, for fluid interface
+     */
+    public function filterByTransaction($transaction = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($transaction)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $transaction)) {
+                $transaction = str_replace('*', '%', $transaction);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(Be2billTransactionTableMap::TRANSACTION, $transaction, $comparison);
     }
 
     /**
@@ -1086,16 +1155,16 @@ abstract class Be2billTransactionQuery extends ModelCriteria
      */
      public function delete(ConnectionInterface $con = null)
      {
-         if (null === $con) {
-             $con = Propel::getServiceContainer()->getWriteConnection(Be2billTransactionTableMap::DATABASE_NAME);
-         }
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getWriteConnection(Be2billTransactionTableMap::DATABASE_NAME);
+        }
 
-         $criteria = $this;
+        $criteria = $this;
 
         // Set the correct dbName
         $criteria->setDbName(Be2billTransactionTableMap::DATABASE_NAME);
 
-         $affectedRows = 0; // initialize var to track total num of affected rows
+        $affectedRows = 0; // initialize var to track total num of affected rows
 
         try {
             // use transaction because $criteria could contain info
@@ -1103,7 +1172,7 @@ abstract class Be2billTransactionQuery extends ModelCriteria
             $con->beginTransaction();
 
 
-            Be2billTransactionTableMap::removeInstanceFromPool($criteria);
+        Be2billTransactionTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
             Be2billTransactionTableMap::clearRelatedInstancePool();
@@ -1114,7 +1183,7 @@ abstract class Be2billTransactionQuery extends ModelCriteria
             $con->rollBack();
             throw $e;
         }
-     }
+    }
 
     // timestampable behavior
 
@@ -1181,4 +1250,5 @@ abstract class Be2billTransactionQuery extends ModelCriteria
     {
         return $this->addAscendingOrderByColumn(Be2billTransactionTableMap::CREATED_AT);
     }
+
 } // Be2billTransactionQuery

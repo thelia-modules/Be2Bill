@@ -4,8 +4,8 @@ namespace Be2Bill\Model\Base;
 
 use \Exception;
 use \PDO;
-use Be2Bill\Model\Be2billConfigQuery as ChildBe2billConfigQuery;
-use Be2Bill\Model\Map\Be2billConfigTableMap;
+use Be2Bill\Model\Be2billMethodQuery as ChildBe2billMethodQuery;
+use Be2Bill\Model\Map\Be2billMethodTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -16,13 +16,15 @@ use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Thelia\Model\Order as ChildOrder;
+use Thelia\Model\OrderQuery;
 
-abstract class Be2billConfig implements ActiveRecordInterface
+abstract class Be2billMethod implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Be2Bill\\Model\\Map\\Be2billConfigTableMap';
+    const TABLE_MAP = '\\Be2Bill\\Model\\Map\\Be2billMethodTableMap';
 
 
     /**
@@ -52,16 +54,27 @@ abstract class Be2billConfig implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
-     * The value for the name field.
-     * @var        string
+     * The value for the id field.
+     * @var        int
      */
-    protected $name;
+    protected $id;
 
     /**
-     * The value for the value field.
+     * The value for the order_id field.
+     * @var        int
+     */
+    protected $order_id;
+
+    /**
+     * The value for the method field.
      * @var        string
      */
-    protected $value;
+    protected $method;
+
+    /**
+     * @var        Order
+     */
+    protected $aOrder;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -72,7 +85,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of Be2Bill\Model\Base\Be2billConfig object.
+     * Initializes internal state of Be2Bill\Model\Base\Be2billMethod object.
      */
     public function __construct()
     {
@@ -167,9 +180,9 @@ abstract class Be2billConfig implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Be2billConfig</code> instance.  If
-     * <code>obj</code> is an instance of <code>Be2billConfig</code>, delegates to
-     * <code>equals(Be2billConfig)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>Be2billMethod</code> instance.  If
+     * <code>obj</code> is an instance of <code>Be2billMethod</code>, delegates to
+     * <code>equals(Be2billMethod)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -252,7 +265,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return Be2billConfig The current object, for fluid interface
+     * @return Be2billMethod The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -284,7 +297,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
      *                       or a format name ('XML', 'YAML', 'JSON', 'CSV')
      * @param string $data The source data to import from
      *
-     * @return Be2billConfig The current object, for fluid interface
+     * @return Be2billMethod The current object, for fluid interface
      */
     public function importFrom($parser, $data)
     {
@@ -330,68 +343,104 @@ abstract class Be2billConfig implements ActiveRecordInterface
     }
 
     /**
-     * Get the [name] column value.
+     * Get the [id] column value.
      *
-     * @return   string
+     * @return   int
      */
-    public function getName()
+    public function getId()
     {
 
-        return $this->name;
+        return $this->id;
     }
 
     /**
-     * Get the [value] column value.
+     * Get the [order_id] column value.
      *
-     * @return   string
+     * @return   int
      */
-    public function getValue()
+    public function getOrderId()
     {
 
-        return $this->value;
+        return $this->order_id;
     }
 
     /**
-     * Set the value of [name] column.
+     * Get the [method] column value.
+     *
+     * @return   string
+     */
+    public function getMethod()
+    {
+
+        return $this->method;
+    }
+
+    /**
+     * Set the value of [id] column.
+     *
+     * @param      int $v new value
+     * @return   \Be2Bill\Model\Be2billMethod The current object (for fluent API support)
+     */
+    public function setId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->id !== $v) {
+            $this->id = $v;
+            $this->modifiedColumns[Be2billMethodTableMap::ID] = true;
+        }
+
+
+        return $this;
+    } // setId()
+
+    /**
+     * Set the value of [order_id] column.
+     *
+     * @param      int $v new value
+     * @return   \Be2Bill\Model\Be2billMethod The current object (for fluent API support)
+     */
+    public function setOrderId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->order_id !== $v) {
+            $this->order_id = $v;
+            $this->modifiedColumns[Be2billMethodTableMap::ORDER_ID] = true;
+        }
+
+        if ($this->aOrder !== null && $this->aOrder->getId() !== $v) {
+            $this->aOrder = null;
+        }
+
+
+        return $this;
+    } // setOrderId()
+
+    /**
+     * Set the value of [method] column.
      *
      * @param      string $v new value
-     * @return   \Be2Bill\Model\Be2billConfig The current object (for fluent API support)
+     * @return   \Be2Bill\Model\Be2billMethod The current object (for fluent API support)
      */
-    public function setName($v)
+    public function setMethod($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->name !== $v) {
-            $this->name = $v;
-            $this->modifiedColumns[Be2billConfigTableMap::NAME] = true;
+        if ($this->method !== $v) {
+            $this->method = $v;
+            $this->modifiedColumns[Be2billMethodTableMap::METHOD] = true;
         }
 
 
         return $this;
-    } // setName()
-
-    /**
-     * Set the value of [value] column.
-     *
-     * @param      string $v new value
-     * @return   \Be2Bill\Model\Be2billConfig The current object (for fluent API support)
-     */
-    public function setValue($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->value !== $v) {
-            $this->value = $v;
-            $this->modifiedColumns[Be2billConfigTableMap::VALUE] = true;
-        }
-
-
-        return $this;
-    } // setValue()
+    } // setMethod()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -430,11 +479,14 @@ abstract class Be2billConfig implements ActiveRecordInterface
         try {
 
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : Be2billConfigTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->name = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : Be2billMethodTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : Be2billConfigTableMap::translateFieldName('Value', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->value = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : Be2billMethodTableMap::translateFieldName('OrderId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->order_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : Be2billMethodTableMap::translateFieldName('Method', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->method = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -443,10 +495,10 @@ abstract class Be2billConfig implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 2; // 2 = Be2billConfigTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 3; // 3 = Be2billMethodTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating \Be2Bill\Model\Be2billConfig object", 0, $e);
+            throw new PropelException("Error populating \Be2Bill\Model\Be2billMethod object", 0, $e);
         }
     }
 
@@ -465,6 +517,9 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aOrder !== null && $this->order_id !== $this->aOrder->getId()) {
+            $this->aOrder = null;
+        }
     } // ensureConsistency
 
     /**
@@ -488,13 +543,13 @@ abstract class Be2billConfig implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(Be2billConfigTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(Be2billMethodTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildBe2billConfigQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildBe2billMethodQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -504,6 +559,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aOrder = null;
         } // if (deep)
     }
 
@@ -513,8 +569,8 @@ abstract class Be2billConfig implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Be2billConfig::setDeleted()
-     * @see Be2billConfig::isDeleted()
+     * @see Be2billMethod::setDeleted()
+     * @see Be2billMethod::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -523,12 +579,12 @@ abstract class Be2billConfig implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(Be2billConfigTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(Be2billMethodTableMap::DATABASE_NAME);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = ChildBe2billConfigQuery::create()
+            $deleteQuery = ChildBe2billMethodQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -565,7 +621,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(Be2billConfigTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(Be2billMethodTableMap::DATABASE_NAME);
         }
 
         $con->beginTransaction();
@@ -585,7 +641,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                Be2billConfigTableMap::addInstanceToPool($this);
+                Be2billMethodTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -614,6 +670,18 @@ abstract class Be2billConfig implements ActiveRecordInterface
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
+
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aOrder !== null) {
+                if ($this->aOrder->isModified() || $this->aOrder->isNew()) {
+                    $affectedRows += $this->aOrder->save($con);
+                }
+                $this->setOrder($this->aOrder);
+            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -646,17 +714,24 @@ abstract class Be2billConfig implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
+        $this->modifiedColumns[Be2billMethodTableMap::ID] = true;
+        if (null !== $this->id) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . Be2billMethodTableMap::ID . ')');
+        }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(Be2billConfigTableMap::NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'NAME';
+        if ($this->isColumnModified(Be2billMethodTableMap::ID)) {
+            $modifiedColumns[':p' . $index++]  = 'ID';
         }
-        if ($this->isColumnModified(Be2billConfigTableMap::VALUE)) {
-            $modifiedColumns[':p' . $index++]  = 'VALUE';
+        if ($this->isColumnModified(Be2billMethodTableMap::ORDER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'ORDER_ID';
+        }
+        if ($this->isColumnModified(Be2billMethodTableMap::METHOD)) {
+            $modifiedColumns[':p' . $index++]  = 'METHOD';
         }
 
         $sql = sprintf(
-            'INSERT INTO be2bill_config (%s) VALUES (%s)',
+            'INSERT INTO be2bill_method (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -665,11 +740,14 @@ abstract class Be2billConfig implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'NAME':
-                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                    case 'ID':
+                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case 'VALUE':
-                        $stmt->bindValue($identifier, $this->value, PDO::PARAM_STR);
+                    case 'ORDER_ID':
+                        $stmt->bindValue($identifier, $this->order_id, PDO::PARAM_INT);
+                        break;
+                    case 'METHOD':
+                        $stmt->bindValue($identifier, $this->method, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -678,6 +756,13 @@ abstract class Be2billConfig implements ActiveRecordInterface
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), 0, $e);
         }
+
+        try {
+            $pk = $con->lastInsertId();
+        } catch (Exception $e) {
+            throw new PropelException('Unable to get autoincrement id.', 0, $e);
+        }
+        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -710,7 +795,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = Be2billConfigTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = Be2billMethodTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -727,10 +812,13 @@ abstract class Be2billConfig implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getName();
+                return $this->getId();
                 break;
             case 1:
-                return $this->getValue();
+                return $this->getOrderId();
+                break;
+            case 2:
+                return $this->getMethod();
                 break;
             default:
                 return null;
@@ -749,25 +837,32 @@ abstract class Be2billConfig implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['Be2billConfig'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['Be2billMethod'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Be2billConfig'][$this->getPrimaryKey()] = true;
-        $keys = Be2billConfigTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['Be2billMethod'][$this->getPrimaryKey()] = true;
+        $keys = Be2billMethodTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getName(),
-            $keys[1] => $this->getValue(),
+            $keys[0] => $this->getId(),
+            $keys[1] => $this->getOrderId(),
+            $keys[2] => $this->getMethod(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aOrder) {
+                $result['Order'] = $this->aOrder->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+        }
 
         return $result;
     }
@@ -785,7 +880,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = Be2billConfigTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = Be2billMethodTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -802,10 +897,13 @@ abstract class Be2billConfig implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                $this->setName($value);
+                $this->setId($value);
                 break;
             case 1:
-                $this->setValue($value);
+                $this->setOrderId($value);
+                break;
+            case 2:
+                $this->setMethod($value);
                 break;
         } // switch()
     }
@@ -829,10 +927,11 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = Be2billConfigTableMap::getFieldNames($keyType);
+        $keys = Be2billMethodTableMap::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setName($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setValue($arr[$keys[1]]);
+        if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setOrderId($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setMethod($arr[$keys[2]]);
     }
 
     /**
@@ -842,10 +941,11 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(Be2billConfigTableMap::DATABASE_NAME);
+        $criteria = new Criteria(Be2billMethodTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(Be2billConfigTableMap::NAME)) $criteria->add(Be2billConfigTableMap::NAME, $this->name);
-        if ($this->isColumnModified(Be2billConfigTableMap::VALUE)) $criteria->add(Be2billConfigTableMap::VALUE, $this->value);
+        if ($this->isColumnModified(Be2billMethodTableMap::ID)) $criteria->add(Be2billMethodTableMap::ID, $this->id);
+        if ($this->isColumnModified(Be2billMethodTableMap::ORDER_ID)) $criteria->add(Be2billMethodTableMap::ORDER_ID, $this->order_id);
+        if ($this->isColumnModified(Be2billMethodTableMap::METHOD)) $criteria->add(Be2billMethodTableMap::METHOD, $this->method);
 
         return $criteria;
     }
@@ -860,30 +960,30 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(Be2billConfigTableMap::DATABASE_NAME);
-        $criteria->add(Be2billConfigTableMap::NAME, $this->name);
+        $criteria = new Criteria(Be2billMethodTableMap::DATABASE_NAME);
+        $criteria->add(Be2billMethodTableMap::ID, $this->id);
 
         return $criteria;
     }
 
     /**
      * Returns the primary key for this object (row).
-     * @return   string
+     * @return   int
      */
     public function getPrimaryKey()
     {
-        return $this->getName();
+        return $this->getId();
     }
 
     /**
-     * Generic method to set the primary key (name column).
+     * Generic method to set the primary key (id column).
      *
-     * @param       string $key Primary key.
+     * @param       int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setName($key);
+        $this->setId($key);
     }
 
     /**
@@ -893,7 +993,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getName();
+        return null === $this->getId();
     }
 
     /**
@@ -902,17 +1002,18 @@ abstract class Be2billConfig implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Be2Bill\Model\Be2billConfig (or compatible) type.
+     * @param      object $copyObj An object of \Be2Bill\Model\Be2billMethod (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setName($this->getName());
-        $copyObj->setValue($this->getValue());
+        $copyObj->setOrderId($this->getOrderId());
+        $copyObj->setMethod($this->getMethod());
         if ($makeNew) {
             $copyObj->setNew(true);
+            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -925,7 +1026,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
      * objects.
      *
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return                 \Be2Bill\Model\Be2billConfig Clone of current object.
+     * @return                 \Be2Bill\Model\Be2billMethod Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -939,12 +1040,64 @@ abstract class Be2billConfig implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildOrder object.
+     *
+     * @param                  ChildOrder $v
+     * @return                 \Be2Bill\Model\Be2billMethod The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setOrder(ChildOrder $v = null)
+    {
+        if ($v === null) {
+            $this->setOrderId(NULL);
+        } else {
+            $this->setOrderId($v->getId());
+        }
+
+        $this->aOrder = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildOrder object, it will not be re-added.
+        if ($v !== null) {
+            $v->addBe2billMethod($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildOrder object
+     *
+     * @param      ConnectionInterface $con Optional Connection object.
+     * @return                 ChildOrder The associated ChildOrder object.
+     * @throws PropelException
+     */
+    public function getOrder(ConnectionInterface $con = null)
+    {
+        if ($this->aOrder === null && ($this->order_id !== null)) {
+            $this->aOrder = OrderQuery::create()->findPk($this->order_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aOrder->addBe2billMethods($this);
+             */
+        }
+
+        return $this->aOrder;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
-        $this->name = null;
-        $this->value = null;
+        $this->id = null;
+        $this->order_id = null;
+        $this->method = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -966,6 +1119,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aOrder = null;
     }
 
     /**
@@ -975,7 +1129,7 @@ abstract class Be2billConfig implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(Be2billConfigTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(Be2billMethodTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

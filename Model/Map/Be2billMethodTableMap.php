@@ -2,8 +2,8 @@
 
 namespace Be2Bill\Model\Map;
 
-use Be2Bill\Model\Be2billConfig;
-use Be2Bill\Model\Be2billConfigQuery;
+use Be2Bill\Model\Be2billMethod;
+use Be2Bill\Model\Be2billMethodQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'be2bill_config' table.
+ * This class defines the structure of the 'be2bill_method' table.
  *
  *
  *
@@ -26,14 +26,14 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class Be2billConfigTableMap extends TableMap
+class Be2billMethodTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Be2Bill.Model.Map.Be2billConfigTableMap';
+    const CLASS_NAME = 'Be2Bill.Model.Map.Be2billMethodTableMap';
 
     /**
      * The default database name for this class
@@ -43,22 +43,22 @@ class Be2billConfigTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'be2bill_config';
+    const TABLE_NAME = 'be2bill_method';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Be2Bill\\Model\\Be2billConfig';
+    const OM_CLASS = '\\Be2Bill\\Model\\Be2billMethod';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Be2Bill.Model.Be2billConfig';
+    const CLASS_DEFAULT = 'Be2Bill.Model.Be2billMethod';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 2;
+    const NUM_COLUMNS = 3;
 
     /**
      * The number of lazy-loaded columns
@@ -68,17 +68,22 @@ class Be2billConfigTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 2;
+    const NUM_HYDRATE_COLUMNS = 3;
 
     /**
-     * the column name for the NAME field
+     * the column name for the ID field
      */
-    const NAME = 'be2bill_config.NAME';
+    const ID = 'be2bill_method.ID';
 
     /**
-     * the column name for the VALUE field
+     * the column name for the ORDER_ID field
      */
-    const VALUE = 'be2bill_config.VALUE';
+    const ORDER_ID = 'be2bill_method.ORDER_ID';
+
+    /**
+     * the column name for the METHOD field
+     */
+    const METHOD = 'be2bill_method.METHOD';
 
     /**
      * The default string format for model objects of the related table
@@ -92,12 +97,12 @@ class Be2billConfigTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Name', 'Value', ),
-        self::TYPE_STUDLYPHPNAME => array('name', 'value', ),
-        self::TYPE_COLNAME       => array(Be2billConfigTableMap::NAME, Be2billConfigTableMap::VALUE, ),
-        self::TYPE_RAW_COLNAME   => array('NAME', 'VALUE', ),
-        self::TYPE_FIELDNAME     => array('name', 'value', ),
-        self::TYPE_NUM           => array(0, 1, )
+        self::TYPE_PHPNAME       => array('Id', 'OrderId', 'Method', ),
+        self::TYPE_STUDLYPHPNAME => array('id', 'orderId', 'method', ),
+        self::TYPE_COLNAME       => array(Be2billMethodTableMap::ID, Be2billMethodTableMap::ORDER_ID, Be2billMethodTableMap::METHOD, ),
+        self::TYPE_RAW_COLNAME   => array('ID', 'ORDER_ID', 'METHOD', ),
+        self::TYPE_FIELDNAME     => array('id', 'order_id', 'method', ),
+        self::TYPE_NUM           => array(0, 1, 2, )
     );
 
     /**
@@ -107,12 +112,12 @@ class Be2billConfigTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Name' => 0, 'Value' => 1, ),
-        self::TYPE_STUDLYPHPNAME => array('name' => 0, 'value' => 1, ),
-        self::TYPE_COLNAME       => array(Be2billConfigTableMap::NAME => 0, Be2billConfigTableMap::VALUE => 1, ),
-        self::TYPE_RAW_COLNAME   => array('NAME' => 0, 'VALUE' => 1, ),
-        self::TYPE_FIELDNAME     => array('name' => 0, 'value' => 1, ),
-        self::TYPE_NUM           => array(0, 1, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'OrderId' => 1, 'Method' => 2, ),
+        self::TYPE_STUDLYPHPNAME => array('id' => 0, 'orderId' => 1, 'method' => 2, ),
+        self::TYPE_COLNAME       => array(Be2billMethodTableMap::ID => 0, Be2billMethodTableMap::ORDER_ID => 1, Be2billMethodTableMap::METHOD => 2, ),
+        self::TYPE_RAW_COLNAME   => array('ID' => 0, 'ORDER_ID' => 1, 'METHOD' => 2, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'order_id' => 1, 'method' => 2, ),
+        self::TYPE_NUM           => array(0, 1, 2, )
     );
 
     /**
@@ -125,14 +130,15 @@ class Be2billConfigTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('be2bill_config');
-        $this->setPhpName('Be2billConfig');
-        $this->setClassName('\\Be2Bill\\Model\\Be2billConfig');
+        $this->setName('be2bill_method');
+        $this->setPhpName('Be2billMethod');
+        $this->setClassName('\\Be2Bill\\Model\\Be2billMethod');
         $this->setPackage('Be2Bill.Model');
-        $this->setUseIdGenerator(false);
+        $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('NAME', 'Name', 'VARCHAR', true, 128, null);
-        $this->addColumn('VALUE', 'Value', 'LONGVARCHAR', false, null, null);
+        $this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('ORDER_ID', 'OrderId', 'INTEGER', 'order', 'ID', true, null, null);
+        $this->addColumn('METHOD', 'Method', 'VARCHAR', true, 255, null);
     } // initialize()
 
     /**
@@ -140,6 +146,7 @@ class Be2billConfigTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Order', '\\Thelia\\Model\\Order', RelationMap::MANY_TO_ONE, array('order_id' => 'id', ), 'CASCADE', 'RESTRICT');
     } // buildRelations()
 
     /**
@@ -156,11 +163,11 @@ class Be2billConfigTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
+        return (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -178,10 +185,10 @@ class Be2billConfigTableMap extends TableMap
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
 
-            return (string) $row[
+            return (int) $row[
                             $indexType == TableMap::TYPE_NUM
                             ? 0 + $offset
-                            : self::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)
+                            : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
                         ];
     }
 
@@ -198,7 +205,7 @@ class Be2billConfigTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? Be2billConfigTableMap::CLASS_DEFAULT : Be2billConfigTableMap::OM_CLASS;
+        return $withPrefix ? Be2billMethodTableMap::CLASS_DEFAULT : Be2billMethodTableMap::OM_CLASS;
     }
 
     /**
@@ -212,21 +219,21 @@ class Be2billConfigTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *         rethrown wrapped into a PropelException.
-     * @return array (Be2billConfig object, last column rank)
+     * @return array (Be2billMethod object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = Be2billConfigTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = Be2billConfigTableMap::getInstanceFromPool($key))) {
+        $key = Be2billMethodTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = Be2billMethodTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + Be2billConfigTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + Be2billMethodTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = Be2billConfigTableMap::OM_CLASS;
+            $cls = Be2billMethodTableMap::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            Be2billConfigTableMap::addInstanceToPool($obj, $key);
+            Be2billMethodTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -249,8 +256,8 @@ class Be2billConfigTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = Be2billConfigTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = Be2billConfigTableMap::getInstanceFromPool($key))) {
+            $key = Be2billMethodTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = Be2billMethodTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
@@ -259,7 +266,7 @@ class Be2billConfigTableMap extends TableMap
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                Be2billConfigTableMap::addInstanceToPool($obj, $key);
+                Be2billMethodTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -280,11 +287,13 @@ class Be2billConfigTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(Be2billConfigTableMap::NAME);
-            $criteria->addSelectColumn(Be2billConfigTableMap::VALUE);
+            $criteria->addSelectColumn(Be2billMethodTableMap::ID);
+            $criteria->addSelectColumn(Be2billMethodTableMap::ORDER_ID);
+            $criteria->addSelectColumn(Be2billMethodTableMap::METHOD);
         } else {
-            $criteria->addSelectColumn($alias . '.NAME');
-            $criteria->addSelectColumn($alias . '.VALUE');
+            $criteria->addSelectColumn($alias . '.ID');
+            $criteria->addSelectColumn($alias . '.ORDER_ID');
+            $criteria->addSelectColumn($alias . '.METHOD');
         }
     }
 
@@ -297,7 +306,7 @@ class Be2billConfigTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(Be2billConfigTableMap::DATABASE_NAME)->getTable(Be2billConfigTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(Be2billMethodTableMap::DATABASE_NAME)->getTable(Be2billMethodTableMap::TABLE_NAME);
     }
 
     /**
@@ -305,16 +314,16 @@ class Be2billConfigTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-      $dbMap = Propel::getServiceContainer()->getDatabaseMap(Be2billConfigTableMap::DATABASE_NAME);
-      if (!$dbMap->hasTable(Be2billConfigTableMap::TABLE_NAME)) {
-        $dbMap->addTableObject(new Be2billConfigTableMap());
+      $dbMap = Propel::getServiceContainer()->getDatabaseMap(Be2billMethodTableMap::DATABASE_NAME);
+      if (!$dbMap->hasTable(Be2billMethodTableMap::TABLE_NAME)) {
+        $dbMap->addTableObject(new Be2billMethodTableMap());
       }
     }
 
     /**
-     * Performs a DELETE on the database, given a Be2billConfig or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Be2billMethod or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Be2billConfig object or primary key or array of primary keys
+     * @param mixed               $values Criteria or Be2billMethod object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -325,25 +334,25 @@ class Be2billConfigTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(Be2billConfigTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(Be2billMethodTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Be2Bill\Model\Be2billConfig) { // it's a model object
+        } elseif ($values instanceof \Be2Bill\Model\Be2billMethod) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(Be2billConfigTableMap::DATABASE_NAME);
-            $criteria->add(Be2billConfigTableMap::NAME, (array) $values, Criteria::IN);
+            $criteria = new Criteria(Be2billMethodTableMap::DATABASE_NAME);
+            $criteria->add(Be2billMethodTableMap::ID, (array) $values, Criteria::IN);
         }
 
-        $query = Be2billConfigQuery::create()->mergeWith($criteria);
+        $query = Be2billMethodQuery::create()->mergeWith($criteria);
 
-        if ($values instanceof Criteria) { Be2billConfigTableMap::clearInstancePool();
+        if ($values instanceof Criteria) { Be2billMethodTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
-            foreach ((array) $values as $singleval) { Be2billConfigTableMap::removeInstanceFromPool($singleval);
+            foreach ((array) $values as $singleval) { Be2billMethodTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -351,20 +360,20 @@ class Be2billConfigTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the be2bill_config table.
+     * Deletes all rows from the be2bill_method table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return Be2billConfigQuery::create()->doDeleteAll($con);
+        return Be2billMethodQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Be2billConfig or Criteria object.
+     * Performs an INSERT on the database, given a Be2billMethod or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Be2billConfig object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or Be2billMethod object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -373,18 +382,22 @@ class Be2billConfigTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(Be2billConfigTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(Be2billMethodTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Be2billConfig object
+            $criteria = $criteria->buildCriteria(); // build Criteria from Be2billMethod object
+        }
+
+        if ($criteria->containsKey(Be2billMethodTableMap::ID) && $criteria->keyContainsValue(Be2billMethodTableMap::ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.Be2billMethodTableMap::ID.')');
         }
 
 
         // Set the correct dbName
-        $query = Be2billConfigQuery::create()->mergeWith($criteria);
+        $query = Be2billMethodQuery::create()->mergeWith($criteria);
 
         try {
             // use transaction because $criteria could contain info
@@ -400,7 +413,7 @@ class Be2billConfigTableMap extends TableMap
         return $pk;
     }
 
-} // Be2billConfigTableMap
+} // Be2billMethodTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-Be2billConfigTableMap::buildTableMap();
+Be2billMethodTableMap::buildTableMap();

@@ -1,0 +1,30 @@
+<script type="text/javascript">
+  var be2BillModuleId = '{$module_id}';
+
+  (function ($) {
+
+    {literal}
+    $(document).ready(function () {
+      var $be2Bill = $('#payment_' + be2BillModuleId)
+        , $be2Method = $('input:radio[name=be2bill-method]')
+        , hasSelection = false
+      ;
+
+      $be2Method.on('change', function() {
+        $be2Bill.prop('checked', true);
+      });
+
+      $('input:radio').each(function(){
+        if ($(this).attr('name') == "thelia_order_payment[payment-module]" && $(this).prop('checked')) {
+          hasSelection = true;
+        }
+      });
+
+      if (!hasSelection) {
+        $be2Bill.prop('checked', true);
+      }
+
+    });
+    {/literal}
+  })(jQuery);
+</script>

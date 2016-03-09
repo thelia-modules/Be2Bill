@@ -1,0 +1,20 @@
+{if $paypal}
+<div class="row">
+  <div class="col-xs-11 col-xs-offset-1">
+    <hr>
+    <div>
+      <!-- card -->
+      <input type="radio" name="be2bill-method" value="" {if $value == ''}checked{/if}/>
+      <img src="{image file='assets/cards-logo.png' source="Be2Bill"}" alt="CB / VISA / Mastercard" />
+    </div>
+    <hr>
+    <div>
+      <!-- PayPal -->
+      <input type="radio" name="be2bill-method" value="paypal"  {if $value == 'paypal'}checked{/if} />
+      <img src="{image file='assets/paypal-logo.png' source="Be2Bill"}" alt="PayPal" />
+    </div>
+  </div>
+</div>
+{else}
+<input type="hidden" name="be2bill-method" value="" />
+{/if}

@@ -112,7 +112,7 @@ class ConfigForm extends BaseForm
                 'paypal-identifier',
                 'text',
                 array(
-                    'constraints'   => array(new NotBlank()),
+                    'constraints'   => array(),
                     'required'      => true,
                     'label'         => $translator->trans('Identifiant du compte Be 2 Bill pour PayPal', array(), Be2Bill::MODULE_DOMAIN),
                     'data'          => Be2billConfigQuery::read('paypal-identifier'),

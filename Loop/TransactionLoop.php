@@ -77,6 +77,7 @@ class TransactionLoop extends BaseLoop implements PropelSearchLoopInterface
     protected function getArgDefinitions()
     {
         return new ArgumentCollection(
+            Argument::createIntListTypeArgument('order_id'),
             Argument::createAnyTypeArgument('interval'),
             Argument::createAnyTypeArgument('date')
         );
@@ -90,6 +91,12 @@ class TransactionLoop extends BaseLoop implements PropelSearchLoopInterface
     public function buildModelCriteria()
     {
         $be2BillTransactionQuery = Be2billTransactionQuery::create();
+
+        $orderIds = $this->getOrderId();
+        if (!empty($orderIds)) {
+            $be2BillTransactionQuery->filterByOrderId($orderIds);
+        }
+
         if (null == $this->getInterval()) {
             $be2BillTransactionQuery->recentlyCreated()->orderByCreatedAt(Criteria::DESC);
         }

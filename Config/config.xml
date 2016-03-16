@@ -42,6 +42,7 @@
         <hook id="be2bill.hook" class="Be2Bill\Hook\HookManager" scope="request">
             <tag name="hook.event_listener" event="order-invoice.payment-extra" type="front" method="onOrderInvoice"/>
             <tag name="hook.event_listener" event="order-invoice.javascript-initialization" type="front" method="onOrderInvoiceJavascriptInitialization"/>
+            <tag name="hook.event_listener" event="order-edit.payment-module-bottom" type="back" method="onOrderEditPaymentModuleBottom"/>
         </hook>
     </hooks>
 

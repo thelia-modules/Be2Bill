@@ -85,6 +85,35 @@ Don't forget to configure your account in be2bill extranet :
 
 *Urls are similar for "Card" and "PayPal" accounts.*
 
+### Public be2bill IP to "WHITE-LIST"
+
+#### SANDBOX
+
+- 80.70.210.50/32
+- 80.70.210.51/32
+- 80.70.210.52/32
+- 80.70.210.53/32
+
+
+#### PRODUCTION
+
+
+- 80.70.210.64/27:
+    - HostMin: 80.70.210.65
+    - HostMax: 80.70.210.94
+    
+- 80.70.213.64/27:
+    - HostMin: 80.70.213.65
+    - HostMax: 80.70.213.94
+
+- 80.70.216.64/27:
+    - HostMin: 80.70.216.65
+    - HostMax: 80.70.216.94
+    
+- 80.70.217.64/27:
+    - HostMin: 80.70.217.65
+    - HostMax: 80.70.217.94
+
 ### Todo
 
 - use hooks instead of admin includes 

@@ -60,4 +60,15 @@ class HookManager extends BaseHook
         }
 
     }
+
+
+    public function onOrderEditPaymentModuleBottom(HookRenderEvent $event)
+    {
+        $event->add(
+            $this->render(
+                'payment-information.html',
+                $event->getArguments()
+            )
+        );
+    }
 }

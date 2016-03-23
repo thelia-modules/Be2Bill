@@ -58,7 +58,7 @@ class Be2billMethodTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class Be2billMethodTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the ID field
@@ -86,6 +86,11 @@ class Be2billMethodTableMap extends TableMap
     const METHOD = 'be2bill_method.METHOD';
 
     /**
+     * the column name for the DATA field
+     */
+    const DATA = 'be2bill_method.DATA';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -97,12 +102,12 @@ class Be2billMethodTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'OrderId', 'Method', ),
-        self::TYPE_STUDLYPHPNAME => array('id', 'orderId', 'method', ),
-        self::TYPE_COLNAME       => array(Be2billMethodTableMap::ID, Be2billMethodTableMap::ORDER_ID, Be2billMethodTableMap::METHOD, ),
-        self::TYPE_RAW_COLNAME   => array('ID', 'ORDER_ID', 'METHOD', ),
-        self::TYPE_FIELDNAME     => array('id', 'order_id', 'method', ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Id', 'OrderId', 'Method', 'Data', ),
+        self::TYPE_STUDLYPHPNAME => array('id', 'orderId', 'method', 'data', ),
+        self::TYPE_COLNAME       => array(Be2billMethodTableMap::ID, Be2billMethodTableMap::ORDER_ID, Be2billMethodTableMap::METHOD, Be2billMethodTableMap::DATA, ),
+        self::TYPE_RAW_COLNAME   => array('ID', 'ORDER_ID', 'METHOD', 'DATA', ),
+        self::TYPE_FIELDNAME     => array('id', 'order_id', 'method', 'data', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -112,12 +117,12 @@ class Be2billMethodTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'OrderId' => 1, 'Method' => 2, ),
-        self::TYPE_STUDLYPHPNAME => array('id' => 0, 'orderId' => 1, 'method' => 2, ),
-        self::TYPE_COLNAME       => array(Be2billMethodTableMap::ID => 0, Be2billMethodTableMap::ORDER_ID => 1, Be2billMethodTableMap::METHOD => 2, ),
-        self::TYPE_RAW_COLNAME   => array('ID' => 0, 'ORDER_ID' => 1, 'METHOD' => 2, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'order_id' => 1, 'method' => 2, ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'OrderId' => 1, 'Method' => 2, 'Data' => 3, ),
+        self::TYPE_STUDLYPHPNAME => array('id' => 0, 'orderId' => 1, 'method' => 2, 'data' => 3, ),
+        self::TYPE_COLNAME       => array(Be2billMethodTableMap::ID => 0, Be2billMethodTableMap::ORDER_ID => 1, Be2billMethodTableMap::METHOD => 2, Be2billMethodTableMap::DATA => 3, ),
+        self::TYPE_RAW_COLNAME   => array('ID' => 0, 'ORDER_ID' => 1, 'METHOD' => 2, 'DATA' => 3, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'order_id' => 1, 'method' => 2, 'data' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -139,6 +144,7 @@ class Be2billMethodTableMap extends TableMap
         $this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('ORDER_ID', 'OrderId', 'INTEGER', 'order', 'ID', true, null, null);
         $this->addColumn('METHOD', 'Method', 'VARCHAR', true, 255, null);
+        $this->addColumn('DATA', 'Data', 'LONGVARCHAR', false, null, null);
     } // initialize()
 
     /**
@@ -290,10 +296,12 @@ class Be2billMethodTableMap extends TableMap
             $criteria->addSelectColumn(Be2billMethodTableMap::ID);
             $criteria->addSelectColumn(Be2billMethodTableMap::ORDER_ID);
             $criteria->addSelectColumn(Be2billMethodTableMap::METHOD);
+            $criteria->addSelectColumn(Be2billMethodTableMap::DATA);
         } else {
             $criteria->addSelectColumn($alias . '.ID');
             $criteria->addSelectColumn($alias . '.ORDER_ID');
             $criteria->addSelectColumn($alias . '.METHOD');
+            $criteria->addSelectColumn($alias . '.DATA');
         }
     }
 

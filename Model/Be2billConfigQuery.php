@@ -3,6 +3,7 @@
 namespace Be2Bill\Model;
 
 use Be2Bill\Model\Base\Be2billConfigQuery as BaseBe2billConfigQuery;
+use Be2Bill\Model\Map\Be2billConfigTableMap;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'be2bill_config' table.
@@ -35,4 +36,29 @@ class Be2billConfigQuery extends BaseBe2billConfigQuery
 
         $config->setValue($value)->save();
     }
+
+    public static function dump(array $exclude = [])
+    {
+        $data = [];
+
+        $configs = self::create()
+            ->select(
+                [
+                    Be2billConfigTableMap::NAME,
+                    Be2billConfigTableMap::VALUE
+                ]
+            )
+            ->find()
+            ->toArray()
+        ;
+
+        foreach ($configs as $config) {
+            if (!in_array($config[Be2billConfigTableMap::NAME], $exclude)) {
+                $data[$config[Be2billConfigTableMap::NAME]] = $config[Be2billConfigTableMap::VALUE];
+            }
+        }
+
+        return $data;
+    }
+
 }

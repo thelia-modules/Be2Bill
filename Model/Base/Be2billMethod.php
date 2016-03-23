@@ -72,6 +72,12 @@ abstract class Be2billMethod implements ActiveRecordInterface
     protected $method;
 
     /**
+     * The value for the data field.
+     * @var        string
+     */
+    protected $data;
+
+    /**
      * @var        Order
      */
     protected $aOrder;
@@ -376,6 +382,17 @@ abstract class Be2billMethod implements ActiveRecordInterface
     }
 
     /**
+     * Get the [data] column value.
+     *
+     * @return   string
+     */
+    public function getData()
+    {
+
+        return $this->data;
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param      int $v new value
@@ -443,6 +460,27 @@ abstract class Be2billMethod implements ActiveRecordInterface
     } // setMethod()
 
     /**
+     * Set the value of [data] column.
+     *
+     * @param      string $v new value
+     * @return   \Be2Bill\Model\Be2billMethod The current object (for fluent API support)
+     */
+    public function setData($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->data !== $v) {
+            $this->data = $v;
+            $this->modifiedColumns[Be2billMethodTableMap::DATA] = true;
+        }
+
+
+        return $this;
+    } // setData()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -487,6 +525,9 @@ abstract class Be2billMethod implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : Be2billMethodTableMap::translateFieldName('Method', TableMap::TYPE_PHPNAME, $indexType)];
             $this->method = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : Be2billMethodTableMap::translateFieldName('Data', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->data = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -495,7 +536,7 @@ abstract class Be2billMethod implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = Be2billMethodTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = Be2billMethodTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating \Be2Bill\Model\Be2billMethod object", 0, $e);
@@ -729,6 +770,9 @@ abstract class Be2billMethod implements ActiveRecordInterface
         if ($this->isColumnModified(Be2billMethodTableMap::METHOD)) {
             $modifiedColumns[':p' . $index++]  = 'METHOD';
         }
+        if ($this->isColumnModified(Be2billMethodTableMap::DATA)) {
+            $modifiedColumns[':p' . $index++]  = 'DATA';
+        }
 
         $sql = sprintf(
             'INSERT INTO be2bill_method (%s) VALUES (%s)',
@@ -748,6 +792,9 @@ abstract class Be2billMethod implements ActiveRecordInterface
                         break;
                     case 'METHOD':
                         $stmt->bindValue($identifier, $this->method, PDO::PARAM_STR);
+                        break;
+                    case 'DATA':
+                        $stmt->bindValue($identifier, $this->data, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -820,6 +867,9 @@ abstract class Be2billMethod implements ActiveRecordInterface
             case 2:
                 return $this->getMethod();
                 break;
+            case 3:
+                return $this->getData();
+                break;
             default:
                 return null;
                 break;
@@ -852,6 +902,7 @@ abstract class Be2billMethod implements ActiveRecordInterface
             $keys[0] => $this->getId(),
             $keys[1] => $this->getOrderId(),
             $keys[2] => $this->getMethod(),
+            $keys[3] => $this->getData(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -905,6 +956,9 @@ abstract class Be2billMethod implements ActiveRecordInterface
             case 2:
                 $this->setMethod($value);
                 break;
+            case 3:
+                $this->setData($value);
+                break;
         } // switch()
     }
 
@@ -932,6 +986,7 @@ abstract class Be2billMethod implements ActiveRecordInterface
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setOrderId($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setMethod($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setData($arr[$keys[3]]);
     }
 
     /**
@@ -946,6 +1001,7 @@ abstract class Be2billMethod implements ActiveRecordInterface
         if ($this->isColumnModified(Be2billMethodTableMap::ID)) $criteria->add(Be2billMethodTableMap::ID, $this->id);
         if ($this->isColumnModified(Be2billMethodTableMap::ORDER_ID)) $criteria->add(Be2billMethodTableMap::ORDER_ID, $this->order_id);
         if ($this->isColumnModified(Be2billMethodTableMap::METHOD)) $criteria->add(Be2billMethodTableMap::METHOD, $this->method);
+        if ($this->isColumnModified(Be2billMethodTableMap::DATA)) $criteria->add(Be2billMethodTableMap::DATA, $this->data);
 
         return $criteria;
     }
@@ -1011,6 +1067,7 @@ abstract class Be2billMethod implements ActiveRecordInterface
     {
         $copyObj->setOrderId($this->getOrderId());
         $copyObj->setMethod($this->getMethod());
+        $copyObj->setData($this->getData());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1098,6 +1155,7 @@ abstract class Be2billMethod implements ActiveRecordInterface
         $this->id = null;
         $this->order_id = null;
         $this->method = null;
+        $this->data = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

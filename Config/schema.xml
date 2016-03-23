@@ -46,6 +46,8 @@
         <column name="order_id"  required="true" type="INTEGER" />
         <column name="method" required="true" type="VARCHAR" size="255" />
 
+        <column name="data" type="LONGVARCHAR" />
+
         <foreign-key foreignTable="order" name="fk_be2bill_method_order_id" onDelete="CASCADE" onUpdate="RESTRICT">
             <reference foreign="id" local="order_id" />
         </foreign-key>

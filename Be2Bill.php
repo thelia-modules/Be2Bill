@@ -37,12 +37,15 @@ class Be2Bill extends AbstractPaymentModule
     const URL_PAYMENT_FORM = '/front/form/process';
     const URL_SERVER_TO_SERVER = '/front/service/rest/process';
 
+    // CB
     const METHOD_CLASSIC = '';
+    // PayPal
     const METHOD_PAYPAL = 'paypal';
+    // Not really a new method, but it uses CB with multiple payments
+    const METHOD_NTIMES = 'ntimes';
 
     /** @var Tlog|null  */
     protected static $logger = null;
-
 
     public function postActivation(ConnectionInterface $con = null)
     {
@@ -160,24 +163,21 @@ class Be2Bill extends AbstractPaymentModule
 
         try {
             // save the method used
-            self::setOrderMethod($order->getId(), $paymentMethod);
+            self::setOrderMethod($order->getId(), $paymentMethod, $be2billParams);
 
-            // classical method
-            if (self::METHOD_CLASSIC === $paymentMethod) {
-
-                return $this->generateGatewayFormResponse(
-                    $order,
-                    "https://" . Be2billConfigQuery::read('url') . self::URL_PAYMENT_FORM,
-                    $be2billParams
-                );
-            }
-
-            // paypal method
+            // PayPal method
             if (self::METHOD_PAYPAL === $paymentMethod) {
                 return $this->generatePayPalResponse($order, $be2billParams);
             }
 
-            throw new \InvalidArgumentException("This is not a valid payment method for be2bill module.");
+            // classical method
+            return $this->generateGatewayFormResponse(
+                $order,
+                "https://" . Be2billConfigQuery::read('url') . self::URL_PAYMENT_FORM,
+                $be2billParams
+            );
+
+            // throw new \InvalidArgumentException("This is not a valid payment method for be2bill module.");
 
         } catch (\Exception $ex) {
             self::getLogger()->error(
@@ -270,7 +270,22 @@ class Be2Bill extends AbstractPaymentModule
             $be2billParams['HASH'] = self::be2BillHash($be2billParams, $method);
         }
 
-        if ("paypal" === $method) {
+        if (self::METHOD_NTIMES === $method) {
+            $be2billParams['IDENTIFIER'] = Be2billConfigQuery::read('identifier');
+            $be2billParams['3DSECURE'] = Be2billConfigQuery::read('3dsecure');
+
+            // compute amounts
+            unset($be2billParams['AMOUNT']);
+            $amounts = self::getNTimesDates($order->getTotalAmount());
+            foreach ($amounts as $amount) {
+                $key = sprintf('AMOUNTS[%s]', $amount[0]->format('Y-m-d'));
+                $be2billParams[$key] = $amount[1];
+            }
+
+            $be2billParams['HASH'] = self::be2BillHash($be2billParams, $method);
+        }
+
+        if (self::METHOD_PAYPAL === $method) {
             $be2billParams['IDENTIFIER'] = Be2billConfigQuery::read('paypal-identifier');
 
             $be2billParams['CLIENTEMAIL'] = $customer->getEmail();
@@ -308,6 +323,42 @@ class Be2Bill extends AbstractPaymentModule
     }
 
     /**
+     * Compute date and amount of every payments
+     *
+     * @param Order $order
+     */
+    public static function getNTimesDates($amount, $count = 3, $interval = 'P1M')
+    {
+        $amounts = [];
+
+        $paymentCount = intval(Be2billConfigQuery::read('ntimes-count', $count));
+        $paymentInterval = Be2billConfigQuery::read('ntimes-interval', $interval);
+
+        $amount = round($amount * 100);
+
+        // amounts
+        $recurrentAmount = floor($amount / $paymentCount);
+        $firstAmount = $amount - ($recurrentAmount * ($paymentCount - 1));
+
+
+        // dates
+        $dateStart = new \DateTime('now');
+        $dateInterval = new \DateInterval($paymentInterval);
+        $period = new \DatePeriod($dateStart, $dateInterval, $paymentCount - 1);
+
+        foreach ($period as $date) {
+            $amounts[] = [
+                $date,
+                $recurrentAmount
+            ];
+        }
+        $amounts[0][1] = $firstAmount;
+
+        return $amounts;
+    }
+
+
+    /**
      *
      * This method is call on Payment loop.
      *
@@ -329,21 +380,29 @@ class Be2Bill extends AbstractPaymentModule
         }
 
         if (null === Be2billConfigQuery::read('3dsecure')) {
-            Be2billConfigQuery::set('activated', 'no');
+            Be2billConfigQuery::set('3dsecure', 'no');
         }
 
         if (null === Be2billConfigQuery::read('paypal')) {
-            Be2billConfigQuery::set('activated', 'no');
+            Be2billConfigQuery::set('paypal', 'no');
         }
     }
 
-    public static function setOrderMethod($orderId, $methodName)
+    public static function setOrderMethod($orderId, $methodName, $parameters)
     {
         if (null === $method = Be2billMethodQuery::create()->findOneByOrderId($orderId)) {
             $method = new Be2billMethod();
             $method->setOrderId($orderId);
         }
 
+        $config = Be2billConfigQuery::dump(['password', 'paypal-password']);
+
+        $data = [
+            "parameters" => $parameters,
+            "config" => $config
+        ];
+
+        $method->setData($data);
         $method->setMethod($methodName);
         $method->save();
     }
@@ -356,6 +415,19 @@ class Be2Bill extends AbstractPaymentModule
 
         return $default;
     }
+
+    /**
+     *
+     * @param $methodName
+     * @return string
+     */
+    public static function getMethodTitle($methodName)
+    {
+        // ->trans('paypal')
+        // ->trans('ntimes')
+        return Translator::getInstance()->trans($methodName, [], self::MODULE_DOMAIN);
+    }
+
 
     /**
      * @return Tlog

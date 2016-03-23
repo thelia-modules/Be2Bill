@@ -12,7 +12,7 @@
     </tr>
     <tr>
       <th>{intl l="Méthode" d="be2bill.bo.default"}</th>
-      <td>{$METHOD_NAME}</td>
+      <td><span class="method-{$METHOD_NAME}">{$METHOD_TITLE}</span></td>
     </tr>
     <tr>
       <th>{intl l="Date" d="be2bill.bo.default"}</th>
@@ -35,6 +35,40 @@
     </tr>
   </tbody>
 </table>
+
+{if $params}
+  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#be2billMoreInformation" aria-expanded="false" aria-controls="be2billMoreInformation">
+    {intl l="More information" d="be2bill.bo.default"}
+  </button>
+
+  <div class="collapse" id="be2billMoreInformation">
+    <table class="table table-striped table-condensed table-left-aligned">
+      <caption class="clearfix">
+        {intl l="Request parameters" d="be2bill.bo.default"}
+      </caption>
+      {foreach $params.parameters as $key => $value}
+        <tr>
+          <th>{$key}</th>
+          <td>{$value}</td>
+        </tr>
+      {/foreach}
+    </table>
+
+    <table class="table table-striped table-condensed table-left-aligned">
+      <caption class="clearfix">
+        {intl l="Configuration used" d="be2bill.bo.default"}
+      </caption>
+      {foreach $params.config as $key => $value}
+        <tr>
+          <th>{$key}</th>
+          <td>{$value}</td>
+        </tr>
+      {/foreach}
+    </table>
+  </div>
+{/if}
+
 {/loop}
+
 {/ifloop}
 

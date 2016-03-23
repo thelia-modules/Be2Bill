@@ -12,6 +12,19 @@
         var intDate = '' + (d <= 9 ? '0' + d : d) + '/' + (m<=9 ? '0' + m : m) + '/' + y;
         var intDateAlt = '' + (m<=9 ? '0' + m : m) + '/'  + (d <= 9 ? '0' + d : d) + '/' + y;
 
+
+        $('[data-toggle-visibilty]').on('change', function(e) {
+            var $el = $(this);
+
+            if ($el.val() == 'yes') {
+                $($el.data('toggle-visibilty')).show();
+            } else {
+                $($el.data('toggle-visibilty')).hide();
+            }
+        });
+        $('[data-toggle-visibilty]').trigger('change');
+
+
         $("#datepicker").val(intDate);
         $("#datepicker-alt").val(intDateAlt);
         $("#datepicker").datepicker({

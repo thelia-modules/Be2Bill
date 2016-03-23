@@ -25,10 +25,12 @@ use Thelia\Model\Order;
  * @method     ChildBe2billMethodQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildBe2billMethodQuery orderByOrderId($order = Criteria::ASC) Order by the order_id column
  * @method     ChildBe2billMethodQuery orderByMethod($order = Criteria::ASC) Order by the method column
+ * @method     ChildBe2billMethodQuery orderByData($order = Criteria::ASC) Order by the data column
  *
  * @method     ChildBe2billMethodQuery groupById() Group by the id column
  * @method     ChildBe2billMethodQuery groupByOrderId() Group by the order_id column
  * @method     ChildBe2billMethodQuery groupByMethod() Group by the method column
+ * @method     ChildBe2billMethodQuery groupByData() Group by the data column
  *
  * @method     ChildBe2billMethodQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildBe2billMethodQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -44,10 +46,12 @@ use Thelia\Model\Order;
  * @method     ChildBe2billMethod findOneById(int $id) Return the first ChildBe2billMethod filtered by the id column
  * @method     ChildBe2billMethod findOneByOrderId(int $order_id) Return the first ChildBe2billMethod filtered by the order_id column
  * @method     ChildBe2billMethod findOneByMethod(string $method) Return the first ChildBe2billMethod filtered by the method column
+ * @method     ChildBe2billMethod findOneByData(string $data) Return the first ChildBe2billMethod filtered by the data column
  *
  * @method     array findById(int $id) Return ChildBe2billMethod objects filtered by the id column
  * @method     array findByOrderId(int $order_id) Return ChildBe2billMethod objects filtered by the order_id column
  * @method     array findByMethod(string $method) Return ChildBe2billMethod objects filtered by the method column
+ * @method     array findByData(string $data) Return ChildBe2billMethod objects filtered by the data column
  *
  */
 abstract class Be2billMethodQuery extends ModelCriteria
@@ -136,7 +140,7 @@ abstract class Be2billMethodQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT ID, ORDER_ID, METHOD FROM be2bill_method WHERE ID = :p0';
+        $sql = 'SELECT ID, ORDER_ID, METHOD, DATA FROM be2bill_method WHERE ID = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -336,6 +340,35 @@ abstract class Be2billMethodQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(Be2billMethodTableMap::METHOD, $method, $comparison);
+    }
+
+    /**
+     * Filter the query on the data column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByData('fooValue');   // WHERE data = 'fooValue'
+     * $query->filterByData('%fooValue%'); // WHERE data LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $data The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildBe2billMethodQuery The current query, for fluid interface
+     */
+    public function filterByData($data = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($data)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $data)) {
+                $data = str_replace('*', '%', $data);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(Be2billMethodTableMap::DATA, $data, $comparison);
     }
 
     /**

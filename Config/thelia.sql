@@ -70,6 +70,7 @@ CREATE TABLE `be2bill_method`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `order_id` INTEGER NOT NULL,
     `method` VARCHAR(255) NOT NULL,
+    `data` TEXT,
     PRIMARY KEY (`id`),
     INDEX `FI_be2bill_method_order_id` (`order_id`),
     CONSTRAINT `fk_be2bill_method_order_id`

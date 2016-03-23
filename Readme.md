@@ -20,6 +20,10 @@ Url : URL fournie par be2bill pour accéder à leur service de type : secure-tes
 
 Description : Courte description du panier de la transaction (maximum 510 charactéres).
 
+l'option **ntimes** vous permet d'autoriser le paiement par carte en plusieurs fois sans frais. 
+Dans la page de configuration du module, il faut préciser le nombre d'échéances et l'intervalle entre
+les échéances au format ISO 8601 : <https://en.wikipedia.org/wiki/ISO_8601#Durations>
+
 Le module be2bill peut également être configuré pour utiliser Paypal. Il faut pour cela activer
 ce type de compte dans l'intranet be2bill. Une fois activé, il faudra activer l'option Paypal
 dans la page de configuration du module et renseigner les identifiant et mot de passe donnés par be2bill
@@ -63,6 +67,10 @@ Url : Web service url given by be2bill, exemple : "secure-magenta.be2bill.com" .
 3DSecure : if you want active 3DSecure for payment
 
 Description : Description of the transaction (string / 510 char max).
+
+The option **ntimes** can be used to authorize payment by card in several instalments, with no additional charge. 
+In the configuration page, you should define the number of instalments and the interval between instalments
+in using the ISO 8601 format : <https://en.wikipedia.org/wiki/ISO_8601#Durations>
 
 The be2bill module can be used with Paypal account.
 First, you should activate the Paypal account on your be2bill account.

@@ -41,7 +41,7 @@ class Order implements EventSubscriberInterface
     public function setPaymentModule(OrderEvent $event)
     {
         if ($event->getPaymentModule() === Be2Bill::getModuleId()) {
-            // check if Paypal method is selected
+            // check if Paypal method is selected, or something else
             $be2billMethod = $this->request->get('be2bill-method', '');
             $this->request->getSession()->set('be2bill-method', $be2billMethod);
         }

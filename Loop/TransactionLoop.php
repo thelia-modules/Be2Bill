@@ -8,6 +8,7 @@
 
 namespace Be2Bill\Loop;
 
+use Be2Bill\Be2Bill;
 use Be2Bill\Model\Be2billTransactionQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Thelia\Core\Template\Element\BaseLoop;
@@ -37,6 +38,7 @@ class TransactionLoop extends BaseLoop implements PropelSearchLoopInterface
                 ->set('DATE', $transaction->getCreatedAt('d/m/Y H:i'))
                 ->set('TRANSACTIONID', $transaction->getTransactionId())
                 ->set('METHOD_NAME', $transaction->getMethodName())
+                ->set('METHOD_TITLE', Be2Bill::getMethodTitle($transaction->getMethodName()))
                 ->set('AMOUNT', $transaction->getAmount())
                 ->set('CUSTOMERID', $transaction->getCustomerId())
                 ->set('CUSTOMER', $customer)

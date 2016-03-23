@@ -1,4 +1,4 @@
-{if $paypal}
+{if $paypal || $ntimes}
 <div class="row">
   <div class="col-xs-11 col-xs-offset-1">
     <hr>
@@ -7,12 +7,29 @@
       <input type="radio" name="be2bill-method" value="" {if $value == ''}checked{/if}/>
       <img src="{image file='assets/cards-logo.png' source="Be2Bill"}" alt="CB / VISA / Mastercard" />
     </div>
+
+    {if $ntimes}
+    <hr>
+    <div>
+      <!-- card -->
+      <input type="radio" name="be2bill-method" value="ntimes" {if $value == 'ntimes'}checked{/if}/>
+      <img src="{image file='assets/ntimes-cards-logo.png' failsafe="1" source="Be2Bill"}" alt="CB / VISA / Mastercard xTimes" />
+      <ul>
+        {foreach $ntimes_dates as $date}
+          <li>{format_date date=$date.date output="date"} = {format_money number=$date.amount}</li>
+        {/foreach}
+      </ul>
+    </div>
+    {/if}
+
+    {if $paypal}
     <hr>
     <div>
       <!-- PayPal -->
       <input type="radio" name="be2bill-method" value="paypal"  {if $value == 'paypal'}checked{/if} />
       <img src="{image file='assets/paypal-logo.png' source="Be2Bill"}" alt="PayPal" />
     </div>
+    {/if}
   </div>
 </div>
 {else}

@@ -95,7 +95,6 @@
                         {/form_field}
 
                         {form_field form=$form field="description"}
-
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="{$name}" class="control-label">{$label}</label>
@@ -103,15 +102,15 @@
                                 <span class="help-block">{$label_attr.help}</span>
                             </div>
                         </div>
-
                         {/form_field}
 
-                        {form_field form=$form field="paypal"}
 
+                        {form_field form=$form field="ntimes"}
+                            <h3 class="u-margin-top">{$label}</h3>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="{$name}" class="control-label">{$label}</label>
-                                    <select id="{$name}" name="{$name}" class="form-control">
+                                    <select id="{$name}" name="{$name}" class="form-control" data-toggle-visibilty=".ntimes-parameters">
                                         <option value="no" {if ({$value} === "no")} selected="selected"{/if} >{intl l='Non' d='be2bill.ai'}</option>
                                         <option value="yes" {if ({$value} === "yes")} selected="selected"{/if} >{intl l='Oui' d='be2bill.ai'}</option>
                                     </select>
@@ -119,45 +118,87 @@
                             </div>
                         {/form_field}
 
-                        {form_field form=$form field="paypal-identifier"}
+                        <div class="ntimes-parameters">
+                            {form_field form=$form field="ntimes-count"}
 
-                            <div class="col-md-6">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{$name}" class="control-label">{$label}</label>
+                                        <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
+                                        <span class="help-block">{$label_attr.help}</span>
+                                    </div>
+                                </div>
+
+                            {/form_field}
+
+                            {form_field form=$form field="ntimes-interval"}
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{$name}" class="control-label">{$label}</label>
+                                        <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
+                                        <span class="help-block">{$label_attr.help nofilter}</span>
+                                    </div>
+                                </div>
+
+                            {/form_field}
+                        </div>
+
+                        {form_field form=$form field="paypal"}
+                            <h3 class="u-margin-top">{$label}</h3>
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="{$name}" class="control-label">{$label}</label>
-                                    <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
-                                    <span class="help-block">{$label_attr.help}</span>
+                                    <select id="{$name}" name="{$name}" class="form-control" data-toggle-visibilty=".paypal-parameters">
+                                        <option value="no" {if ({$value} === "no")} selected="selected"{/if} >{intl l='Non' d='be2bill.ai'}</option>
+                                        <option value="yes" {if ({$value} === "yes")} selected="selected"{/if} >{intl l='Oui' d='be2bill.ai'}</option>
+                                    </select>
                                 </div>
                             </div>
-
                         {/form_field}
 
-                        {form_field form=$form field="paypal-password"}
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="{$name}" class="control-label">{$label}</label>
-                                    <input id="{$name}" type="password" name="{$name}" value="{$value}" class="form-control"/>
-                                    <span class="help-block">{$label_attr.help}</span>
+                        <div class="paypal-parameters">
+                            {form_field form=$form field="paypal-identifier"}
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{$name}" class="control-label">{$label}</label>
+                                        <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
+                                        <span class="help-block">{$label_attr.help}</span>
+                                    </div>
                                 </div>
+
+                            {/form_field}
+
+                            {form_field form=$form field="paypal-password"}
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{$name}" class="control-label">{$label}</label>
+                                        <input id="{$name}" type="password" name="{$name}" value="{$value}" class="form-control"/>
+                                        <span class="help-block">{$label_attr.help}</span>
+                                    </div>
+                                </div>
+
+                            {/form_field}
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="alert alert-info">
+                                <strong>{intl l="N'oubliez pas d'aller configurer votre compte dans l'extranet Be2bill :" d="be2bill.ai"}</strong>
+                                <br/>
+                                {intl l="1) Autoriser l'hébergeur à acceder au service Be2Bill en renseignant son adresse IP dans la configuration." d="be2bill.ai"}
+                                <br/>
+                                {intl l="2) Renseigner les urls de notifications :" d="be2bill.ai"}
+                                <ul>
+                                    <li>http://<strong>{intl l="VotreSite.com" d="be2bill.ai"}</strong>/be2bill/callback/payment {intl l="(notification de transactions)" d="be2bill.ai"}</li>
+                                    <li>http://<strong>{intl l="VotreSite.com" d="be2bill.ai"}</strong>/be2bill/callback/unpaid {intl l="(notification d'impayés)" d="be2bill.ai"}</li>
+                                </ul>
+                                {intl l="3) Renseigner les urls de redirections :" d="be2bill.ai"}
+                                <ul>
+                                    <li>http://<strong>{intl l="VotreSite.com" d="be2bill.ai"}</strong>/be2bill/redirect/payment {intl l="(Url après traitement) " d="be2bill.ai"}</li>
+                                    <li>http://<strong>{intl l="VotreSite.com" d="be2bill.ai"}</strong>/be2bill/redirect/cancel {intl l="(Url en cas d'annulation) " d="be2bill.ai"}</li>
+                                </ul>
                             </div>
-
-                        {/form_field}
-
-                        <div class="col-md-6">
-                            <strong>{intl l="N'oubliez pas d'aller configurer votre compte dans l'extranet Be2bill :" d="be2bill.ai"}</strong>
-                            <br/>
-                            {intl l="1) Autoriser l'hébergeur à acceder au service Be2Bill en renseignant son adresse IP dans la configuration." d="be2bill.ai"}
-                            <br/>
-                            {intl l="2) Renseigner les urls de notifications :" d="be2bill.ai"}
-                            <ul>
-                                <li>http://<strong>{intl l="VotreSite.com" d="be2bill.ai"}</strong>/be2bill/callback/payment {intl l="(notification de transactions)" d="be2bill.ai"}</li>
-                                <li>http://<strong>{intl l="VotreSite.com" d="be2bill.ai"}</strong>/be2bill/callback/unpaid {intl l="(notification d'impayés)" d="be2bill.ai"}</li>
-                            </ul>
-                            {intl l="3) Renseigner les urls de redirections :" d="be2bill.ai"}
-                            <ul>
-                                <li>http://<strong>{intl l="VotreSite.com" d="be2bill.ai"}</strong>/be2bill/redirect/payment {intl l="(Url après traitement) " d="be2bill.ai"}</li>
-                                <li>http://<strong>{intl l="VotreSite.com" d="be2bill.ai"}</strong>/be2bill/redirect/cancel {intl l="(Url en cas d'annulation) " d="be2bill.ai"}</li>
-                            </ul>
                         </div>
                     </div>
                 </div>

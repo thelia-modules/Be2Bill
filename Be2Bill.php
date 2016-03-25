@@ -12,6 +12,8 @@
 
 namespace Be2Bill;
 
+use Be2Bill\Events\Be2BillEvents;
+use Be2Bill\Events\PaymentParametersEvent;
 use Be2Bill\Model\Be2billConfigQuery;
 use Be2Bill\Model\Be2billMethod;
 use Be2Bill\Model\Be2billMethodQuery;
@@ -264,8 +266,6 @@ class Be2Bill extends AbstractPaymentModule
             $be2billParams['IDENTIFIER'] = Be2billConfigQuery::read('identifier');
 
             $be2billParams['3DSECURE'] = Be2billConfigQuery::read('3dsecure');
-
-            $be2billParams['HASH'] = self::be2BillHash($be2billParams, $method);
         }
 
         if (self::METHOD_NTIMES === $method) {
@@ -279,8 +279,6 @@ class Be2Bill extends AbstractPaymentModule
                 $key = sprintf('AMOUNTS[%s]', $amount[0]->format('Y-m-d'));
                 $be2billParams[$key] = $amount[1];
             }
-
-            $be2billParams['HASH'] = self::be2BillHash($be2billParams, $method);
         }
 
         if (self::METHOD_PAYPAL === $method) {
@@ -289,9 +287,17 @@ class Be2Bill extends AbstractPaymentModule
             $be2billParams['CLIENTEMAIL'] = $customer->getEmail();
             $be2billParams['CLIENTIP'] = $this->getRequest()->getClientIp();
             $be2billParams['CLIENTUSERAGENT'] = $this->getRequest()->server->get('HTTP_USER_AGENT');
-
-            $be2billParams['HASH'] = self::be2BillHash($be2billParams, $method);
         }
+
+        // dispatch event to change parameters if needed
+        $event = new PaymentParametersEvent($order, $method, $be2billParams);
+        $this->getDispatcher()->dispatch(
+            Be2BillEvents::BE2BILL_PAYMENT_PARAMETERS,
+            $event
+        );
+        $be2billParams = $event->getParameters();
+
+        $be2billParams['HASH'] = self::be2BillHash($be2billParams, $method);
 
         return $be2billParams;
     }

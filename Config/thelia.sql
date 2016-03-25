@@ -7,9 +7,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- be2bill_config
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `be2bill_config`;
-
-CREATE TABLE `be2bill_config`
+CREATE TABLE IF NOT EXISTS `be2bill_config`
 (
     `name` VARCHAR(128) NOT NULL,
     `value` TEXT,
@@ -20,9 +18,7 @@ CREATE TABLE `be2bill_config`
 -- be2bill_transaction
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `be2bill_transaction`;
-
-CREATE TABLE `be2bill_transaction`
+CREATE TABLE IF NOT EXISTS `be2bill_transaction`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `order_id` INTEGER NOT NULL,
@@ -63,9 +59,7 @@ CREATE TABLE `be2bill_transaction`
 -- be2bill_method
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `be2bill_method`;
-
-CREATE TABLE `be2bill_method`
+CREATE TABLE IF NOT EXISTS `be2bill_method`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `order_id` INTEGER NOT NULL,

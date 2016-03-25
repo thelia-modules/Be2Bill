@@ -108,25 +108,23 @@ class Be2Bill extends AbstractPaymentModule
         // add missing variables
         $this->initializeConfig();
 
-        // update db
-        $finder = Finder::create()
-            ->name('*.sql')
-            ->depth(0)
-            ->sortByName()
+        $finder = (new Finder)
+            ->files()
+            ->name('#.*?\.sql#')
             ->in(__DIR__ . DS . 'Config' . DS . 'update');
 
-        $updates = [];
-        /** @var \SplFileInfo $file */
-        foreach ($finder as $file) {
-            $version = $file->getBasename('.sql');
-            if (version_compare($currentVersion, $version) == -1) {
-                $updates[] = $file->getRealPath();
-            }
-        }
+        $database = new Database($con);
 
-        if (count($updates) > 0) {
-            $database = new Database($con);
-            $database->insertSql(null, $updates);
+        /** @var \Symfony\Component\Finder\SplFileInfo $updateSQLFile */
+        foreach ($finder as $updateSQLFile) {
+            if (version_compare($currentVersion, str_replace('.sql', '', $updateSQLFile->getFilename()), '<')) {
+                $database->insertSql(
+                    null,
+                    [
+                        $updateSQLFile->getPathname()
+                    ]
+                );
+            }
         }
     }
 

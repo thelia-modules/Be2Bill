@@ -1,6 +1,5 @@
-<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js" ></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/humanity/jquery-ui.css" >
-
+<script src="//code.jquery.com/ui/1.11.0/jquery-ui.min.js" ></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/humanity/jquery-ui.css" >
 <script>
     $(document).ready(function(){
         var dateToday = new Date();
@@ -70,7 +69,7 @@
                 }).done(function(data) {
                     var html = '';
                     if (data == '') {
-                        html += ' <tr><td>{intl l="Aucune transaction trouvée pour cette période." d="be2bill.ai"}</td></tr>';
+                        html += ' <tr><td>{intl l="Aucune transaction trouvée pour cette période." d="be2bill.bo.default"}</td></tr>';
                     }
 
                     $.each(data, function (i, val) {
@@ -79,14 +78,23 @@
 
                         if (val.Refunded === false) {
 
-                            var refunded = '<form class="refund-form" action="{url path="/admin/module/be2bill/refund"}" method="post"><input type="hidden" name="' + val.TransactionId + '" value="{$TRANSACTIONID}"/><input type="hidden" name="order-id" value="' + val.OrderId + '"/>';
-                            refunded += '<button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " d="be2bill.ai"} <span class="glyphicon glyphicon-repeat"></span></button></form>';
+                            var refunded = '<form class="refund-form" action="{url path="/admin/module/be2bill/refund"}" method="post"><input type="hidden" name="transaction-id" value="' + val.TransactionId + '"/><input type="hidden" name="order-id" value="' + val.OrderId + '"/>';
+                            refunded += '<button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " d="be2bill.bo.default"} <span class="glyphicon glyphicon-repeat"></span></button></form>';
 
                         } else {
 
-                            var refunded = '{intl l="Remboursé par :" d="be2bill.ai"} ' + val.Refundedby;
+                            var refunded = '{intl l="Remboursé par :" d="be2bill.bo.default"} ' + val.Refundedby;
                         }
-                        html += val.refunded + '<tr><td>' + val.TransactionId + '</td><td>' + val.OrderId + '</td><td>' + val.Amount + '</td><td>' + val.CustomerId + '</td><td>' + val.lastname + ' ' + val.firstname + '</td><td>' + val.Clientemail + '</td><td>' + created + '</td><td id="refund-' + val.OrderId + '">' + refunded + '</td></tr>'
+                        html += val.refunded + '<tr><td>' + val.TransactionId + '</td><td>'
+                            + (val.MethodName == '' ? 'CB' : val.MethodName) +  '</td><td>'
+                            + val.OrderId + '</td><td>'
+                            + val.Amount + '</td><td>'
+                            + val.CustomerId + '</td><td>'
+                            + val.lastname + ' '
+                            + val.firstname + '</td><td>'
+                            + val.Clientemail + '</td><td>'
+                            + created + '</td><td id="refund-' + val.OrderId + '">'
+                            + refunded + '</td></tr>'
                         ;
                     });
                     $("#list-transaction").html(html);
@@ -94,28 +102,26 @@
             }
         });
 
-       $(".refund-form").on('submit', function(e){
+       $("#b2b-transaction").on('submit', '.refund-form', function(e){
             e.preventDefault();
 
             var $this = $(this);
-            if (confirm("{intl l='Cette opération est irréversible. Êtes-vous sûr de vouloir rembourser cette transaction ?' d='be2bill.ai'}")){
+            if (confirm("{intl l='Cette opération est irréversible. Êtes-vous sûr de vouloir rembourser cette transaction ?' d='be2bill.bo.default'}")){
                 $.ajax({
                     url: $this.attr('action'),
                     type: $this.attr('method'),
                     data : $this.serialize()
                 }).done(function(data) {
                     if( data.orderId ){
-                        $("#refund-"+data.orderId).html("{intl l='Remboursé par :' d='be2bill.ai'} "+data.admin);
+                        $("#refund-"+data.orderId).html("{intl l='Remboursé par :' d='be2bill.bo.default'} "+data.admin);
                     }
                 }).fail(function(jqXHR){
                     $("#alert-refund").addClass("alert alert-danger");
-                    $("#alert-refund").html("{intl l='Erreur : ' d='be2bill.ai'} "+jqXHR.responseText);
+                    $("#alert-refund").html("{intl l='Erreur : ' d='be2bill.bo.default'} "+jqXHR.responseText);
                 });
             }
 
         });
-
-
 
     });
 </script>

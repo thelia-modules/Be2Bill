@@ -27,6 +27,8 @@ use Thelia\Model\AddressQuery;
  */
 class HookManager extends BaseHook
 {
+    const MAX_TRACE_SIZE = 1000;
+
     public function onOrderInvoice(HookRenderEvent $event)
     {
         if ('yes' === Be2billConfigQuery::read('activated')) {
@@ -122,5 +124,52 @@ class HookManager extends BaseHook
         $amount += (float)$this->getOrder()->getPostage();
 
         return $amount;
+    }
+
+    public function onModuleConfiguration(HookRenderEvent $event)
+    {
+        $module_id = self::getModule()->getModuleId();
+
+        $logFilePath = Be2Bill::getLogFilePath();
+
+        $traces = @file_get_contents($logFilePath);
+
+        if (false === $traces) {
+            $traces = $this->translator->trans("The log file doesn't exists yet.", [], Be2Bill::MODULE_DOMAIN);
+        } elseif (empty($traces)) {
+            $traces = $this->translator->trans("The log file is empty.", [], Be2Bill::MODULE_DOMAIN);
+        } else {
+            // Limit to 1MO
+            $traces = array_reverse(explode("\n", $traces));
+
+            if (count($traces) > self::MAX_TRACE_SIZE) {
+                $traces = array_slice($traces, 0, self::MAX_TRACE_SIZE);
+
+                $traces[] = $this->translator->trans(
+                    "(Previous log is in %file file.)\n",
+                    ['%file' => $logFilePath],
+                    Be2Bill::MODULE_DOMAIN
+                );
+            }
+
+            $traces = implode("\n", $traces);
+        }
+
+        $event->add(
+            $this->render(
+                "module_configuration.html",
+                [
+                    'module_id' => $module_id,
+                    'trace_content' => $traces
+                ]
+            )
+        );
+    }
+
+    public function onModuleConfigJs(HookRenderEvent $event)
+    {
+        $module_id = self::getModule()->getModuleId();
+
+        $event->add($this->render("module-config-js.html", ['module_id' => $module_id]));
     }
 }

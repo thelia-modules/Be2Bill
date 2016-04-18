@@ -1,0 +1,327 @@
+<div class="row">
+    <div class="col-md-12 general-block-decorator">
+        <div class="row">
+            <div class="col-md-12 title title-without-tabs">
+                {intl l="Configuration Be 2 Bill" d="be2bill.bo.default"}
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#b2b-configuration" aria-controls="b2b-configuration" role="tab" data-toggle="tab">
+                        {intl l="Configuration" d="be2bill.bo.default"}
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#b2b-transaction" aria-controls="b2b-transaction" role="tab" data-toggle="tab">
+                        {intl l="Transaction" d="be2bill.bo.default"}
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#b2b-logs" aria-controls="b2b-configuration" role="tab" data-toggle="tab">
+                        {intl l="Logs" d="be2bill.bo.default"}
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="b2b-configuration" class="tab-pane active">
+
+                    <div class="form-container">
+
+                        {form name="be2bill.configuration.form"}
+
+                        {if $form_error}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger">{$form_error_message}</div>
+                                </div>
+                            </div>
+                        {/if}
+
+                        <form action="{url path='/admin/module/be2bill/configure'}" method="post">
+
+                            {form_hidden_fields form=$form}
+
+                            {include file = "includes/inner-form-toolbar.html"
+                            hide_flags = true
+                            page_url   = "{url path='/admin/module/be2bill'}"
+                            close_url  = "{url path='/admin/modules'}"
+                            }
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {form_field form=$form field="activated"}
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="{$name}" class="control-label">{$label}</label>
+                                                <select id="{$name}" name="{$name}" class="form-control">
+                                                    <option value="no" {if ({$value} === "no")} selected="selected"{/if} >{intl l='Non' d='be2bill.bo.default'}</option>
+                                                    <option value="yes" {if ({$value} === "yes")} selected="selected"{/if} >{intl l='Oui' d='be2bill.bo.default'}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    {/form_field}
+
+                                    {form_field form=$form field="3dsecure"}
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="{$name}" class="control-label">{$label}</label>
+                                                <select id="{$name}" name="{$name}" class="form-control">
+                                                    <option value="no" {if ({$value} === "no")} selected="selected"{/if} >{intl l='Non' d='be2bill.bo.default'}</option>
+                                                    <option value="yes" {if ({$value} === "yes")} selected="selected"{/if} >{intl l='Oui' d='be2bill.bo.default'}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    {/form_field}
+
+                                    {form_field form=$form field="identifier"}
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="{$name}" class="control-label">{$label}</label>
+                                                <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
+                                                <span class="help-block">{$label_attr.help}</span>
+                                            </div>
+                                        </div>
+
+                                    {/form_field}
+
+                                    {form_field form=$form field="password"}
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="{$name}" class="control-label">{$label}</label>
+                                                <input id="{$name}" type="password" name="{$name}" value="{$value}" class="form-control"/>
+                                                <span class="help-block">{$label_attr.help}</span>
+                                            </div>
+                                        </div>
+
+                                    {/form_field}
+
+                                    {form_field form=$form field="url"}
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="{$name}" class="control-label">{$label}</label>
+                                                <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
+                                                <span class="help-block">{$label_attr.help}</span>
+                                            </div>
+                                        </div>
+
+                                    {/form_field}
+
+                                    {form_field form=$form field="description"}
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="{$name}" class="control-label">{$label}</label>
+                                                <textarea id="{$name}" name="{$name}" class="form-control">{$value}</textarea>
+                                                <span class="help-block">{$label_attr.help}</span>
+                                            </div>
+                                        </div>
+                                    {/form_field}
+
+
+                                    {form_field form=$form field="ntimes"}
+                                        <h3 class="u-margin-top">{$label}</h3>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="{$name}" class="control-label">{$label}</label>
+                                                <select id="{$name}" name="{$name}" class="form-control" data-toggle-visibilty=".ntimes-parameters">
+                                                    <option value="no" {if ({$value} === "no")} selected="selected"{/if} >{intl l='Non' d='be2bill.bo.default'}</option>
+                                                    <option value="yes" {if ({$value} === "yes")} selected="selected"{/if} >{intl l='Oui' d='be2bill.bo.default'}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    {/form_field}
+
+                                    <div class="ntimes-parameters">
+                                        {form_field form=$form field="ntimes-count"}
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="{$name}" class="control-label">{$label}</label>
+                                                    <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
+                                                    <span class="help-block">{$label_attr.help}</span>
+                                                </div>
+                                            </div>
+
+                                        {/form_field}
+
+                                        {form_field form=$form field="ntimes-interval"}
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="{$name}" class="control-label">{$label}</label>
+                                                    <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
+                                                    <span class="help-block">{$label_attr.help nofilter}</span>
+                                                </div>
+                                            </div>
+
+                                        {/form_field}
+                                    </div>
+
+                                    {form_field form=$form field="paypal"}
+                                        <h3 class="u-margin-top">{$label}</h3>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="{$name}" class="control-label">{$label}</label>
+                                                <select id="{$name}" name="{$name}" class="form-control" data-toggle-visibilty=".paypal-parameters">
+                                                    <option value="no" {if ({$value} === "no")} selected="selected"{/if} >{intl l='Non' d='be2bill.bo.default'}</option>
+                                                    <option value="yes" {if ({$value} === "yes")} selected="selected"{/if} >{intl l='Oui' d='be2bill.bo.default'}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    {/form_field}
+
+                                    <div class="paypal-parameters">
+                                        {form_field form=$form field="paypal-identifier"}
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="{$name}" class="control-label">{$label}</label>
+                                                    <input id="{$name}" type="text" name="{$name}" value="{$value}" class="form-control"/>
+                                                    <span class="help-block">{$label_attr.help}</span>
+                                                </div>
+                                            </div>
+
+                                        {/form_field}
+
+                                        {form_field form=$form field="paypal-password"}
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="{$name}" class="control-label">{$label}</label>
+                                                    <input id="{$name}" type="password" name="{$name}" value="{$value}" class="form-control"/>
+                                                    <span class="help-block">{$label_attr.help}</span>
+                                                </div>
+                                            </div>
+
+                                        {/form_field}
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="alert alert-info">
+                                            <strong>{intl l="N'oubliez pas d'aller configurer votre compte dans l'extranet Be2bill :" d="be2bill.bo.default"}</strong>
+                                            <br/>
+                                            {intl l="1) Autoriser l'hébergeur à acceder au service Be2Bill en renseignant son adresse IP dans la configuration." d="be2bill.bo.default"}
+                                            <br/>
+                                            {intl l="2) Renseigner les urls de notifications :" d="be2bill.bo.default"}
+                                            <ul>
+                                                <li>http://<strong>{intl l="VotreSite.com" d="be2bill.bo.default"}</strong>/be2bill/callback/payment {intl l="(notification de transactions)" d="be2bill.bo.default"}</li>
+                                                <li>http://<strong>{intl l="VotreSite.com" d="be2bill.bo.default"}</strong>/be2bill/callback/unpaid {intl l="(notification d'impayés)" d="be2bill.bo.default"}</li>
+                                            </ul>
+                                            {intl l="3) Renseigner les urls de redirections :" d="be2bill.bo.default"}
+                                            <ul>
+                                                <li>http://<strong>{intl l="VotreSite.com" d="be2bill.bo.default"}</strong>/be2bill/redirect/payment {intl l="(Url après traitement) " d="be2bill.bo.default"}</li>
+                                                <li>http://<strong>{intl l="VotreSite.com" d="be2bill.bo.default"}</strong>/be2bill/redirect/cancel {intl l="(Url en cas d'annulation) " d="be2bill.bo.default"}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                        {/form}
+                    </div>
+
+                </div><!--//#b2b-configuration-->
+
+                <div id="b2b-transaction" class="tab-pane">
+                    <br>
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <form id="transaction-form" action="{url path='/admin/module/be2bill/ajax/transactions'}" method="get">
+                                {intl l="A partir de : " d="be2bill.bo.default"}
+
+                                <input id="datepicker" type="text" name="date"/>
+                                <input id="datepicker-alt" type="hidden" name="transaction-date"/>
+
+                                {intl l=" interval : " d="be2bill.bo.default"}
+                                <select name="transaction-interval">
+                                    <option value="1">{intl l="Jour" d="be2bill.bo.default"}</option>
+                                    <option value="7" selected="selected">{intl l="Semaine" d="be2bill.bo.default"}</option>
+                                    <option value="31">{intl l="Mois" d="be2bill.bo.default"}</option>
+                                </select>
+                            </form>
+
+                            <div id="alert-refund" role="alert"></div>
+
+                            <div class="table-responsive">
+
+                                <table class="table table-striped table-condensed table-left-aligned">
+
+                                    <thead>
+                                    <tr>
+                                        <th>{intl l="ID Be2Bill" d="be2bill.bo.default"}</th>
+                                        <th>{intl l="Méthode" d="be2bill.bo.default"}</th>
+                                        <th>{intl l="Commande" d="be2bill.bo.default"}</th>
+                                        <th>{intl l="Montant" d="be2bill.bo.default"}</th>
+                                        <th>{intl l="ID Client" d="be2bill.bo.default"}</th>
+                                        <th>{intl l="Nom Client" d="be2bill.bo.default"}</th>
+                                        <th>{intl l="Email Client" d="be2bill.bo.default"}</th>
+                                        <th>Date</th>
+                                        <th>{intl l="Remboursement" d="be2bill.bo.default"}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="list-transaction">
+                                    {ifloop rel="be2bill_transactions"}
+                                    {loop type="be2bill.transactions" name="be2bill_transactions" }
+                                        <tr>
+                                            <td>{$TRANSACTIONID}</td>
+                                            <td>{$METHOD_NAME}</td>
+                                            <td>{$ORDERID}</td>
+                                            <td>{$AMOUNT}</td>
+                                            <td>{$CUSTOMERID}</td>
+                                            <td>{$CUSTOMER}</td>
+                                            <td>{$CUSTOMEREMAIL}</td>
+                                            <td>{$DATE}</td>
+                                            <td id="refund-{$ORDERID}">
+                                                {if $REFUNDED == 0}
+                                                    <form class="refund-form" action="{url path='/admin/module/be2bill/refund'}" method="post">
+                                                        <input type="hidden" name="transaction-id" value="{$TRANSACTIONID}"/>
+                                                        <input type="hidden" name="order-id" value="{$ORDERID}"/>
+                                                        <button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " d="be2bill.bo.default"} <span class="glyphicon glyphicon-repeat"></span></button>
+                                                    </form>
+                                                {else}
+                                                    {intl l="Remboursé par :" d="be2bill.bo.default"} {$REFUNDEDBY}
+                                                {/if}
+                                            </td>
+                                        </tr>
+                                    {/loop}
+                                    {/ifloop}
+                                    {elseloop rel="be2bill_transactions"}
+                                        <tr><td>{intl l="Aucune transaction trouvée pour cette période." d="be2bill.bo.default"}</td></tr>
+                                    {/elseloop}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div><!--//#b2b-transaction-->
+
+                <div id="b2b-logs" class="tab-pane">
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <pre style="font-family: monospace; font-size: 12px; max-height: 400px; overflow-y: scroll">{$trace_content nofilter}</pre>
+                        </div>
+                    </div>
+                </div><!--//#b2b-logs-->
+
+            </div><!--//.tab-content-->
+        </div>
+    </div>
+</div>
+
+
+
+

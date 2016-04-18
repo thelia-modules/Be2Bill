@@ -302,7 +302,7 @@ class Be2Bill extends AbstractPaymentModule
         return $be2billParams;
     }
 
-    public static function be2BillHash(array $params, $methodName)
+    public static function be2BillHash(array $params, $methodName = '')
     {
         ksort($params);
 
@@ -433,6 +433,12 @@ class Be2Bill extends AbstractPaymentModule
     }
 
 
+    public static function getLogFilePath()
+    {
+        $logFilePath = sprintf(THELIA_ROOT."log".DS."%s.log", strtolower(self::getModuleCode()));
+
+        return $logFilePath;
+    }
     /**
      * @return Tlog
      */
@@ -442,7 +448,7 @@ class Be2Bill extends AbstractPaymentModule
             self::$logger = Tlog::getNewInstance();
 
             // same as the log in payment controller
-            $logFilePath = sprintf(THELIA_ROOT."log".DS."%s.log", strtolower(self::getModuleCode()));
+            $logFilePath = self::getLogFilePath();
 
             self::$logger->setPrefix("#LEVEL: #DATE #HOUR: ");
             self::$logger->setDestinations("\\Thelia\\Log\\Destination\\TlogDestinationRotatingFile");

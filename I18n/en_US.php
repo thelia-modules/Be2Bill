@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    '(Previous log is in %file file.)\n' => '(Previous log is in %file file.)\n',
     'Active le paiement Be2Bill' => 'Activate the be2bill for the payment',
     'Activer le module' => 'Activate the module',
     'Be2Bill payment confirmation' => 'be2bill payment confirmation',
@@ -26,6 +27,8 @@ return array(
     'Response could not be authentified.' => 'Response could not be authentified.',
     'Sorry, something did not worked with be2bill. Please try again, or use another payment type' => 'Sorry, something did not worked with be2bill. Please try again, or use another payment type',
     'The interval should respect the ISO 8601 format' => 'The interval should respect the ISO 8601 format',
+    'The log file doesn\'t exists yet.' => 'The log file doesn\'t exists yet.',
+    'The log file is empty.' => 'The log file is empty.',
     'Url Web Service fournis par be2bill, exemple : "secure-magenta.be2bill.com" .' => 'Web service url given by be2bill, exemple : "secure-magenta.be2bill.com" .',
     'Votre commande n° %commande a bien était annulé.' => 'Your order n° commande was well canceled.',
     '[type d\'environnement].be2bill.com' => '[environement type].be2bill.com',

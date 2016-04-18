@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     ' interval : ' => ' interval : ',
     '(Url après traitement) ' => '(Url après traitement) ',
     '(Url en cas d\'annulation) ' => '(Url en cas d\'annulation) ',
@@ -32,4 +32,4 @@ return array(
     'Semaine' => 'Semaine',
     'Transactions Be2Bill' => 'Transactions be2bill',
     'VotreSite.com' => 'VotreSite.com',
-);
+];

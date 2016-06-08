@@ -146,7 +146,7 @@ class Be2Bill extends AbstractPaymentModule
      */
     public function pay(Order $order)
     {
-        if ('yes' !== Be2billConfigQuery::read('activated', 'yes')) {
+        if (!$this->isValidPayment()) {
             throw new \InvalidArgumentException("be2bill is not a valid payment method.");
         }
 
@@ -373,7 +373,8 @@ class Be2Bill extends AbstractPaymentModule
      */
     public function isValidPayment()
     {
-        return 'yes' === Be2billConfigQuery::read('activated', 'yes');
+        return 'yes' === Be2billConfigQuery::read('activated', 'yes')
+            &&  $this->getCurrentOrderTotalAmount() > 0;
     }
 
 

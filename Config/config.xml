@@ -5,29 +5,15 @@
         xsi:schemaLocation="http://thelia.net/schema/dic/config http://thelia.net/schema/dic/config/thelia-1.0.xsd">
 
     <loops>
-        <!-- sample definition
-        <loop name="MySuperLoop" class="MyModule\Loop\MySuperLoop" />
-        -->
         <loop name="be2bill.transactions" class="Be2Bill\Loop\TransactionLoop"/>
     </loops>
 
     <forms>
-        <!--
-        <form name="MyFormName" class="MyModule\Form\MySuperForm" />
-        -->
         <form name="be2bill.configuration.form" class="Be2Bill\Form\ConfigForm"/>
     </forms>
 
-    <commands>
-        <!--
-        <command class="MyModule\Command\MySuperCommand" />
-        -->
-    </commands>
-
-
     <services>
         <service id="be2bill.service.mail" class="Be2Bill\EventListeners\SendConfirmationEmail" scope="request">
-            <argument type="service" id="thelia.parser"/>
             <argument type="service" id="mailer"/>
             <tag name="kernel.event_subscriber"/>
         </service>
@@ -51,15 +37,4 @@
         </hook>
     </hooks>
 
-    <!--
-    <exports>
-
-    </exports>
-    -->
-
-    <!--
-    <imports>
-
-    </imports>
-    -->
 </config>

@@ -10,7 +10,10 @@ namespace Be2Bill\Controller;
 
 use Be2Bill\Be2Bill;
 use Be2Bill\Model\Be2billTransaction;
+use Thelia\Core\Event\Order\OrderEvent;
+use Thelia\Core\Event\TheliaEvents;
 use Thelia\Core\HttpFoundation\Response;
+use Thelia\Model\OrderStatusQuery;
 use Thelia\Module\BasePaymentModuleController;
 
 class PaymentController extends BasePaymentModuleController
@@ -168,5 +171,37 @@ class PaymentController extends BasePaymentModuleController
                 Be2Bill::MODULE_DOMAIN
             )
         );
+    }
+
+    /**
+     * Patch for buggy Thelia method
+     *
+     * @param int $order_id
+     */
+    public function cancelPayment($order_id)
+    {
+        $order_id = intval($order_id);
+
+        if (null !== $order = $this->getOrder($order_id)) {
+            $this->getLog()->addInfo(
+                $this->getTranslator()->trans(
+                    "Processing cancelation of payment for order ref. %ref",
+                    array('%ref' => $order->getRef())
+                )
+            );
+
+            $event = new OrderEvent($order);
+
+            $event->setStatus(OrderStatusQuery::getNotPaidStatus()->getId());
+
+            $this->getLog()->addInfo(
+                $this->getTranslator()->trans(
+                    "Order ref. %ref is now unpaid.",
+                    array('%ref' => $order->getRef())
+                )
+            );
+
+            $this->dispatch(TheliaEvents::ORDER_UPDATE_STATUS, $event);
+        }
     }
 }

@@ -37,10 +37,10 @@ class PaymentController extends BasePaymentModuleController
         $request->remove('HASH');
         $params = $request->all();
         $orderId = intval($request->get('ORDERID'));
-        
+
         // retrieve the method used to pay
         $methodName = Be2Bill::getOrderMethod($orderId);
-        
+
         $hash = Be2Bill::be2BillHash($params, $methodName);
 
         $this
@@ -51,7 +51,8 @@ class PaymentController extends BasePaymentModuleController
                     array('%id' => $orderId),
                     Be2Bill::MODULE_DOMAIN
                 )
-            );
+            )
+        ;
 
         if (null !== $order = $this->getOrder($orderId)) {
             // Check the authencity of the request
@@ -69,7 +70,7 @@ class PaymentController extends BasePaymentModuleController
                     } else {
                         $this->getLog()->addInfo(
                             $this->getTranslator()->trans(
-                                "Order ID %id payment was succesful.",
+                                "Order ID %id payment was successful.",
                                 array('%id' => $orderId),
                                 Be2Bill::MODULE_DOMAIN
                             )
@@ -77,6 +78,11 @@ class PaymentController extends BasePaymentModuleController
 
                         $this->confirmPayment($orderId);
 
+                        // save the transaction ref
+                        $order->setTransactionRef($request->get('TRANSACTIONID'));
+                        $order->save();
+
+                        // save the transaction
                         $transaction = new Be2billTransaction();
                         $transaction->setCustomerId($request->get('CLIENTIDENT'))
                             ->setOrderId($request->get('ORDERID'))
@@ -102,15 +108,17 @@ class PaymentController extends BasePaymentModuleController
                     $this->cancelPayment($orderId);
                     // Payment was not accepted
                 } else {
-                    $this->getLog()->addError($this->getTranslator()
-                        ->trans("Order ID %id payment failed.", array('%id' => $orderId), Be2Bill::MODULE_DOMAIN))
-                    ;
+                    $this->getLog()->addError(
+                        $this->getTranslator()
+                            ->trans("Order ID %id payment failed.", array('%id' => $orderId), Be2Bill::MODULE_DOMAIN)
+                    );
                 }
                 return Response::create('OK');
             } else {
-                $this->getLog()->addError($this->getTranslator()
-                    ->trans("Response could not be authentified.", array(), Be2Bill::MODULE_DOMAIN))
-                ;
+                $this->getLog()->addError(
+                    $this->getTranslator()
+                        ->trans("Response could not be authentified.", array(), Be2Bill::MODULE_DOMAIN)
+                );
                 return Response::create('ERROR');
             }
         }
@@ -139,7 +147,8 @@ class PaymentController extends BasePaymentModuleController
                         '%message' => $params['MESSAGE']
                     ),
                     Be2Bill::MODULE_DOMAIN
-                );
+                )
+                ;
                 $this->redirectToFailurePage($params['ORDERID'], $message);
             }
         }

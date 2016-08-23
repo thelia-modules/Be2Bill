@@ -13,7 +13,7 @@
         <language>en_US</language>
         <language>fr_FR</language>
     </languages>
-    <version>2.2</version>
+    <version>2.2.0</version>
     <authors>
         <author>
             <name>Vincent Lopes-Vicente</name>
@@ -25,6 +25,6 @@
         </author>
     </authors>
     <type>payment</type>
-    <thelia>2.1.1</thelia>
+    <thelia>2.1</thelia>
     <stability>other</stability>
 </module>

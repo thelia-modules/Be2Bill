@@ -1,74 +1,75 @@
 
 {ifloop rel="be2bill_transaction"}
-{loop type="be2bill.transactions" name="be2bill_transaction" order_id={$order_id} }
-<table class="table table-striped table-condensed table-left-aligned">
+<table class="table table-condensed table-left-aligned">
   <caption class="clearfix">
     {intl l='be2bill payment information'}
   </caption>
-  <tbody>
-    <tr>
-      <th>{intl l="ID Be2Bill" d="be2bill.bo.default"}</th>
-      <td>{$TRANSACTIONID}</td>
-    </tr>
-    <tr>
-      <th>{intl l="Méthode" d="be2bill.bo.default"}</th>
-      <td><span class="method-{$METHOD_NAME}">{$METHOD_TITLE}</span></td>
-    </tr>
+  <thead>
     <tr>
       <th>{intl l="Date" d="be2bill.bo.default"}</th>
-      <td>{$DATE}</td>
+      <th>{intl l="Method" d="be2bill.bo.default"}</th>
+      <th>{intl l="Trans. ID" d="be2bill.bo.default"}</th>
+      <th>{intl l="Code" d="be2bill.bo.default"}</th>
+      <th>{intl l="Message" d="be2bill.bo.default"}</th>
+      <th>{intl l="Refund" d="be2bill.bo.default"}</th>
     </tr>
+  </thead>
+  <tbody>
+{loop type="be2bill.transactions" name="be2bill_transaction" order_id={$order_id} }
+  <tbody>
     <tr>
-      {if $REFUNDED == 0}
-        <th>{intl l="Remboursement" d="be2bill.bo.default"}</th>
-        <td>
+      <td>{$DATE}</td>
+      <td><span class="method-{$METHOD_NAME}">{$METHOD_TITLE}</span></td>
+      <td><a href="#be2billMoreInformation{$ID}" data-toggle="collapse" data-target="#be2billMoreInformation{$ID}" aria-expanded="false" >{$TRANSACTIONID}</a></td>
+      <td>{$EXECCODE}</td>
+      <td>{$EXECCODE_TITLE}</td>
+      <td>
+      {if {$EXECCODE} == "0000"}
+        {if $REFUNDED == 0}
           <form class="refund-form" action="{url path='/admin/module/be2bill/refund'}" method="post">
             <input type="hidden" name="transaction-id" value="{$TRANSACTIONID}"/>
             <input type="hidden" name="order-id" value="{$ORDERID}"/>
             <button type="submit" class="form-submit-button btn btn-sm btn-default btn-primary"> {intl l="Rembourser " d="be2bill.bo.default"} <span class="glyphicon glyphicon-repeat"></span></button>
           </form>
-        </td>
-      {else}
-        <th>{intl l="Remboursé par" d="be2bill.bo.default"}</th>
-        <td>{$REFUNDEDBY}</td>
+        {else}
+          {$REFUNDEDBY}
+        {/if}
       {/if}
+      </td>
     </tr>
+    {if $params}
+      <tr class="collapse" id="be2billMoreInformation{$ID}">
+        <td colspan="10">
+          <div>
+            <table class="table table-striped table-condensed table-left-aligned">
+              <caption class="clearfix">
+                {intl l="Request parameters" d="be2bill.bo.default"}
+              </caption>
+              {foreach $params.parameters as $key => $value}
+                <tr>
+                  <th>{$key}</th>
+                  <td>{$value}</td>
+                </tr>
+              {/foreach}
+            </table>
+
+            <table class="table table-striped table-condensed table-left-aligned">
+              <caption class="clearfix">
+                {intl l="Configuration used" d="be2bill.bo.default"}
+              </caption>
+              {foreach $params.config as $key => $value}
+                <tr>
+                  <th>{$key}</th>
+                  <td>{$value}</td>
+                </tr>
+              {/foreach}
+            </table>
+          </div>
+        </td>
+      </tr>
+    {/if}
+{/loop}
   </tbody>
 </table>
-
-{if $params}
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#be2billMoreInformation" aria-expanded="false" aria-controls="be2billMoreInformation">
-    {intl l="More information" d="be2bill.bo.default"}
-  </button>
-
-  <div class="collapse" id="be2billMoreInformation">
-    <table class="table table-striped table-condensed table-left-aligned">
-      <caption class="clearfix">
-        {intl l="Request parameters" d="be2bill.bo.default"}
-      </caption>
-      {foreach $params.parameters as $key => $value}
-        <tr>
-          <th>{$key}</th>
-          <td>{$value}</td>
-        </tr>
-      {/foreach}
-    </table>
-
-    <table class="table table-striped table-condensed table-left-aligned">
-      <caption class="clearfix">
-        {intl l="Configuration used" d="be2bill.bo.default"}
-      </caption>
-      {foreach $params.config as $key => $value}
-        <tr>
-          <th>{$key}</th>
-          <td>{$value}</td>
-        </tr>
-      {/foreach}
-    </table>
-  </div>
-{/if}
-
-{/loop}
-
 {/ifloop}
 

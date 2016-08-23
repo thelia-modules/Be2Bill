@@ -428,11 +428,14 @@ class Be2Bill extends AbstractPaymentModule
      */
     public static function getMethodTitle($methodName)
     {
+        // ->trans('CB, Visa or MasterCard')
         // ->trans('paypal')
         // ->trans('ntimes')
+        if (empty($methodName)) {
+            $methodName = 'CB, Visa or MasterCard';
+        }
         return Translator::getInstance()->trans($methodName, [], self::MODULE_DOMAIN);
     }
-
 
     public static function getLogFilePath()
     {
@@ -440,6 +443,7 @@ class Be2Bill extends AbstractPaymentModule
 
         return $logFilePath;
     }
+
     /**
      * @return Tlog
      */

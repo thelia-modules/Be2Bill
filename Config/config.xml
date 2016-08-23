@@ -22,6 +22,10 @@
             <argument type="service" id="request"/>
             <tag name="kernel.event_subscriber"/>
         </service>
+
+        <service id="be2bill.service.execcode" class="Be2Bill\Service\ExecCodeService" scope="request">
+            <argument type="service" id="thelia.translator"/>
+        </service>
     </services>
 
     <hooks>

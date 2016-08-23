@@ -27,6 +27,9 @@ class TransactionLoop extends BaseLoop implements PropelSearchLoopInterface
      */
     public function parseResults(LoopResult $loopResult)
     {
+        /** @var \Be2Bill\Service\ExecCodeService $execCodeService */
+        $execCodeService = $this->container->get('be2bill.service.execcode');
+
         /** @var \Be2Bill\Model\Be2BillTransaction $transaction */
         foreach ($loopResult->getResultDataCollection() as $transaction) {
             $loopResultRow = new LoopResultRow($transaction);
@@ -34,9 +37,13 @@ class TransactionLoop extends BaseLoop implements PropelSearchLoopInterface
             $customer = $transaction->getCustomer()->getLastname().' '.$transaction->getCustomer()->getFirstname();
 
             $loopResultRow
+                ->set('ID', $transaction->getId())
                 ->set('ORDERID', $transaction->getOrderId())
                 ->set('DATE', $transaction->getCreatedAt('d/m/Y H:i'))
                 ->set('TRANSACTIONID', $transaction->getTransactionId())
+                ->set('EXECCODE', $transaction->getExeccode())
+                ->set('EXECCODE_TITLE', $execCodeService->getTitle($transaction->getExeccode()))
+                ->set('MESSAGE', $transaction->getMessage())
                 ->set('METHOD_NAME', $transaction->getMethodName())
                 ->set('METHOD_TITLE', Be2Bill::getMethodTitle($transaction->getMethodName()))
                 ->set('AMOUNT', $transaction->getAmount())
@@ -44,7 +51,8 @@ class TransactionLoop extends BaseLoop implements PropelSearchLoopInterface
                 ->set('CUSTOMER', $customer)
                 ->set('CUSTOMEREMAIL', $transaction->getClientemail())
                 ->set('REFUNDED', $transaction->getRefunded())
-                ->set('REFUNDEDBY', $transaction->getRefundedby());
+                ->set('REFUNDEDBY', $transaction->getRefundedby())
+            ;
 
             $loopResult->addRow($loopResultRow);
         }

@@ -26,6 +26,11 @@
         <service id="be2bill.service.execcode" class="Be2Bill\Service\ExecCodeService" scope="request">
             <argument type="service" id="thelia.translator"/>
         </service>
+
+        <service id="be2bill.service.operationtype" class="Be2Bill\Service\OperationTypeService" scope="request">
+            <argument type="service" id="thelia.translator"/>
+        </service>
+
     </services>
 
     <hooks>

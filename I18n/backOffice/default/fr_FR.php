@@ -32,6 +32,7 @@ return array(
     'N\'oubliez pas d\'aller configurer votre compte dans l\'extranet Be2bill :' => 'N\'oubliez pas d\'aller configurer votre compte dans l\'extranet be2bill :',
     'Nom Client' => 'Nom Client',
     'Non' => 'Non',
+    'Operation Type' => 'Type d\'opération ',
     'Oui' => 'Oui',
     'Refund' => 'Remboursement',
     'Remboursement' => 'Remboursement',

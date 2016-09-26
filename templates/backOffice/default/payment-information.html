@@ -9,6 +9,7 @@
       <th>{intl l="Date" d="be2bill.bo.default"}</th>
       <th>{intl l="Method" d="be2bill.bo.default"}</th>
       <th>{intl l="Trans. ID" d="be2bill.bo.default"}</th>
+      <th>{intl l="Operation Type" d="be2bill.bo.default"}</th>
       <th>{intl l="Code" d="be2bill.bo.default"}</th>
       <th>{intl l="Message" d="be2bill.bo.default"}</th>
       <th>{intl l="Refund" d="be2bill.bo.default"}</th>
@@ -20,6 +21,7 @@
       <td>{$DATE}</td>
       <td><span class="method-{$METHOD_NAME}">{$METHOD_TITLE}</span></td>
       <td><a href="#be2billMoreInformation{$ID}" data-toggle="collapse" data-target="#be2billMoreInformation{$ID}" aria-expanded="false" >{$TRANSACTIONID}</a></td>
+      <td>{$OPERATIONTYPE_TITLE}</td>
       <td>{$EXECCODE}</td>
       <td>{$EXECCODE_TITLE}</td>
       <td>

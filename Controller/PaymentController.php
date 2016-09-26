@@ -10,9 +10,12 @@ namespace Be2Bill\Controller;
 
 use Be2Bill\Be2Bill;
 use Be2Bill\Model\Be2billTransaction;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Thelia\Core\Event\Order\OrderEvent;
 use Thelia\Core\Event\TheliaEvents;
+use Thelia\Core\HttpFoundation\Request;
 use Thelia\Core\HttpFoundation\Response;
+use Thelia\Model\Order;
 use Thelia\Model\OrderStatusQuery;
 use Thelia\Module\BasePaymentModuleController;
 
@@ -45,7 +48,6 @@ class PaymentController extends BasePaymentModuleController
         $methodName = Be2Bill::getOrderMethod($orderId);
 
         $hash = Be2Bill::be2BillHash($params, $methodName);
-
         $this
             ->getLog()
             ->addInfo(
@@ -58,106 +60,71 @@ class PaymentController extends BasePaymentModuleController
         ;
 
         if (null !== $order = $this->getOrder($orderId)) {
+
             // Check the authencity of the request
-            if ($be2BillHash == $hash) {
-                // Payment was accepted
-                if ($request->get('EXECCODE') == 0000) {
-
-                    if ($order->isPaid()) {
-                        $this->getLog()->addInfo(
-                            $this->getTranslator()->trans(
-                                "Order ID %id is already paid.",
-                                array('%id' => $orderId),
-                                Be2Bill::MODULE_DOMAIN
-                            )
-                        );
-                    } else {
-                        $this->getLog()->addInfo(
-                            $this->getTranslator()->trans(
-                                "Order ID %id payment was successful.",
-                                array('%id' => $orderId),
-                                Be2Bill::MODULE_DOMAIN
-                            )
-                        );
-
-                        $this->confirmPayment($orderId);
-
-                        // save the transaction ref
-                        $order->setTransactionRef($request->get('TRANSACTIONID'));
-                        $order->save();
-                    }
-
-                } else {
-
-                    $this->getLog()->addError(
-                        $this
-                            ->getTranslator()
-                            ->trans(
-                                "Transaction %transaction for order ID %id failed. [%code] : %message",
-                                [
-                                    '%transaction' => $request->get('TRANSACTIONID'),
-                                    '%id' => $orderId,
-                                    '%code' => $request->get('EXECCODE'),
-                                    '%message' => $request->get('MESSAGE'),
-                                ],
-                                Be2Bill::MODULE_DOMAIN
-                            )
-                    );
-
-                    if ($request->get('EXECCODE') == 4004) {
-                        if (!$order->isCancelled() && !$order->isPaid()) {
-                            $this->getLog()->addInfo(
-                                $this->getTranslator()->trans(
-                                    "Cancelling order ID %id - payment failed.",
-                                    array('%id' => $orderId),
-                                    Be2Bill::MODULE_DOMAIN
-                                )
-                            );
-
-                            $this->cancelPayment($orderId);
-                        }
-                    }
-                }
-
-                // save the transaction
-                $this->getLog()->addInfo(
-                    $this->getTranslator()->trans(
-                        "Saving transaction %transaction for order ID %id.",
-                        [
-                            '%transaction' => $request->get('TRANSACTIONID'),
-                            '%id' => $orderId
-                        ],
-                        Be2Bill::MODULE_DOMAIN
-                    )
-                );
-
-                $transaction = new Be2billTransaction();
-                $transaction->setCustomerId($request->get('CLIENTIDENT'))
-                    ->setOrderId($request->get('ORDERID'))
-                    ->setTransactionId($request->get('TRANSACTIONID'))
-                    ->setMethodName($methodName)
-                    ->setOperationtype($request->get('OPERATIONTYPE'))
-                    ->setDsecure($request->get('3DSECURE'))
-                    ->setExeccode($request->get('EXECCODE'))
-                    ->setMessage($request->get('MESSAGE'))
-                    ->setAmount($request->get('AMOUNT') / 100)
-                    ->setClientemail($request->get('CLIENTEMAIL'))
-                    ->setCardcode($request->get('CARDCODE'))
-                    ->setCardvaliditydate($request->get('CARDVALIDITYDATE'))
-                    ->setCardfullname($request->get('CARDFULLNAME'))
-                    ->setCardtype($request->get('CARDTYPE'))
-                    ->setTransaction(json_encode($params))
-                ;
-
-                $transaction->save();
-
-                return Response::create('OK');
-            } else {
+            if ($be2BillHash != $hash) {
                 $this->getLog()->addError(
                     $this->getTranslator()
                         ->trans("Response could not be authentified.", array(), Be2Bill::MODULE_DOMAIN)
                 );
+
+                return Response::create('ERROR');
             }
+
+            // Operation types : "payment" / "authorization" / "capture" / "refund" / "stopntimes"
+            if ("payment" == $request->get('OPERATIONTYPE')) {
+                $this->managePaymentOperation($request, $order);
+            }
+
+            if ("refund" == $request->get('OPERATIONTYPE')) {
+                $this->manageRefundOperation($request, $order);
+            }
+
+            if (in_array($request->get('OPERATIONTYPE'), ["authorization", "capture", "stopntimes"])) {
+                $this->getLog()->addError(
+                    $this->getTranslator()
+                        ->trans(
+                            "Operation type '%operation' not implemented yet.",
+                            ['operation' => $request->get('OPERATION_TYPE')],
+                            Be2Bill::MODULE_DOMAIN
+                        )
+                );
+
+                return Response::create('NOT YET IMPLEMENTED');
+            }
+
+            // save the transaction
+            $this->getLog()->addInfo(
+                $this->getTranslator()->trans(
+                    "Saving transaction %transaction for order ID %id.",
+                    [
+                        '%transaction' => $request->get('TRANSACTIONID'),
+                        '%id' => $orderId
+                    ],
+                    Be2Bill::MODULE_DOMAIN
+                )
+            );
+
+            $transaction = new Be2billTransaction();
+            $transaction->setCustomerId($request->get('CLIENTIDENT'))
+                ->setOrderId($request->get('ORDERID'))
+                ->setTransactionId($request->get('TRANSACTIONID'))
+                ->setMethodName($methodName)
+                ->setOperationtype($request->get('OPERATIONTYPE'))
+                ->setDsecure($request->get('3DSECURE'))
+                ->setExeccode($request->get('EXECCODE'))
+                ->setMessage($request->get('MESSAGE'))
+                ->setAmount($request->get('AMOUNT') / 100)
+                ->setClientemail($request->get('CLIENTEMAIL'))
+                ->setCardcode($request->get('CARDCODE'))
+                ->setCardvaliditydate($request->get('CARDVALIDITYDATE'))
+                ->setCardfullname($request->get('CARDFULLNAME'))
+                ->setCardtype($request->get('CARDTYPE'))
+                ->setTransaction(json_encode($params));
+
+            $transaction->save();
+
+            return Response::create('OK');
         }
 
         return Response::create('ERROR');
@@ -238,6 +205,150 @@ class PaymentController extends BasePaymentModuleController
             );
 
             $this->dispatch(TheliaEvents::ORDER_UPDATE_STATUS, $event);
+        }
+    }
+
+    public function cancelOrder($order_id)
+    {
+        $order_id = intval($order_id);
+
+        if (null !== $order = $this->getOrder($order_id)) {
+            $this->getLog()->addInfo(
+                $this->getTranslator()->trans(
+                    "Processing cancellation / refund of payment for order ref. %ref",
+                    array('%ref' => $order->getRef())
+                )
+            );
+
+            $event = new OrderEvent($order);
+
+            $event->setStatus(OrderStatusQuery::getCancelledStatus()->getId());
+
+            $this->getLog()->addInfo(
+                $this->getTranslator()->trans(
+                    "Order ref. %ref is now cancelled.",
+                    array('%ref' => $order->getRef())
+                )
+            );
+
+            $this->dispatch(TheliaEvents::ORDER_UPDATE_STATUS, $event);
+        }
+    }
+
+    /**
+     * @param $request
+     * @param $order
+     */
+    protected function managePaymentOperation(ParameterBag $request, Order $order)
+    {
+        $orderId = $order->getId();
+
+        // Payment was accepted
+        if ($request->get('EXECCODE') == 0000) {
+
+            if ($order->isPaid()) {
+                $this->getLog()->addInfo(
+                    $this->getTranslator()->trans(
+                        "Order ID %id is already paid.",
+                        array('%id' => $orderId),
+                        Be2Bill::MODULE_DOMAIN
+                    )
+                );
+            } else {
+                $this->getLog()->addInfo(
+                    $this->getTranslator()->trans(
+                        "Order ID %id payment was successful.",
+                        array('%id' => $orderId),
+                        Be2Bill::MODULE_DOMAIN
+                    )
+                );
+
+                $this->confirmPayment($orderId);
+
+                // save the transaction ref
+                $order->setTransactionRef($request->get('TRANSACTIONID'));
+                $order->save();
+            }
+
+        } else {
+
+            $this->getLog()->addError(
+                $this
+                    ->getTranslator()
+                    ->trans(
+                        "Transaction %transaction for order ID %id failed. [%code] : %message",
+                        [
+                            '%transaction' => $request->get('TRANSACTIONID'),
+                            '%id' => $orderId,
+                            '%code' => $request->get('EXECCODE'),
+                            '%message' => $request->get('MESSAGE'),
+                        ],
+                        Be2Bill::MODULE_DOMAIN
+                    )
+            );
+
+            if ($request->get('EXECCODE') == 4004) {
+                if (!$order->isCancelled() && !$order->isPaid()) {
+                    $this->getLog()->addInfo(
+                        $this->getTranslator()->trans(
+                            "Cancelling order ID %id - payment failed.",
+                            array('%id' => $orderId),
+                            Be2Bill::MODULE_DOMAIN
+                        )
+                    );
+
+                    $this->cancelPayment($orderId);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $request
+     * @param $order
+     */
+    protected function manageRefundOperation(ParameterBag $request, Order $order)
+    {
+        $orderId = $order->getId();
+
+        // Refund is accepted
+        if ($request->get('EXECCODE') == 0000) {
+            if ($order->isCancelled()) {
+                $this->getLog()->addInfo(
+                    $this->getTranslator()->trans(
+                        "Order ID %id is already cancelled.",
+                        array('%id' => $orderId),
+                        Be2Bill::MODULE_DOMAIN
+                    )
+                );
+            } else {
+                $this->getLog()->addInfo(
+                    $this->getTranslator()->trans(
+                        "Order ID %id payment refund.",
+                        array('%id' => $orderId),
+                        Be2Bill::MODULE_DOMAIN
+                    )
+                );
+
+                $this->cancelOrder($orderId);
+            }
+
+        } else {
+
+            $this->getLog()->addError(
+                $this
+                    ->getTranslator()
+                    ->trans(
+                        "Refund transaction %transaction for order ID %id failed. [%code] : %message",
+                        [
+                            '%transaction' => $request->get('TRANSACTIONID'),
+                            '%id' => $orderId,
+                            '%code' => $request->get('EXECCODE'),
+                            '%message' => $request->get('MESSAGE'),
+                        ],
+                        Be2Bill::MODULE_DOMAIN
+                    )
+            );
         }
     }
 }

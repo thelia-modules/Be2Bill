@@ -10,6 +10,8 @@ namespace Be2Bill\Loop;
 
 use Be2Bill\Be2Bill;
 use Be2Bill\Model\Be2billTransactionQuery;
+use Be2Bill\Service\ExecCodeService;
+use Be2Bill\Service\OperationTypeService;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Thelia\Core\Template\Element\BaseLoop;
 use Thelia\Core\Template\Element\LoopResult;
@@ -27,8 +29,11 @@ class TransactionLoop extends BaseLoop implements PropelSearchLoopInterface
      */
     public function parseResults(LoopResult $loopResult)
     {
-        /** @var \Be2Bill\Service\ExecCodeService $execCodeService */
+        /** @var ExecCodeService $execCodeService */
         $execCodeService = $this->container->get('be2bill.service.execcode');
+
+        /** @var OperationTypeService $operationTypeService */
+        $operationTypeService = $this->container->get('be2bill.service.operationtype');
 
         /** @var \Be2Bill\Model\Be2BillTransaction $transaction */
         foreach ($loopResult->getResultDataCollection() as $transaction) {
@@ -41,6 +46,8 @@ class TransactionLoop extends BaseLoop implements PropelSearchLoopInterface
                 ->set('ORDERID', $transaction->getOrderId())
                 ->set('DATE', $transaction->getCreatedAt('d/m/Y H:i'))
                 ->set('TRANSACTIONID', $transaction->getTransactionId())
+                ->set('OPERATIONTYPE', $transaction->getOperationtype())
+                ->set('OPERATIONTYPE_TITLE', $operationTypeService->getTitle($transaction->getOperationtype()))
                 ->set('EXECCODE', $transaction->getExeccode())
                 ->set('EXECCODE_TITLE', $execCodeService->getTitle($transaction->getExeccode()))
                 ->set('MESSAGE', $transaction->getMessage())

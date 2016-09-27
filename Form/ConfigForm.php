@@ -178,6 +178,17 @@ class ConfigForm extends BaseForm
                     'label_attr' => array('help' => $translator->trans('Mot de passe Be2Bill pour PayPal', [], Be2Bill::MODULE_DOMAIN))
                 )
             )
+            ->add(
+                'cancel-on-refund',
+                'text',
+                array(
+                    'constraints'   => array(new NotBlank()),
+                    'required'      => true,
+                    'label'         => $translator->trans('Annuler la commande lors d\'un remboursement', [], Be2Bill::MODULE_DOMAIN),
+                    'data'          => Be2billConfigQuery::read('cancel-on-refund', 'no'),
+                    'label_attr'    => array('help' => $translator->trans('Passe la commande en statut annulée lors d\'un remboursement', [], Be2Bill::MODULE_DOMAIN))
+                )
+            )
         ;
     }
 

@@ -9,6 +9,7 @@
 namespace Be2Bill\Controller;
 
 use Be2Bill\Be2Bill;
+use Be2Bill\Model\Be2billConfigQuery;
 use Be2Bill\Model\Be2billTransaction;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Thelia\Core\Event\Order\OrderEvent;
@@ -313,24 +314,26 @@ class PaymentController extends BasePaymentModuleController
 
         // Refund is accepted
         if ($request->get('EXECCODE') == 0000) {
-            if ($order->isCancelled()) {
-                $this->getLog()->addInfo(
-                    $this->getTranslator()->trans(
-                        "Order ID %id is already cancelled.",
-                        array('%id' => $orderId),
-                        Be2Bill::MODULE_DOMAIN
-                    )
-                );
-            } else {
-                $this->getLog()->addInfo(
-                    $this->getTranslator()->trans(
-                        "Order ID %id payment refund.",
-                        array('%id' => $orderId),
-                        Be2Bill::MODULE_DOMAIN
-                    )
-                );
+            if (Be2billConfigQuery::read('cancel-on-refund') === 'yes') {
+                if ($order->isCancelled()) {
+                    $this->getLog()->addInfo(
+                        $this->getTranslator()->trans(
+                            "Order ID %id is already cancelled.",
+                            array('%id' => $orderId),
+                            Be2Bill::MODULE_DOMAIN
+                        )
+                    );
+                } else {
+                    $this->getLog()->addInfo(
+                        $this->getTranslator()->trans(
+                            "Order ID %id payment refund.",
+                            array('%id' => $orderId),
+                            Be2Bill::MODULE_DOMAIN
+                        )
+                    );
 
-                $this->cancelOrder($orderId);
+                    $this->cancelOrder($orderId);
+                }
             }
 
         } else {

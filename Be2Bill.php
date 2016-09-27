@@ -391,6 +391,10 @@ class Be2Bill extends AbstractPaymentModule
         if (null === Be2billConfigQuery::read('paypal')) {
             Be2billConfigQuery::set('paypal', 'no');
         }
+
+        if (null === Be2billConfigQuery::read('cancel-on-refund')) {
+            Be2billConfigQuery::set('cancel-on-refund', 'no');
+        }
     }
 
     public static function setOrderMethod($orderId, $methodName, $parameters)

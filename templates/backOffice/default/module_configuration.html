@@ -127,6 +127,18 @@
                                         </div>
                                     {/form_field}
 
+                                    {form_field form=$form field="cancel-on-refund"}
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="{$name}" class="control-label">{$label}</label>
+                                            <select id="{$name}" name="{$name}" class="form-control">
+                                                <option value="no" {if ({$value} === "no")} selected="selected"{/if} >{intl l='Non' d='be2bill.bo.default'}</option>
+                                                <option value="yes" {if ({$value} === "yes")} selected="selected"{/if} >{intl l='Oui' d='be2bill.bo.default'}</option>
+                                            </select>
+                                            <span class="help-block">{$label_attr.help}</span>
+                                        </div>
+                                    </div>
+                                    {/form_field}
 
                                     {form_field form=$form field="ntimes"}
                                         <h3 class="u-margin-top">{$label}</h3>

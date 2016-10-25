@@ -255,6 +255,14 @@ class PaymentController extends BasePaymentModuleController
                         Be2Bill::MODULE_DOMAIN
                     )
                 );
+            } elseif ($order->isCancelled()) {
+                $this->getLog()->addInfo(
+                    $this->getTranslator()->trans(
+                        "Order ID %id has cancelled status, don't change to paid status.",
+                        array('%id' => $orderId),
+                        Be2Bill::MODULE_DOMAIN
+                    )
+                );
             } else {
                 $this->getLog()->addInfo(
                     $this->getTranslator()->trans(

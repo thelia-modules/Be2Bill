@@ -62,7 +62,7 @@ class PaymentController extends BasePaymentModuleController
 
         if (null !== $order = $this->getOrder($orderId)) {
 
-            // Check the authencity of the request
+            // Check the authenticity of the request
             if ($be2BillHash != $hash) {
                 $this->getLog()->addError(
                     $this->getTranslator()
@@ -244,9 +244,28 @@ class PaymentController extends BasePaymentModuleController
     {
         $orderId = $order->getId();
 
+        // if transaction is a schedule and not the first one
+        // don't change order status
+        $schedule = $this->getScheduleInformation($request);
+        if (null !== $schedule) {
+            if (!$schedule->first) {
+                $this->getLog()->addInfo($this->getTranslator()->trans(
+                    "Transaction %transaction is the schedule %index on %total for order ID %id, don't change status",
+                    [
+                        '%transaction' => $request->get('TRANSACTIONID'),
+                        '%id' => $orderId,
+                        '%index' => $schedule->index,
+                        '%total' => $schedule->total,
+                    ],
+                    Be2Bill::MODULE_DOMAIN
+                ));
+
+                return;
+            }
+        }
+
         // Payment was accepted
         if ($request->get('EXECCODE') == 0000) {
-
             if ($order->isPaid(false)) {
                 $this->getLog()->addInfo(
                     $this->getTranslator()->trans(
@@ -280,7 +299,6 @@ class PaymentController extends BasePaymentModuleController
             }
 
         } else {
-
             $this->getLog()->addError(
                 $this
                     ->getTranslator()
@@ -345,7 +363,6 @@ class PaymentController extends BasePaymentModuleController
             }
 
         } else {
-
             $this->getLog()->addError(
                 $this
                     ->getTranslator()
@@ -361,5 +378,23 @@ class PaymentController extends BasePaymentModuleController
                     )
             );
         }
+    }
+
+    protected function getScheduleInformation(ParameterBag $request)
+    {
+        $schedule = $request->get('SCHEDULE');
+        $scheduleInfo = null;
+
+        if (null !== $schedule) {
+            $schedules = explode('-', $schedule);
+            $scheduleInfo = (object) [
+                'index' => (int) $schedules[0],
+                'total' => (int) $schedules[1],
+                'first' => ($schedules[0] == 1),
+                'last' => ($schedules[0] == $schedules[1]),
+            ];
+        }
+
+        return $scheduleInfo;
     }
 }

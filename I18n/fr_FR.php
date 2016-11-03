@@ -104,4 +104,5 @@ return array(
     'échéancier déjà interrompu' => 'échéancier déjà interrompu',
     'échéancier déjà terminé' => 'échéancier déjà terminé',
     'échéancier non trouvé' => 'échéancier non trouvé',
+    'Transaction %transaction is the schedule %index on %total for order ID %id, don\'t change status' => 'La transaction %transaction est l\'échéance %index sur %total pour la commande %id, pas de changement de statut.',
 );

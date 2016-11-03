@@ -247,7 +247,7 @@ class PaymentController extends BasePaymentModuleController
         // Payment was accepted
         if ($request->get('EXECCODE') == 0000) {
 
-            if ($order->isPaid()) {
+            if ($order->isPaid(false)) {
                 $this->getLog()->addInfo(
                     $this->getTranslator()->trans(
                         "Order ID %id is already paid.",
@@ -297,7 +297,7 @@ class PaymentController extends BasePaymentModuleController
             );
 
             if ($request->get('EXECCODE') == 4004) {
-                if (!$order->isCancelled() && !$order->isPaid()) {
+                if (!$order->isCancelled() && !$order->isPaid(false)) {
                     $this->getLog()->addInfo(
                         $this->getTranslator()->trans(
                             "Cancelling order ID %id - payment failed.",
